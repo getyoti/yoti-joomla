@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.0" client="site" method="upgrade">
+    <name>Yoti Connect Module</name>
+    <author>Simon Tong</author>
+    <authorEmail>simon.tong@yoti.com</authorEmail>
+    <authorUrl>http://www.yoti.com</authorUrl>
+    <creationDate>August 2016</creationDate>
+    <version>1.0.0</version>
+    <license>Link to licence url</license>
+    <copyright>Copyright (C) 2016 http://www.yoti.com. All rights reserved.</copyright>
+    <description>Yoti Connect Module allows you to add a button to your page to connect to Yoti</description>
+    <files>
+        <filename module="mod_yoticonnect">mod_yoticonnect.php</filename>
+        <folder>tmpl</folder>
+    </files>
+</extension>

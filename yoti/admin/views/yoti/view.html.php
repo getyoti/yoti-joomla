@@ -3,9 +3,9 @@ defined('_JEXEC') or die('Restricted access');
 
 /**
  * Admin view class
- * @author Simon Tong <simon.tong@yoti.com>
+ * @author Moussa Sidibe <moussa.sidibe@yoti.com>
  */
-class AdminYotiConnectViewYotiConnect extends JViewLegacy
+class AdminYotiViewYoti extends JViewLegacy
 {
     /**
      * @var array
@@ -21,10 +21,10 @@ class AdminYotiConnectViewYotiConnect extends JViewLegacy
     public function display($tpl = null)
     {
         $this->addSidebar();
-        JFactory::getDocument()->addStyleSheet("$this->baseurl/components/com_yoticonnect/assets/styles.css");
+        JFactory::getDocument()->addStyleSheet("$this->baseurl/components/com_yoti/assets/styles.css");
 
         /** @var stdClass $component */
-        $component = JComponentHelper::getComponent('com_yoticonnect');
+        $component = JComponentHelper::getComponent('com_yoti');
         /** @var \Joomla\Registry\Registry $config */
         $config = $component->params;
 
@@ -32,15 +32,15 @@ class AdminYotiConnectViewYotiConnect extends JViewLegacy
         $errors = array();
         if (!function_exists('curl_version'))
         {
-            $errors[] = "PHP module 'curl' not installed. Yoti Connect requires it to work. Please contact your server administrator.";
+            $errors[] = "PHP module 'curl' not installed. Yoti requires it to work. Please contact your server administrator.";
         }
         if (!function_exists('mcrypt_encrypt'))
         {
-            $errors[] = "PHP module 'mcrypt' not installed. Yoti Connect requires it to work. Please contact your server administrator.";
+            $errors[] = "PHP module 'mcrypt' not installed. Yoti requires it to work. Please contact your server administrator.";
         }
         if (!function_exists('json_decode'))
         {
-            $errors[] = "PHP module 'json' not installed. Yoti Connect requires it to work. Please contact your server administrator.";
+            $errors[] = "PHP module 'json' not installed. Yoti requires it to work. Please contact your server administrator.";
         }
 
         // get data
@@ -123,7 +123,6 @@ class AdminYotiConnectViewYotiConnect extends JViewLegacy
             }
         }
 
-        /** @var AdminYotiConnectViewYotiConnect $view */
         $this->errors = $errors;
         $this->data = $data->flatten();
 
@@ -157,18 +156,19 @@ class AdminYotiConnectViewYotiConnect extends JViewLegacy
      */
     private function addSidebar()
     {
-        $view = JFactory::getApplication()->input->getCmd('view', 'yoticonnect');
+        /** @var AdminYotiViewYoti $view */
+        $view = JFactory::getApplication()->input->getCmd('view', 'yoti');
         JHtmlSidebar::addEntry(
-            'Yoti Connect',
-            'index.php?option=com_yoticonnect&view=yoticonnect',
-            ($view == 'yoticonnect')
+            'Yoti',
+            'index.php?option=com_yoti&view=yoti',
+            ($view == 'yoti')
         );
         JHtmlSidebar::addEntry(
             'Users',
-            'index.php?option=com_yoticonnect&view=users',
+            'index.php?option=com_yoti&view=users',
             ($view == 'users')
         );
-        JToolbarHelper::preferences('com_yoticonnect', 400, 570);
-        JToolbarHelper::title('Yoti Connect');
+        JToolbarHelper::preferences('com_yoti', 400, 570);
+        JToolbarHelper::title('Yoti');
     }
 }

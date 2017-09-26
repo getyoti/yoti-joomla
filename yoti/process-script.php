@@ -2,11 +2,11 @@
 defined('_JEXEC') or die('Restricted access'); // no direct access
 
 /**
- * Class com_YotiConnectInstallerScript
+ * Class com_YotiInstallerScript
  *
- * @author Simon Tong <simon.tong@yoti.com>
+ * @author Moussa Sidibe <moussa.sidibe@yoti.com>
  */
-class com_yoticonnectInstallerScript
+class com_yotiInstallerScript
 {
     /**
      * @param JAdapterInstance $adapter
@@ -14,22 +14,22 @@ class com_yoticonnectInstallerScript
     public function install(JAdapterInstance $adapter)
     {
         $app = JFactory::getApplication();
-        $modulePath = __DIR__ . '/modules/mod_yoticonnect';
+        $modulePath = __DIR__ . '/modules/mod_yoti';
         if (is_dir($modulePath))
         {
             $installer = new JInstaller;
             if ($installer->install($modulePath))
             {
-                $app->enqueueMessage('Installing module [mod_yoticonnect] was successful.', 'message');
+                $app->enqueueMessage('Installing module [mod_yoti] was successful.', 'message');
             }
             else
             {
-                $app->enqueueMessage('Installing module [mod_yoticonnect] failed.', 'error');
+                $app->enqueueMessage('Installing module [mod_yoti] failed.', 'error');
             }
         }
         else
         {
-            $app->enqueueMessage('Installing module [mod_yoticonnect] failed.', 'error');
+            $app->enqueueMessage('Installing module [mod_yoti] failed.', 'error');
         }
 
         $pluginPath = __DIR__ . '/plugins/yotiprofile';
@@ -59,18 +59,18 @@ class com_yoticonnectInstallerScript
         $db = JFactory::getDBO();
         $app = JFactory::getApplication();
 
-        $db->setQuery("SELECT `extension_id` FROM #__extensions WHERE `element` = 'mod_yoticonnect' AND `type` = 'module'");
+        $db->setQuery("SELECT `extension_id` FROM #__extensions WHERE `element` = 'mod_yoti' AND `type` = 'module'");
         $id = $db->loadResult();
         if ($id)
         {
             $installer = new JInstaller;
             if ($installer->uninstall('module', $id, 1))
             {
-                $app->enqueueMessage('Uninstalling module [mod_yoticonnect] was successful.', 'message');
+                $app->enqueueMessage('Uninstalling module [mod_yoti] was successful.', 'message');
             }
             else
             {
-                $app->enqueueMessage('Uninstalling module [mod_yoticonnect] failed.', 'error');
+                $app->enqueueMessage('Uninstalling module [mod_yoti] failed.', 'error');
             }
         }
     }

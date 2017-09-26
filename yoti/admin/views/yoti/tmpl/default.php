@@ -1,13 +1,13 @@
 <?php
 /**
- * @var $this AdminYotiConnectViewYotiConnect
+ * @var $this AdminYotiViewYoti
  */
 ?>
 <div class="row-fluid">
     <div class="span12">
-        <form id="yoti-connect-form" method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>" class="form-horizontal">
+        <form id="yoti-form" method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>" class="form-horizontal">
             <p>You need to first create a Yoti App at <a href="<?php echo \Yoti\YotiClient::DASHBOARD_URL; ?>" target="_blank">Yoti Dashboard</a>.</p>
-            <p>Note: On the Yoti Dashboard the callback URL should be set to: <code><?php echo JUri::root(false).'index.php?option=com_yoticonnect&task=login'; ?></code></p>
+            <p>Note: On the Yoti Dashboard the callback URL should be set to: <code><?php echo JUri::root(false).'index.php?option=com_yoti&task=login'; ?></code></p>
             <div class="control-group">
                 <label for="yoti_app_id" class="col-md-6 control-label">Yoti App ID</label>
                 <div class="controls">

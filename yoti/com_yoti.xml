@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension type="component" version="3.0" method="upgrade">
-    <name>Yoti Connect</name>
-    <author>Simon Tong</author>
-    <authorEmail>simon.tong@yoti.com</authorEmail>
+    <name>Yoti</name>
+    <author>Yoti Ltd</author>
+    <authorEmail>sdksupport@yoti.com</authorEmail>
     <authorUrl>http://www.yoti.com</authorUrl>
     <creationDate>August 2016</creationDate>
     <version>1.0.0</version>
@@ -16,19 +16,19 @@
         </sql>
     </install>
     <modules>
-        <module folder="modules" module="mod_yoticonnect" name="Yoti Connect"/>
+        <module folder="modules" module="mod_yoti" name="Yoti"/>
     </modules>
     <files folder="site">
-        <filename>yoticonnect.php</filename>
+        <filename>yoti.php</filename>
         <filename>controller.php</filename>
-        <filename>YotiConnectHelper.php</filename>
+        <filename>YotiHelper.php</filename>
         <folder>sdk</folder>
     </files>
 
     <administration>
-        <menu view="yoticonnect">Yoti Connect</menu>
+        <menu view="yoti">Yoti</menu>
         <files folder="admin">
-            <filename>yoticonnect.php</filename>
+            <filename>yoti.php</filename>
             <filename>controller.php</filename>
             <filename>access.xml</filename>
             <folder>assets</folder>

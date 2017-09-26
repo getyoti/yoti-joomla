@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.1" type="plugin" group="user">
-    <name>Yoti Connect Profile</name>
-    <author>Simon Tong</author>
+    <name>Yoti Profile</name>
+    <author>Yoti Ltd</author>
     <creationDate>August 2016</creationDate>
     <!--<copyright>(C) 2005 - 201 Open Source Matters. All rights reserved.</copyright>-->
-    <!--<license>GNU General Public License version 2 or later; see LICENSE.txt</license>-->
-    <authorEmail>simon.tong@yoti.com</authorEmail>
-    <!--<authorUrl>www.joomla.org</authorUrl>-->
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>sdksupport@yoti.com</authorEmail>
+    <authorUrl>http://www.yoti.com</authorUrl>
     <version>1.0.0</version>
-    <description>Yoti Connect Profile</description>
+    <description>Yoti Profile</description>
 
     <files>
         <filename plugin="yotiprofile">yotiprofile.php</filename>

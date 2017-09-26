@@ -8,8 +8,8 @@
 use Yoti\ActivityDetails;
 
 defined('JPATH_BASE') or die;
-require_once JPATH_SITE . '/components/com_yoticonnect/sdk/boot.php';
-require_once JPATH_SITE . '/components/com_yoticonnect/YotiConnectHelper.php';
+require_once JPATH_SITE . '/components/com_yoti/sdk/boot.php';
+require_once JPATH_SITE . '/components/com_yoti/YotiHelper.php';
 
 /**
  * An example custom profile plugin.
@@ -51,7 +51,7 @@ class plgUseryotiprofile extends JPlugin
 
             $user = JFactory::getUser($data->id);
             $db = JFactory::getDbo();
-            $tableName = YotiConnectHelper::tableName();
+            $tableName = YotiHelper::tableName();
             $dbProfile = $db->loadAssoc($db->setQuery("SELECT * FROM {$tableName} WHERE joomla_userid=" . $db->quote($user->id)));
             $profile = null;
             if ($dbProfile)
@@ -76,10 +76,10 @@ class plgUseryotiprofile extends JPlugin
                     $value = $profile->getProfileAttribute($param);
                     if ($param == ActivityDetails::ATTR_SELFIE)
                     {
-                        $selfieFullPath = YotiConnectHelper::uploadDir() . "/{$dbProfile['selfie_filename']}";
+                        $selfieFullPath = YotiHelper::uploadDir() . "/{$dbProfile['selfie_filename']}";
                         if ($dbProfile['selfie_filename'] && file_exists($selfieFullPath))
                         {
-                            $selfieUrl = JRoute::_('index.php?option=com_yoticonnect&task=bin-file&field=selfie');
+                            $selfieUrl = JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie');
 //                                site_url('wp-login.php') . '?yoti-connect=1&action=bin-file&field=selfie';
 //                            $selfieUrl = YotiConnectHelper::uploadUrl() . "/{$dbProfile['selfie_filename']}";
                             $xml .= '<field name="' . $param . '" type="Image" src="' . $selfieUrl . '" width="100" />';
@@ -207,6 +207,5 @@ class plgUseryotiprofile extends JPlugin
 
         return true;
     }
-
 
 }

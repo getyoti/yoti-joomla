@@ -29,20 +29,20 @@
     margin-top: 0;
 }*/
 
-#yoti-connect-form .pem-file {
+#yoti-form .pem-file {
     margin-bottom: 10px;
 }
-#yoti-connect-form .pem-file label.checkbox {
+#yoti-form .pem-file label.checkbox {
     display: inline-block;
     padding: 0;
     margin-left: 8px;
 }
-#yoti-connect-form .pem-file label.checkbox input {
+#yoti-form .pem-file label.checkbox input {
     vertical-align: middle;
     margin: 3px 5px 0 0;
     display: inline-block;
 }
 
-#yoti-connect-form .pem-file input[name="yoti_delete_pem"] {
+#yoti-form .pem-file input[name="yoti_delete_pem"] {
     margin-left: 10px;
 }

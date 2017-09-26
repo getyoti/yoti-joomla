@@ -3,11 +3,11 @@ use Yoti\ActivityDetails;
 use Yoti\YotiClient;
 
 /**
- * Class YotiConnectHelper
+ * Class YotiHelper
  *
- * @author Simon Tong <simon.tong@yoti.com>
+ * @author Moussa Sidibe <moussa.sidibe@yoti.com>
  */
-class YotiConnectHelper
+class YotiHelper
 {
     /**
      * Running mock requests instead of going to yoti
@@ -160,7 +160,7 @@ class YotiConnectHelper
             return;
         }
 
-        $file = YotiConnectHelper::uploadDir() . "/{$dbProfile[$field]}";
+        $file = YotiHelper::uploadDir() . "/{$dbProfile[$field]}";
         if (!file_exists($file))
         {
             return;
@@ -380,7 +380,7 @@ class YotiConnectHelper
      */
     public static function uploadDir()
     {
-        return JPATH_BASE . '/media/com_yoticonnect';
+        return JPATH_BASE . '/media/com_yoti';
     }
 
     /**
@@ -390,7 +390,7 @@ class YotiConnectHelper
     {
         global $baseurl;
 
-        return "$baseurl/media/com_yoticonnect";
+        return "$baseurl/media/com_yoti";
     }
 
     /**
@@ -400,12 +400,12 @@ class YotiConnectHelper
     {
         if (self::mockRequests())
         {
-            $config = require_once JPATH_BASE.'/components/com_yoticonnect/sdk/sample-data/config.php';
+            $config = require_once JPATH_BASE.'/components/com_yoti/sdk/sample-data/config.php';
             $config['yoti_pem'] = (object)$config['yoti_pem'];
             return $config;
         }
 
-        return JComponentHelper::getParams('com_yoticonnect');
+        return JComponentHelper::getParams('com_yoti');
     }
 
     /**

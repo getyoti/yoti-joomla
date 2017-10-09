@@ -12,8 +12,17 @@ class JFormFieldStatic extends JFormField
 
     public function getInput()
     {
-        $value = (string)$this->element['value'] ? htmlspecialchars($this->element['value']) : '<i>(empty)</i>';
 
-        return '<div class="form-control-static">' . $value . '</div>';
+        $value = $this->element['value'];
+        if(empty($value)){
+            $elementName = $this->element['name'];
+            $data = $this->form->getData()->get('yotiprofile');
+            if (is_object($data) && isset($data->{$elementName})) {
+                $value = $data->{$elementName};
+            }
+        }
+
+        $html = (string)$value ? htmlspecialchars($value) : '<i>(empty)</i>';
+        return '<div class="form-control-static">' . $html . '</div>';
     }
 }

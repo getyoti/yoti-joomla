@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fields name="credentials">
+    <fieldset name="credentials"
+              label="Yoti User login"
+    >
+        <field name="yoti_note"
+               id="yoti_note"
+               type="plaintext"
+               label="This is a warning message"
+        />
+        <field name="yoti_nolink"
+               id="yoti_nolink"
+               type="checkbox"
+               label="Don't link my Yoti account"
+               value="1"
+               default="0"
+        />
+    </fieldset>
+</fields>

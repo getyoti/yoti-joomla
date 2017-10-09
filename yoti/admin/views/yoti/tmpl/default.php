@@ -9,32 +9,101 @@
             <p>You need to first create a Yoti App at <a href="<?php echo \Yoti\YotiClient::DASHBOARD_URL; ?>" target="_blank">Yoti Dashboard</a>.</p>
             <p>Note: On the Yoti Dashboard the callback URL should be set to: <code><?php echo JUri::root(false).'index.php?option=com_yoti&task=login'; ?></code></p>
             <div class="control-group">
-                <label for="yoti_app_id" class="col-md-6 control-label">Yoti App ID</label>
+                <label for="yoti_app_id" class="col-md-6 control-label">App ID <span><strong>*</strong></span></label>
                 <div class="controls">
-                    <input type="text" name="yoti_app_id" id="yoti_app_id" placeholder="Yoti App ID" value="<?php if (!empty($this->data['yoti_app_id'])) echo htmlspecialchars($this->data['yoti_app_id']); ?>" class="form-control input-xlarge" />
+                    <input type="text" name="yoti_app_id" id="yoti_app_id" placeholder="Yoti App ID"
+                           value="<?php if (!empty($this->data['yoti_app_id'])) echo htmlspecialchars($this->data['yoti_app_id']); ?>"
+                           class="form-control input-xlarge"
+                           required="true"
+                    />
+                    <span class="help-block">Copy the App ID of your Yoti App here</span>
                 </div>
             </div>
             <div class="control-group">
-                <label for="yoti_sdk_id" class="col-md-6 control-label">Yoti SDK ID</label>
+                <label for="yoti_scenario_id" class="col-md-6 control-label">Scenario ID <span><strong>*</strong></span></label>
                 <div class="controls">
-                    <input type="text" name="yoti_sdk_id" id="yoti_sdk_id" placeholder="Yoti SDK ID" value="<?php if (!empty($this->data['yoti_sdk_id'])) echo htmlspecialchars($this->data['yoti_sdk_id']); ?>" class="form-control input-xlarge" />
+                    <input type="text" name="yoti_scenario_id" id="yoti_scenario_id" placeholder="Yoti Scenario ID"
+                           value="<?php if (!empty($this->data['yoti_scenario_id'])) echo htmlspecialchars($this->data['yoti_scenario_id']); ?>"
+                           class="form-control input-xlarge"
+                           required="true"
+                    />
+                    <span class="help-block">Scenario ID is used to render the inline QR code</span>
                 </div>
             </div>
-
             <div class="control-group">
-                <label for="yoti_pem" class="col-md-6 control-label">Yoti PEM File</label>
+                <label for="yoti_sdk_id" class="col-md-6 control-label">SDK ID <span><strong>*</strong></span></label>
+                <div class="controls">
+                    <input type="text" name="yoti_sdk_id" id="yoti_sdk_id" placeholder="Yoti SDK ID"
+                           value="<?php if (!empty($this->data['yoti_sdk_id'])) echo htmlspecialchars($this->data['yoti_sdk_id']); ?>"
+                           class="form-control input-xlarge"
+                           required="true"
+                    />
+                    <span class="help-block">Copy the SDK ID of your Yoti App here</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="yoti_company_name" class="col-md-6 control-label">Company Name</label>
+                <div class="controls">
+                    <input type="text" name="yoti_company_name" id="yoti_company_name" placeholder="Company Name"
+                           value="<?php if (!empty($this->data['yoti_company_name'])) echo htmlspecialchars($this->data['yoti_company_name']); ?>"
+                           class="form-control input-xlarge"
+                    />
+                    <span class="help-block">To tailor our Yoti plugin please add your company name.</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="yoti_success_url" class="col-md-6 control-label">Success URL <span><strong>*</strong></span></label>
+                <div class="controls">
+                    <input type="text" name="yoti_success_url" id="yoti_success_url" placeholder="Success URL"
+                           value="<?php echo $this->successUrl; ?>"
+                           class="form-control input-xlarge"
+                           required="true"
+                    />
+                    <span class="help-block">Redirect users here if they successfully login with Yoti</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="yoti_failed_url" class="col-md-6 control-label">Failed URL <span><strong>*</strong></span></label>
+                <div class="controls">
+                    <input type="text" name="yoti_failed_url" id="yoti_failed_url" placeholder="Failed URL"
+                           value="<?php echo $this->failedUrl; ?>"
+                           class="form-control input-xlarge"
+                           required="true"
+                    />
+                    <span class="help-block">Redirect users here if they were unable to login with Yoti</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="yoti_pem" class="col-md-6 control-label">PEM File <span><strong>*</strong></span></label>
                 <div class="controls">
                     <?php
+                    $pemFileRequired = 'required="true"';
                     if (!empty($this->data['yoti_pem.name']))
                     {
-                        $checked = (!empty($this->data['yoti_delete_pem']) ? ' checked="checked"' : '');
+                        $pemFileRequired = '';
                         echo '<div class="pem-file">' .
                             '<code><strong>Current file:</strong> ' . htmlspecialchars($this->data['yoti_pem.name']) . '</code>' .
-                            '<label class="checkbox"><input type="checkbox" name="yoti_delete_pem" value="1"' . $checked . ' /> Delete this PEM file</label>' .
+                            '<label class="checkbox"><input type="checkbox" name="yoti_delete_pem" value="1"' . $this->pemFilechecked . ' /> Delete this PEM file</label>' .
                             '</div>';
                     }
                     ?>
-                    <input type="file" name="yoti_pem" id="yoti_pem" class="form-control input-xlarge" />
+                    <input type="file" name="yoti_pem" id="yoti_pem" class="form-control input-xlarge" <?php echo $pemFileRequired; ?>/>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox"><input type="checkbox" name="yoti_only_existing_user" value="1"
+                            <?php echo $this->onlyExitingUserChecked ?>
+                        /> Only allow existing Joomla users to link their Yoti account
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox"><input type="checkbox" name="yoti_user_email" value="1"
+                            <?php echo $this->userEmailChecked ?>
+                        /> Attempt to link Yoti email address with Joomla user account for first time users
+                    </label>
                 </div>
             </div>
             <div class="btn-wrapper controls">

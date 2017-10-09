@@ -13,6 +13,14 @@ class AdminYotiViewYoti extends JViewLegacy
     public $data = array();
     public $errors = array();
 
+    protected $formRequiredFields = [
+        'yoti_sdk_id' => 'App ID',
+        'yoti_app_id' => 'Scenario ID',
+        'yoti_scenario_id' => 'SDK ID',
+        'yoti_success_url' => 'Success URL',
+        'yoti_failed_url' => 'Failed URL'
+    ];
+
     /**
      * @param null $tpl
      * @return mixed|void
@@ -47,21 +55,24 @@ class AdminYotiViewYoti extends JViewLegacy
         $data = $config;
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            $data['yoti_app_id'] = $this->postVar('yoti_app_id');
-            $data['yoti_sdk_id'] = $this->postVar('yoti_sdk_id');
-            $data['yoti_delete_pem'] = ($this->postVar('yoti_delete_pem')) ? true : false;
+            $errorMsg = $this->validateForm();
             $pemFile = $this->filesVar('yoti_pem', (array)$config['yoti_pem']);
 
+            $data['yoti_app_id'] = $this->postVar('yoti_app_id');
+            $data['yoti_scenario_id'] = $this->postVar('yoti_scenario_id');
+            $data['yoti_sdk_id'] = $this->postVar('yoti_sdk_id');
+            $data['yoti_company_name'] = $this->postVar('yoti_company_name');
+            $data['yoti_delete_pem'] = ($this->postVar('yoti_delete_pem')) ? true : false;
+            $data['yoti_success_url'] = $this->postVar('yoti_success_url');
+            $data['yoti_failed_url'] = $this->postVar('yoti_failed_url');
+            $data['yoti_only_existing_user'] = ($this->postVar('yoti_only_existing_user')) ? true : false;
+            $data['yoti_user_email'] = ($this->postVar('yoti_user_email')) ? true : false;
+
             // validation
-            if (!$data['yoti_sdk_id'])
-            {
-                $errors['yoti_sdk_id'] = 'App ID is required.';
+            if(!empty($errorMsg)) {
+                $errors['validation_error'] = $errorMsg;
             }
-            if (!$data['yoti_app_id'])
-            {
-                $errors['yoti_app_id'] = 'SDK ID is required.';
-            }
-            if (empty($pemFile['name']))
+            elseif (empty($pemFile['name']))
             {
                 $errors['yoti_pem'] = 'PEM file is required.';
             }
@@ -91,7 +102,7 @@ class AdminYotiViewYoti extends JViewLegacy
                     }
                     $pemContents = file_get_contents($pemFile['tmp_name']);
                 }
-                // if delete not ticked
+                // If delete not ticked
                 elseif (!$data['yoti_delete_pem'])
                 {
                     $name = $config['yoti_pem']->name;
@@ -106,8 +117,14 @@ class AdminYotiViewYoti extends JViewLegacy
 
                 // save config
                 $config->set('yoti_app_id', $data['yoti_app_id']);
+                $config->set('yoti_scenario_id', $data['yoti_scenario_id']);
                 $config->set('yoti_sdk_id', $data['yoti_sdk_id']);
+                $config->set('yoti_company_name', $data['yoti_company_name']);
                 $config->set('yoti_pem', $data['yoti_pem']);
+                $config->set('yoti_success_url', $data['yoti_success_url']);
+                $config->set('yoti_failed_url', $data['yoti_failed_url']);
+                $config->set('yoti_only_existing_user', $data['yoti_only_existing_user']);
+                $config->set('yoti_user_email', $data['yoti_user_email']);
 
                 $table = JTable::getInstance('extension');
                 $table->load($component->id);
@@ -126,6 +143,13 @@ class AdminYotiViewYoti extends JViewLegacy
         $this->errors = $errors;
         $this->data = $data->flatten();
 
+        $this->successUrl = (!empty($this->data['yoti_success_url'])) ? $this->data['yoti_success_url']  : '/user';
+        $this->failedUrl = (!empty($this->data['yoti_failed_url'])) ? $this->data['yoti_failed_url']  : '/';
+        $this->pemFilechecked = (!empty($this->data['yoti_delete_pem']) ? ' checked="checked"' : '');
+        $this->onlyExitingUserChecked = (!empty($this->data['yoti_only_existing_user'])) ? ' checked="checked"'  : '';
+        $this->userEmailChecked = (!empty($this->data['yoti_user_email'])) ? ' checked="checked"'  : '';
+
+
         return parent::display($tpl);
     }
 
@@ -136,8 +160,24 @@ class AdminYotiViewYoti extends JViewLegacy
      */
     protected function postVar($var, $default = null)
     {
-        return JFactory::getApplication()->input->post->get($var, $default);
+        return JFactory::getApplication()->input->get($var, $default, 'STR');
 //        return (array_key_exists($var, $_POST)) ? $_POST[$var] : $default;
+    }
+
+    /**
+     * @return string
+     */
+    protected function validateForm()
+    {
+       $errorMsg = '';
+       foreach($this->formRequiredFields as $fieldName => $fieldLabel) {
+           if(empty($this->postVar($fieldName))) {
+               $errorMsg = "{$fieldLabel} is required!";
+               break;
+           }
+       }
+
+       return $errorMsg;
     }
 
     /**
@@ -169,6 +209,6 @@ class AdminYotiViewYoti extends JViewLegacy
             ($view == 'users')
         );
         JToolbarHelper::preferences('com_yoti', 400, 570);
-        JToolbarHelper::title('Yoti');
+        JToolbarHelper::title('Yoti Settings');
     }
 }

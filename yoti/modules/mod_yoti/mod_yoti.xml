@@ -12,5 +12,6 @@
     <files>
         <filename module="mod_yoti">mod_yoti.php</filename>
         <folder>tmpl</folder>
+        <filename>helper.php</filename>
     </files>
 </extension>

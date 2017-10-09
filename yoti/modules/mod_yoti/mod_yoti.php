@@ -1,4 +1,14 @@
 <?php
 defined('_JEXEC') or die('Restricted access'); // no direct access
 
-require JModuleHelper::getLayoutPath('mod_yoti');
+// Include the syndicate functions only once
+require_once dirname(__FILE__) . '/helper.php';
+
+// Include the latest functions only once
+JLoader::register('ModYotiHelper', __DIR__ . '/helper.php');
+
+// Load YotiUserModel
+JLoader::register('YotiModelUser', JPATH_ROOT . '/components/com_yoti/models/user.php');
+
+//require JModuleHelper::getLayoutPath('mod_yoti');
+require JModuleHelper::getLayoutPath('mod_yoti', $params->get('layout', 'default'));

@@ -10,33 +10,102 @@ use Yoti\ActivityDetails;
 defined('JPATH_BASE') or die;
 require_once JPATH_SITE . '/components/com_yoti/sdk/boot.php';
 require_once JPATH_SITE . '/components/com_yoti/YotiHelper.php';
+//Load the Joomla Model framework
+jimport('joomla.application.component.model');
+// Load YotiUserModel
+JLoader::register('YotiModelUser', JPATH_ROOT . '/components/com_yoti/models/user.php');
+
+jimport('joomla.plugin.plugin');
 
 /**
- * An example custom profile plugin.
+ * UserYotiprofile plugin.
  *
  * @package        Joomla.Plugins
  * @subpackage    user.profile
- * @version        1.6
+ * @version        2.5
  */
-class plgUseryotiprofile extends JPlugin
+class plgUserYotiprofile extends JPlugin
 {
+    /**
+     * @param	string	The context for the data
+     * @param	int		The user id
+     * @param	object
+     * @return	boolean
+     * @since	2.5
+     */
+    function onContentPrepareData($context, $data)
+    {
+        // Check we are manipulating a valid form.
+        if (!in_array($context, array('com_users.profile','com_users.registration','com_users.user','com_admin.profile'))){
+            return true;
+        }
+
+        $userId = isset($data->id) ? $data->id : 0;
+
+        // Load the profile data from the database.
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true)
+            ->select('data')
+            ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
+            ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId))
+            ->setLimit('1');
+        $result = $db->setQuery($query)->loadAssoc();
+
+        // Check for a database error.
+        if ($db->getErrorNum()) {
+            $this->_subject->setError($db->getErrorMsg());
+            return false;
+        }
+
+        // Merge the profile data.
+        $data->yotiprofile = [];
+        $profileArr = (!empty($result['data'])) ? unserialize($result['data']) : [];
+
+        foreach ($profileArr as $key => $value) {
+            if ($key == YotiHelper::ATTR_SELFIE_FILE_NAME) {
+                $profilePic = '<img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" />';
+                $data->yotiprofile[$key] = $profilePic;
+                //$data->yotiprofile[$key] = YotiHelper::uploadUrl() . "/" . $value;
+            } else {
+                $data->yotiprofile[$key] = $value;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * @param    JForm    The form to be altered.
      * @param    array    The associated data for the form.
      * @return    boolean
      * @since    1.6
      */
-    function onContentPrepareForm($form, $data)
+    public function onContentPrepareForm($form, $data)
     {
         // Load user_profile plugin language
         $lang = JFactory::getLanguage();
         $lang->load('plg_user_yotiprofile', JPATH_ADMINISTRATOR);
+        $config = YotiHelper::getConfig();
 
         if (!($form instanceof JForm))
         {
             $this->_subject->setError('JERROR_NOT_A_FORM');
             return false;
         }
+
+        if (
+            $form->getName() === 'com_users.login'
+            && $config['yoti_only_existing_user']
+            && !is_null(YotiHelper::getYotiUserFromSession())
+        ) {
+            JForm::addFieldPath(dirname(__FILE__) . '/fields');
+            $yotiLoginXml = simplexml_load_file(dirname(__FILE__) . "/profiles/login.xml");
+            $formXml = $form->getXML();
+            $form->reset(true);
+            $form->setFields($yotiLoginXml);
+            $form->setFields($formXml);
+        }
+
         // Check we are manipulating a valid form.
         $forms = array('com_users.profile', 'com_users.registration', 'com_users.user', 'com_admin.profile');
         if (!in_array($form->getName(), $forms))
@@ -44,118 +113,54 @@ class plgUseryotiprofile extends JPlugin
             return true;
         }
 
-//        exit($form->getName());
-        if ($form->getName() == 'com_users.profile' || $form->getName() == 'com_users.user')
+        if (
+            !empty($data->yotiprofile)
+            && ($form->getName() == 'com_users.profile'
+                || $form->getName() == 'com_users.user')
+        )
         {
             JForm::addFieldPath(dirname(__FILE__) . '/fields');
 
-            $user = JFactory::getUser($data->id);
-            $db = JFactory::getDbo();
-            $tableName = YotiHelper::tableName();
-            $dbProfile = $db->loadAssoc($db->setQuery("SELECT * FROM {$tableName} WHERE joomla_userid=" . $db->quote($user->id)));
-            $profile = null;
-            if ($dbProfile)
-            {
-                $profile = new ActivityDetails($dbProfile, $dbProfile['identifier']);
-            }
-
-            // display these fields
-            $map = array(
-                ActivityDetails::ATTR_SELFIE => 'Selfie',
-                ActivityDetails::ATTR_PHONE_NUMBER => 'Phone number',
-                ActivityDetails::ATTR_DATE_OF_BIRTH => 'Date of birth',
-                ActivityDetails::ATTR_GIVEN_NAMES => 'Given names',
-                ActivityDetails::ATTR_FAMILY_NAME => 'Family name',
-                ActivityDetails::ATTR_NATIONALITY => 'Nationality',
-            );
-            if ($profile)
-            {
-                $xml = '';
-                foreach ($map as $param => $label)
-                {
-                    $value = $profile->getProfileAttribute($param);
-                    if ($param == ActivityDetails::ATTR_SELFIE)
-                    {
-                        $selfieFullPath = YotiHelper::uploadDir() . "/{$dbProfile['selfie_filename']}";
-                        if ($dbProfile['selfie_filename'] && file_exists($selfieFullPath))
-                        {
-                            $selfieUrl = JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie');
-//                                site_url('wp-login.php') . '?yoti-connect=1&action=bin-file&field=selfie';
-//                            $selfieUrl = YotiConnectHelper::uploadUrl() . "/{$dbProfile['selfie_filename']}";
-                            $xml .= '<field name="' . $param . '" type="Image" src="' . $selfieUrl . '" width="100" />';
-                        }
-                    }
-                    else
-                    {
-                        $xml .= '<field name="' . $param . '" type="Static" label="' . $label . '" value="' . $value . '" />';
-                    }
-                }
-                $xml = '<fieldset name="yotiprofile" label="Yoti Profile">' . $xml . '</fieldset>';
-                $form->setField(new SimpleXMLElement($xml));
-            }
-
-            // todo: add this
-            //            echo '<tr><th><label>Connect</label></th>';
-            //            echo '<td>' . YotiConnectButton::render($_SERVER['REQUEST_URI']) . '</td></tr>';
-            //            echo '</table>';
-
             // Add the profile fields to the form.
-            JForm::addFormPath(dirname(__FILE__) . '/profiles');
-            $form->loadFile('profile', false);
-
-            // Toggle whether the something field is required.
-            //            if ($this->params->get('profile-require_something', 1) > 0) {
-            //                $form->setFieldAttribute('something', 'required', $this->params->get('profile-require_something') == 2, 'yotiprofile');
-            //            } else {
-            //                $form->removeField('something', 'yotiprofile');
-            //            }
+           $yotiProfileXml = simplexml_load_file(dirname(__FILE__) . "/profiles/profile.xml");
+           $form->setField($yotiProfileXml);
         }
-        //
-        //        //In this example, we treat the frontend registration and the back end user create or edit as the same.
-        //        elseif ($form->getName()=='com_users.registration' || $form->getName()=='com_users.user' )
-        //        {
-        //            // Add the registration fields to the form.
-        //            JForm::addFormPath(dirname(__FILE__).'/profiles');
-        //            $form->loadFile('profile', false);
-        //
-        //            // Toggle whether the something field is required.
-        //            if ($this->params->get('register-require_something', 1) > 0) {
-        //                $form->setFieldAttribute('something', 'required', $this->params->get('register-require_something') == 2, 'yotiprofile');
-        //            } else {
-        //                $form->removeField('something', 'yotiprofile');
-        //            }
-        //        }
+
+        return true;
     }
 
-    function onUserAfterSave($data, $isNew, $result, $error)
+    public function onUserAfterSave($user, $isNew, $success, $error)
     {
-        $userId = JArrayHelper::getValue($data, 'id', 0, 'int');
+        $userId = (isset($user['id'])) ? $user['id'] : 0;
 
-        if ($userId && $result && isset($data['yotiprofile']) && (count($data['yotiprofile'])))
+        return true;
+    }
+
+    /**
+     * Remove all user profile information for the given user ID
+     * Method is called after user data is deleted from the database
+     *
+     * @param $user
+     * @param $success
+     * @param $msg
+     * @return bool
+     */
+    public function onUserAfterDelete($user, $success, $msg)
+    {
+        if (!$success)
+        {
+            return false;
+        }
+
+        $userId = (isset($user['id'])) ? $user['id'] : 0;
+
+        if ($userId)
         {
             try
             {
-                $db = JFactory::getDbo();
-                $db->setQuery('DELETE FROM #__user_profiles WHERE user_id = ' . $userId . ' AND profile_key LIKE \'yotiprofile.%\'');
-                if (!$db->query())
-                {
-                    throw new Exception($db->getErrorMsg());
-                }
-
-                $tuples = array();
-                $order = 1;
-                foreach ($data['yotiprofile'] as $k => $v)
-                {
-                    $tuples[] = '(' . $userId . ', ' . $db->quote('yotiprofile.' . $k) . ', ' . $db->quote(json_encode($v)) . ', ' . $order++ . ')';
-                }
-
-                $db->setQuery('INSERT INTO #__user_profiles VALUES ' . implode(', ', $tuples));
-                if (!$db->query())
-                {
-                    throw new Exception($db->getErrorMsg());
-                }
+                YotiHelper::deleteYotiUser($userId);
             }
-            catch (JException $e)
+            catch (\Exception $e)
             {
                 $this->_subject->setError($e->getMessage());
                 return false;
@@ -165,44 +170,55 @@ class plgUseryotiprofile extends JPlugin
         return true;
     }
 
-    /**
-     * Remove all user profile information for the given user ID
-     *
-     * Method is called after user data is deleted from the database
-     *
-     * @param    array $user Holds the user data
-     * @param    boolean $success True if user was succesfully stored in the database
-     * @param    string $msg Message
-     */
-    function onUserAfterDelete($user, $success, $msg)
-    {
-        if (!$success)
-        {
-            return false;
+    public function onUserLogin($user, $options) {
+        if(!YotiHelper::getYotiUserFromSession()) {
+            $yotiUserModel = new YotiModelUser();
+            $yotiUserData = $yotiUserModel->getYotiUserById($user['id']);
+            if(!empty($yotiUserData) && isset($yotiUserData['data'])) {
+                $yotiuserProfile = YotiHelper::makeYotiUserProfile(unserialize($yotiUserData['data']), $user['id']);
+                YotiHelper::storeYotiUserInSession($yotiuserProfile);
+            }
         }
+    }
 
-        $userId = JArrayHelper::getValue($user, 'id', 0, 'int');
+    /**
+     * Create or delete Yoti user from Joomla.
+     * Method is called after a user has logged in.
+     *
+     * @param $options
+     * @return bool
+     */
+    public function onUserAfterLogin($options)
+    {
+        $input  = JFactory::getApplication()->input;
+        $postData = $input->post->getArray();
+        $user = $options['user'];
+        $userId = (is_object($user)) ? $user->id : 0;
 
-        if ($userId)
-        {
-            try
-            {
-                $db = JFactory::getDbo();
-                $db->setQuery(
-                    'DELETE FROM #__user_profiles WHERE user_id = ' . $userId .
-                    " AND profile_key LIKE 'yotiprofile.%'"
-                );
+        if ($input->post) {
+            // If Yoti nolink option is ticked then remove Yoti user
+            if (isset($postData['yoti_nolink']) && $input->post->get('yoti_nolink')) {
+                try {
+                    YotiHelper::deleteYotiUser($userId);
+                } catch(\Exception $e) {
+                    $this->_subject->setError($e->getMessage());
+                    return false;
+                }
+            } else if (YotiHelper::getYotiUserFromSession()) {
+                // If the session is set then create Yoti user.
+                $activityDetails = YotiHelper::getYotiUserFromSession();
 
-                if (!$db->query())
-                {
-                    throw new Exception($db->getErrorMsg());
+                if ($activityDetails) {
+                    try {
+                        $yotiHelper = new YotiHelper();
+                        $yotiHelper->createYotiUser($activityDetails, $userId);
+                    } catch(\Exception $e) {
+                        $this->_subject->setError($e->getMessage());
+                        return false;
+                    }
                 }
             }
-            catch (JException $e)
-            {
-                $this->_subject->setError($e->getMessage());
-                return false;
-            }
+            YotiHelper::clearYotiUserFromSession();
         }
 
         return true;

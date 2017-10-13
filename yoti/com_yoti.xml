@@ -23,6 +23,7 @@
         <filename>controller.php</filename>
         <filename>YotiHelper.php</filename>
         <folder>sdk</folder>
+        <folder>models</folder>
     </files>
 
     <administration>

@@ -10,5 +10,4 @@ JLoader::register('ModYotiHelper', __DIR__ . '/helper.php');
 // Load YotiUserModel
 JLoader::register('YotiModelUser', JPATH_ROOT . '/components/com_yoti/models/user.php');
 
-//require JModuleHelper::getLayoutPath('mod_yoti');
 require JModuleHelper::getLayoutPath('mod_yoti', $params->get('layout', 'default'));

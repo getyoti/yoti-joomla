@@ -23,6 +23,7 @@ if (ModYotiHelper::mockRequests())
 $currentUser = JFactory::getUser();
 
 $document = JFactory::getDocument();
+// Add Yoti button library
 $document->addScript(ModYotiHelper::YOTI_BUTTON_JS_LIBRARY);
 
 $script = [];
@@ -74,13 +75,13 @@ else
         {
             $url = ModYotiHelper::getLoginUrl();
         }
-        $button = sprintf($linkButton, 'Link Yoti account');
+        $button = sprintf($linkButton, 'Link to Yoti');
     }
     else
     {
         $url = JRoute::_('index.php?option=com_yoti&task=unlink');
         $label = 'Unlink account from Yoti';
-        $button = '<a class="yoti-connect-button btn btn-primary" href="' . $url . '">' . $label . '</a>';
+        $button = '<a class="yoti-connect-button btn btn-small btn-danger" href="' . $url . '">' . $label . '</a>';
     }
 }
 echo '<div class="yoti-connect">' . $button . '</div>';

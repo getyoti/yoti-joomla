@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die;
 
-require_once JPATH_SITE . '/components/com_yoti/YotiHelper.php';
+require_once JPATH_ROOT . '/components/com_yoti/YotiHelper.php';
 
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
@@ -29,6 +29,8 @@ class YotiModelUser extends JModelForm
     protected $_item = null;
 
     /**
+     * Get the prefix count.
+     *
      * @param string $prefix
      *   String to search for.
      * @param string $fieldName
@@ -47,24 +49,6 @@ class YotiModelUser extends JModelForm
             );
             $count = $db->loadResult();
         }
-        return $count;
-    }
-
-    /**
-     * @param string $prefix
-     *   String to search for against username field.
-     *
-     * @return int $count
-     */
-    public function getUsernamePrefixCount($prefix)
-    {
-        $count = 0;
-        if(!empty($prefix)) {
-            $db = JFactory::getDbo();
-            $db->setQuery("SELECT COUNT(*) FROM #__users WHERE username LIKE " . $db->quote($prefix. "%"));
-            $count = $db->loadResult();
-        }
-
         return $count;
     }
 

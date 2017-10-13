@@ -8,7 +8,7 @@
     <authorEmail>sdksupport@yoti.com</authorEmail>
     <authorUrl>http://www.yoti.com</authorUrl>
     <version>1.0.0</version>
-    <description>PLG_USER_YOTIPROFILE_XML_DESCRIPTION</description>
+    <description>Yoti user plugin</description>
 
     <files>
         <filename plugin="yotiprofile">yotiprofile.php</filename>

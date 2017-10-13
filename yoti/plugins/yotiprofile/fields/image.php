@@ -12,14 +12,6 @@ class JFormFieldImage extends JFormField
 
     public function getInput()
     {
-        /*if(empty($value)){
-            $elementName = $this->element['name'];
-            $data = $this->form->getData()->get('yotiprofile');
-            if (is_object($data) && isset($data->{$elementName})) {
-                $value = $data->{$elementName};
-            }
-        }*/
-        //$srcValue = (isset($this->element['src'])) ? $this->element['src'] : $value;
         $srcValue = JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie');
         $width = (isset($this->element['width'])) ? $this->element['width'] : 100;
         $html = '<img src="' . $srcValue . '" width="' . $width . '" />';

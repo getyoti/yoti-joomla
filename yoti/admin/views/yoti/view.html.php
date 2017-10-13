@@ -13,6 +13,10 @@ class AdminYotiViewYoti extends JViewLegacy
     public $data = array();
     public $errors = array();
 
+    protected $defaultSuccessUrl = 'index.php?option=com_users&view=profile';
+    protected $defaultFailedUrl = '/';
+    protected $joomlaLoginPage = 'index.php?option=com_yoti&task=login';
+
     protected $formRequiredFields = [
         'yoti_sdk_id' => 'App ID',
         'yoti_app_id' => 'Scenario ID',
@@ -143,8 +147,8 @@ class AdminYotiViewYoti extends JViewLegacy
         $this->errors = $errors;
         $this->data = $data->flatten();
 
-        $this->successUrl = (!empty($this->data['yoti_success_url'])) ? $this->data['yoti_success_url']  : '/user';
-        $this->failedUrl = (!empty($this->data['yoti_failed_url'])) ? $this->data['yoti_failed_url']  : '/';
+        $this->successUrl = (!empty($this->data['yoti_success_url'])) ? $this->data['yoti_success_url']  : $this->defaultSuccessUrl;
+        $this->failedUrl = (!empty($this->data['yoti_failed_url'])) ? $this->data['yoti_failed_url']  : $this->defaultFailedUrl;
         $this->pemFilechecked = (!empty($this->data['yoti_delete_pem']) ? ' checked="checked"' : '');
         $this->onlyExitingUserChecked = (!empty($this->data['yoti_only_existing_user'])) ? ' checked="checked"'  : '';
         $this->userEmailChecked = (!empty($this->data['yoti_user_email'])) ? ' checked="checked"'  : '';
@@ -154,17 +158,21 @@ class AdminYotiViewYoti extends JViewLegacy
     }
 
     /**
+     * Get post param value.
+     *
      * @param $var
-     * @param null $default
-     * @return null
+     * @param mixed $default
+     *
+     * @return mixed
      */
     protected function postVar($var, $default = null)
     {
         return JFactory::getApplication()->input->get($var, $default, 'STR');
-//        return (array_key_exists($var, $_POST)) ? $_POST[$var] : $default;
     }
 
     /**
+     * Validate form field.
+     *
      * @return string
      */
     protected function validateForm()
@@ -181,18 +189,20 @@ class AdminYotiViewYoti extends JViewLegacy
     }
 
     /**
-     * @param $var
-     * @param null $default
-     * @return null
+     * Get value fo the file.
+     *
+     * @param string $var
+     * @param mixed $default
+     *
+     * @return mixed
      */
     protected function filesVar($var, $default = null)
     {
-//        return JFactory::getApplication()->input->files->get($var, $default);
         return (array_key_exists($var, $_FILES) && !empty($_FILES[$var]['name'])) ? $_FILES[$var] : $default;
     }
 
     /**
-     * add sidebar
+     * Add sidebar.
      */
     private function addSidebar()
     {

@@ -5,12 +5,13 @@
  * @license        GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-use Yoti\ActivityDetails;
 
 defined('JPATH_BASE') or die;
-require_once JPATH_SITE . '/components/com_yoti/sdk/boot.php';
-require_once JPATH_SITE . '/components/com_yoti/YotiHelper.php';
-//Load the Joomla Model framework
+
+require_once JPATH_ROOT . '/components/com_yoti/sdk/boot.php';
+require_once JPATH_ROOT . '/components/com_yoti/YotiHelper.php';
+
+// Load the Joomla Model framework
 jimport('joomla.application.component.model');
 // Load YotiUserModel
 JLoader::register('YotiModelUser', JPATH_ROOT . '/components/com_yoti/models/user.php');
@@ -33,7 +34,7 @@ class plgUserYotiprofile extends JPlugin
      * @return	boolean
      * @since	2.5
      */
-    function onContentPrepareData($context, $data)
+    public function onContentPrepareData($context, $data)
     {
         // Check we are manipulating a valid form.
         if (!in_array($context, array('com_users.profile','com_users.registration','com_users.user','com_admin.profile'))){
@@ -63,9 +64,9 @@ class plgUserYotiprofile extends JPlugin
 
         foreach ($profileArr as $key => $value) {
             if ($key == YotiHelper::ATTR_SELFIE_FILE_NAME) {
-                $profilePic = '<img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" />';
-                $data->yotiprofile[$key] = $profilePic;
-                //$data->yotiprofile[$key] = YotiHelper::uploadUrl() . "/" . $value;
+                //$profilePic = '<img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" />';
+                //$data->yotiprofile[$key] = $profilePic;
+                $data->yotiprofile[$key] = 'Edit profile to see your picture';
             } else {
                 $data->yotiprofile[$key] = $value;
             }
@@ -129,12 +130,12 @@ class plgUserYotiprofile extends JPlugin
         return true;
     }
 
-    public function onUserAfterSave($user, $isNew, $success, $error)
+    /**public function onUserAfterSave($user, $isNew, $success, $error)
     {
         $userId = (isset($user['id'])) ? $user['id'] : 0;
 
         return true;
-    }
+    }*/
 
     /**
      * Remove all user profile information for the given user ID
@@ -152,13 +153,15 @@ class plgUserYotiprofile extends JPlugin
             return false;
         }
 
+        $yotiUserModel = new YotiModelUser();
+
         $userId = (isset($user['id'])) ? $user['id'] : 0;
 
         if ($userId)
         {
             try
             {
-                YotiHelper::deleteYotiUser($userId);
+                $yotiUserModel->deleteYotiUser($userId);
             }
             catch (\Exception $e)
             {
@@ -170,6 +173,12 @@ class plgUserYotiprofile extends JPlugin
         return true;
     }
 
+    /**
+     * Triggered after user login process
+     *
+     * @param array $user
+     * @param array $options
+     */
     public function onUserLogin($user, $options) {
         if(!YotiHelper::getYotiUserFromSession()) {
             $yotiUserModel = new YotiModelUser();
@@ -194,12 +203,13 @@ class plgUserYotiprofile extends JPlugin
         $postData = $input->post->getArray();
         $user = $options['user'];
         $userId = (is_object($user)) ? $user->id : 0;
+        $yotiUserModel = new YotiModelUser();
 
         if ($input->post) {
             // If Yoti nolink option is ticked then remove Yoti user
             if (isset($postData['yoti_nolink']) && $input->post->get('yoti_nolink')) {
                 try {
-                    YotiHelper::deleteYotiUser($userId);
+                    $yotiUserModel->deleteYotiUser($userId);
                 } catch(\Exception $e) {
                     $this->_subject->setError($e->getMessage());
                     return false;

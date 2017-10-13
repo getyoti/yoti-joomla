@@ -1,11 +1,11 @@
 #!/bin/bash
 #!/bin/bash
-NAME="yoti-for-joomla-v1.0.0-edge.zip"
+NAME="yoti-joomla-v1.0.1-edge.zip"
 SDK_RELATIVE_PATH="sdk"
-curl https://github.com/getyoti/php/archive/master.zip -O -L
+curl https://github.com/getyoti/yoti-php-sdk/archive/master.zip -O -L
 unzip master.zip -d sdk
-mv sdk/php-master/src/* sdk
-rm -rf sdk/php-master
+mv sdk/yoti-php-sdk-master/src/* sdk
+rm -rf sdk/yoti-php-sdk-master
 
 
 if [ ! -d "./yoti" ]; then

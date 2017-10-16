@@ -29,19 +29,19 @@ class YotiController extends JControllerLegacy
             case 'login':
                 $userLinked = $helper->link();
                 if ($userLinked && empty($_GET['redirect'])) {
-                    $redirect = JRoute::_($config['yoti_success_url']);
+                    $redirect = JRoute::_($config['yoti_success_url'], false);
                 } else if(!$userLinked) {
                     // Redirect to failed URL
                     $failedUrl = ($config['yoti_failed_url'] == "/") ? "index.php" : $config['yoti_failed_url'];
-                    $redirect = JRoute::_($failedUrl);
+                    $redirect = JRoute::_($failedUrl, false);
                 }
-                $this->setRedirect($redirect, false);
+                $this->setRedirect($redirect);
                 return;
                 break;
 
             case 'unlink':
                 $helper->unlink();
-                $this->setRedirect($redirect, false);
+                $this->setRedirect($redirect);
                 //JFactory::getApplication()->redirect($redirect);
                 return;
                 break;
@@ -52,7 +52,7 @@ class YotiController extends JControllerLegacy
                 break;
 
             default:
-                $this->setRedirect('index.php', false);
+                $this->setRedirect(JRoute::_($redirect, false));
                 return;
         }
 

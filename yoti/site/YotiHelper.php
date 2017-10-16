@@ -2,6 +2,8 @@
 
 use Yoti\ActivityDetails;
 use Yoti\YotiClient;
+use Carbon\Carbon;
+
 //Load the Joomla Model framework
 jimport('joomla.application.component.model');
 // Load YotiUserModel
@@ -194,13 +196,13 @@ class YotiHelper
             // If logged in user doesn't match yoti user registered then bail
             if ($userId && $currentUser->id != $userId)
             {
-                self::setFlash('This Yoti account is already linked to another account.', 'error');
+                YotiHelper::setFlash('This Yoti account is already linked to another account.', 'error');
             }
             // If Joomla user not found in Yoti table then create new yoti user
             elseif (!$userId)
             {
                 $this->createYotiUser($activityDetails, $currentUser->id);
-                self::setFlash('Your Yoti account has been successfully linked.');
+                YotiHelper::setFlash('Your Yoti account has been successfully linked.');
             }
         }
 
@@ -527,7 +529,7 @@ class YotiHelper
         $username = $this->generateUsername($activityDetails);
         $password = $this->generatePassword();
 
-        // user data
+        // Set user data
         $userData = [
             'name' => $userFullName,
             'username' => $username,
@@ -537,7 +539,7 @@ class YotiHelper
             'sendEmail' => 0,
         ];
 
-        // save user
+        // Save user
         if (!$user->bind($userData, 'usertype'))
         {
             throw new Exception("Create user error: " . $user->getError());
@@ -549,7 +551,7 @@ class YotiHelper
             throw new Exception("Could not save Yoti user");
         }
 
-        // set new id
+        // Set new user Id
         $userId = $user->get('id');
         $this->createYotiUser($activityDetails, $userId);
 
@@ -588,25 +590,6 @@ class YotiHelper
     }
 
     /**
-     * Check if Yoti user is linked to Joomla user.
-     *
-     * @param int $userId
-     *   Joomla userId
-     *
-     * @return mixed
-     */
-    public static function yotiUserIsLinkedToJoomlaUser($userId)
-    {
-        $db = JFactory::getDbo();
-        $query = $db->getQuery(true)
-            ->select('joomla_userid')
-            ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
-            ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId))
-            ->setLimit('1');
-        return ($db->setQuery($query)->loadResult());
-    }
-
-    /**
      * Create Yoti user account.
      *
      * @param int $userId
@@ -619,8 +602,41 @@ class YotiHelper
     {
         $db = JFactory::getDbo();
 
+        // Create Yoti user selfie file
+        $selfieFilename = YotiHelper::createUserSelfieFile($activityDetails, $userId);
+
+        // Get Yoti user data array
+        $yotiUserData = YotiHelper::getYotiUserData($activityDetails);
+
+        // Replace selfie attribute with the file name attribute
+        if(isset($yotiUserData[ActivityDetails::ATTR_SELFIE])) {
+            $yotiUserData[self::ATTR_SELFIE_FILE_NAME] = $selfieFilename;
+            unset($yotiUserData[ActivityDetails::ATTR_SELFIE]);
+        }
+
+        $user = [
+            'joomla_userid' => $userId,
+            'identifier' => $activityDetails->getUserId(),
+            'data' => serialize($yotiUserData),
+        ];
+
+        // Convert into an object and save
+        $user = (object) $user;
+        $db->insertObject(YotiHelper::YOTI_USER_TABLE_NAME, $user);
+    }
+
+    /**
+     * Create Yoti user selfie file.
+     *
+     * @param ActivityDetails $activityDetails
+     * @param $userId
+     * @return mixed
+     */
+    protected static function createUserSelfieFile(ActivityDetails $activityDetails, $userId)
+    {
         $selfieFilename = null;
-        if ($activityDetails->getProfileAttribute(ActivityDetails::ATTR_SELFIE))
+        $userId = (int) $userId;
+        if ($userId && $activityDetails->getProfileAttribute(ActivityDetails::ATTR_SELFIE))
         {
             // Create media dir
             if (!is_dir(self::uploadDir()))
@@ -632,25 +648,31 @@ class YotiHelper
             file_put_contents(self::uploadDir() . "/$selfieFilename", $activityDetails->getSelfie());
         }
 
+        return $selfieFilename;
+    }
+
+    /**
+     * Build Yoti user data array.
+     *
+     * @param ActivityDetails $activityDetails
+     * @return array
+     */
+    protected static function getYotiUserData(ActivityDetails $activityDetails)
+    {
         $yotiUserData = [];
         foreach(YotiHelper::$profileFields as $attribute => $label) {
-            if ($attribute == ActivityDetails::ATTR_SELFIE) {
-                $yotiUserData[self::ATTR_SELFIE_FILE_NAME] = $selfieFilename;
-            } else {
-                $yotiUserData[$attribute] = $activityDetails->getProfileAttribute($attribute);
-            }
+            $yotiUserData[$attribute] = $activityDetails->getProfileAttribute($attribute);
         }
 
-        $user = [
-            'joomla_userid' => $userId,
-            'identifier' => $activityDetails->getUserId(),
-            'data' => serialize($yotiUserData),
-        ];
+        // Format the date of birth to d-m-Y
+        if(isset($yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH])) {
+            $dateOfBirth = $yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH];
+            $yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH] = date('d-m-Y', strtotime($dateOfBirth));
+        }
 
-        // Convert into an object
-        $user = (object) $user;
-        $db->insertObject(YotiHelper::YOTI_USER_TABLE_NAME, $user);
+        return $yotiUserData;
     }
+
 
     /**
      * Log user in.

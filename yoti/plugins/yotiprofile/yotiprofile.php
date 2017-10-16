@@ -67,6 +67,9 @@ class plgUserYotiprofile extends JPlugin
                 //$profilePic = '<img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" />';
                 //$data->yotiprofile[$key] = $profilePic;
                 $data->yotiprofile[$key] = 'Edit profile to see your picture';
+                //$profile_image = JHtml::_('image', "http://".$_SERVER['HTTP_HOST'].JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie'), 'my profile');
+                //$profile_link = JHtml::_('link', "http://".$_SERVER['HTTP_HOST'].JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie'), 'my profile');
+                //$data->yotiprofile[$key] = $profile_link;
             } else {
                 $data->yotiprofile[$key] = $value;
             }
@@ -129,13 +132,6 @@ class plgUserYotiprofile extends JPlugin
 
         return true;
     }
-
-    /**public function onUserAfterSave($user, $isNew, $success, $error)
-    {
-        $userId = (isset($user['id'])) ? $user['id'] : 0;
-
-        return true;
-    }*/
 
     /**
      * Remove all user profile information for the given user ID

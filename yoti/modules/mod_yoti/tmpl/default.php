@@ -25,6 +25,7 @@ $currentUser = JFactory::getUser();
 $document = JFactory::getDocument();
 // Add Yoti button library
 $document->addScript(ModYotiHelper::YOTI_BUTTON_JS_LIBRARY);
+$document->addStyleSheet(JUri::base() . "components/com_yoti/assets/styles.css");
 
 $script = [];
 
@@ -81,7 +82,7 @@ else
     {
         $url = JRoute::_('index.php?option=com_yoti&task=unlink');
         $label = 'Unlink account from Yoti';
-        $button = '<a class="yoti-connect-button btn btn-small btn-danger" href="' . $url . '">' . $label . '</a>';
+        $button = '<a class="yoti-unlink-button" href="' . $url . '">' . $label . '</a>';
     }
 }
 echo '<div class="yoti-connect">' . $button . '</div>';

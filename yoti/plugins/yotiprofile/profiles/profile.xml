@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<form class="form-group">
 <fields name="yotiprofile">
     <fieldset name="yotiprofile"
               label="Yoti Profile"
     >
         <field
                 name="selfie_filename"
-                type="image"
+                type="yotiavatar"
                 id="selfie_filename"
-                description="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_DESC"
+                alt="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_DESC"
                 label="Selfie"
                 filter=""
                 width="100"
@@ -92,6 +93,6 @@
                 message="PLG_USER_YOTIPROFILE_FIELD_DATE_OF_BIRTH_MESSAGE"
                 size="30"
         />
-
     </fieldset>
 </fields>
+</form>

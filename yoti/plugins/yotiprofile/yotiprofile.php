@@ -17,6 +17,8 @@ jimport('joomla.application.component.model');
 JLoader::register('YotiModelUser', JPATH_ROOT . '/components/com_yoti/models/user.php');
 
 jimport('joomla.plugin.plugin');
+jimport('joomla.filesystem.file');
+jimport('joomla.filesystem.folder');
 
 /**
  * UserYotiprofile plugin.
@@ -27,6 +29,29 @@ jimport('joomla.plugin.plugin');
  */
 class plgUserYotiprofile extends JPlugin
 {
+    /**
+     * Load the language file on instantiation.
+     *
+     * @var    boolean
+     *
+     * @since  1.0.0
+     */
+    protected $autoloadLanguage = true;
+
+    /**
+     * Constructor.
+     *
+     * @param   object  &$subject  The object to observe
+     * @param   array   $config    An array that holds the plugin configuration
+     *
+     * @since   1.0.0
+     */
+    /*public function __construct(& $subject, $config)
+    {
+        parent::__construct($subject, $config);
+        JFormHelper::addFieldPath(__DIR__ . '/fields');
+    }*/
+
     /**
      * @param	string	The context for the data
      * @param	int		The user id
@@ -41,7 +66,7 @@ class plgUserYotiprofile extends JPlugin
             return true;
         }
 
-        $userId = isset($data->id) ? $data->id : 0;
+        $userId = (isset($data->id)) ? $data->id : 0;
 
         // Load the profile data from the database.
         $db = JFactory::getDbo();
@@ -64,17 +89,17 @@ class plgUserYotiprofile extends JPlugin
 
         foreach ($profileArr as $key => $value) {
             if ($key == YotiHelper::ATTR_SELFIE_FILE_NAME) {
-                //$profilePic = '<img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" />';
+                $profilePic = '<pre><code><img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" /></code></pre>';
                 //$data->yotiprofile[$key] = $profilePic;
-                $data->yotiprofile[$key] = 'Edit profile to see your picture';
-                //$profile_image = JHtml::_('image', "http://".$_SERVER['HTTP_HOST'].JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie'), 'my profile');
+                $data->yotiprofile[$key] = 'Edit your profile to see your Selfie';
+                $profile_image = JHtml::_('image', "http://".$_SERVER['HTTP_HOST'].JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie'), 'my profile');
                 //$profile_link = JHtml::_('link', "http://".$_SERVER['HTTP_HOST'].JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie'), 'my profile');
                 //$data->yotiprofile[$key] = $profile_link;
+
             } else {
                 $data->yotiprofile[$key] = $value;
             }
         }
-
         return true;
     }
 
@@ -87,8 +112,8 @@ class plgUserYotiprofile extends JPlugin
     public function onContentPrepareForm($form, $data)
     {
         // Load user_profile plugin language
-        $lang = JFactory::getLanguage();
-        $lang->load('plg_user_yotiprofile', JPATH_ADMINISTRATOR);
+        //$lang = JFactory::getLanguage();
+        //$lang->load('plg_user_yotiprofile', JPATH_SITE);
         $config = YotiHelper::getConfig();
 
         if (!($form instanceof JForm))
@@ -102,6 +127,7 @@ class plgUserYotiprofile extends JPlugin
             && $config['yoti_only_existing_user']
             && !is_null(YotiHelper::getYotiUserFromSession())
         ) {
+            // Reorder the form to put the warning message on top
             JForm::addFieldPath(dirname(__FILE__) . '/fields');
             $yotiLoginXml = simplexml_load_file(dirname(__FILE__) . "/profiles/login.xml");
             $formXml = $form->getXML();
@@ -120,14 +146,11 @@ class plgUserYotiprofile extends JPlugin
         if (
             !empty($data->yotiprofile)
             && ($form->getName() == 'com_users.profile'
-                || $form->getName() == 'com_users.user')
+            || $form->getName() == 'com_users.user')
         )
         {
-            JForm::addFieldPath(dirname(__FILE__) . '/fields');
-
-            // Add the profile fields to the form.
-           $yotiProfileXml = simplexml_load_file(dirname(__FILE__) . "/profiles/profile.xml");
-           $form->setField($yotiProfileXml);
+            JForm::addFormPath(dirname(__FILE__) . '/profiles');
+            $form->loadFile('profile', false);
         }
 
         return true;
@@ -157,7 +180,9 @@ class plgUserYotiprofile extends JPlugin
         {
             try
             {
-                $yotiUserModel->deleteYotiUser($userId);
+                if ($yotiUserModel->getYotiUserById($userId)) {
+                    $yotiUserModel->deleteYotiUser($userId);
+                }
             }
             catch (\Exception $e)
             {
@@ -180,6 +205,7 @@ class plgUserYotiprofile extends JPlugin
             $yotiUserModel = new YotiModelUser();
             $yotiUserData = $yotiUserModel->getYotiUserById($user['id']);
             if(!empty($yotiUserData) && isset($yotiUserData['data'])) {
+                // After successful login store Yoti user data in the session
                 $yotiuserProfile = YotiHelper::makeYotiUserProfile(unserialize($yotiUserData['data']), $user['id']);
                 YotiHelper::storeYotiUserInSession($yotiuserProfile);
             }
@@ -196,16 +222,18 @@ class plgUserYotiprofile extends JPlugin
     public function onUserAfterLogin($options)
     {
         $input  = JFactory::getApplication()->input;
-        $postData = $input->post->getArray();
         $user = $options['user'];
         $userId = (is_object($user)) ? $user->id : 0;
         $yotiUserModel = new YotiModelUser();
 
         if ($input->post) {
+            $postData = $input->post->getArray();
             // If Yoti nolink option is ticked then remove Yoti user
-            if (isset($postData['yoti_nolink']) && $input->post->get('yoti_nolink')) {
+            if (isset($postData['credentials']['yoti_nolink']) && $input->post->get('credentials')) {
                 try {
-                    $yotiUserModel->deleteYotiUser($userId);
+                    if($yotiUserModel->getYotiUserById($userId)) {
+                       $yotiUserModel->deleteYotiUser($userId);
+                    }
                 } catch(\Exception $e) {
                     $this->_subject->setError($e->getMessage());
                     return false;

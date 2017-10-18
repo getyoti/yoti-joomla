@@ -15,16 +15,15 @@ class com_yotiInstallerScript
     {
         $app = JFactory::getApplication();
         $modulePath = __DIR__ . '/modules/mod_yoti';
+        $installer = new JInstaller;
+
         if (is_dir($modulePath))
         {
-            $installer = new JInstaller;
-            if ($installer->install($modulePath))
-            {
+            try {
+                $installer->install($modulePath);
                 $app->enqueueMessage('Installing module [mod_yoti] was successful.', 'message');
-            }
-            else
-            {
-                $app->enqueueMessage('Installing module [mod_yoti] failed.', 'error');
+            } catch(\Exception $e) {
+                $app->enqueueMessage('Error - Installing module [mod_yoti] ' . $e->getMessage(), 'error');
             }
         }
         else
@@ -35,14 +34,11 @@ class com_yotiInstallerScript
         $pluginPath = __DIR__ . '/plugins/yotiprofile';
         if (is_dir($pluginPath))
         {
-            $installer = new JInstaller;
-            if ($installer->install($pluginPath))
-            {
+            try {
+                $installer->install($pluginPath);
                 $app->enqueueMessage('Installing plugin [yotiprofile] was successful.', 'message');
-            }
-            else
-            {
-                $app->enqueueMessage('Installing plugin [yotiprofile] failed.', 'error');
+            } catch(\Exception $e) {
+                $app->enqueueMessage('Error - Installing plugin [yotiprofile] ' . $e->getMessage(), 'error');
             }
         }
         else
@@ -58,19 +54,36 @@ class com_yotiInstallerScript
     {
         $db = JFactory::getDBO();
         $app = JFactory::getApplication();
+        $installer = new JInstaller;
 
-        $db->setQuery("SELECT `extension_id` FROM #__extensions WHERE `element` = 'mod_yoti' AND `type` = 'module'");
-        $id = $db->loadResult();
-        if ($id)
+        $moduleQuery = $db->getQuery(true)
+                ->select('extension_id')
+                ->from('#__extensions')
+                ->where($db->quoteName('element') . '=' . $db->quote('mod_yoti'))
+                 ->where($db->quoteName('type') . '=' . $db->quote('module'));
+        $moduleId = $db->setQuery($moduleQuery)->loadResult();
+        if ($moduleId)
         {
-            $installer = new JInstaller;
-            if ($installer->uninstall('module', $id, 1))
-            {
+            try {
+                $installer->uninstall('module', $moduleId, 1);
                 $app->enqueueMessage('Uninstalling module [mod_yoti] was successful.', 'message');
+            } catch(\Exception $e) {
+                $app->enqueueMessage("Error uninstalling module [mod_yoti] " . $e->getMessage(), 'error');
             }
-            else
-            {
-                $app->enqueueMessage('Uninstalling module [mod_yoti] failed.', 'error');
+        }
+        $pluginQuery = $db->getQuery(true)
+            ->select('extension_id')
+            ->from($db->quoteName('#__extensions'))
+            ->where($db->quoteName('element') . '=' . $db->quote('yotiprofile'))
+            ->where($db->quoteName('type') . '=' . $db->quote('plugin'));
+        $pluginId = $db->setQuery($pluginQuery)->loadResult();
+        if($pluginId)
+        {
+            try {
+                $installer->uninstall('plugin', $pluginId, 1);
+                $app->enqueueMessage('Uninstalling plugin [plg_user_yotiprofile] was successful.', 'message');
+            } catch(\Exception $e) {
+                $app->enqueueMessage("Error uninstalling plugin [plg_user_yotiprofile] " . $e->getMessage(), 'error');
             }
         }
     }

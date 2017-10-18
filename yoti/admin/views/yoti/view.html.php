@@ -40,7 +40,7 @@ class AdminYotiViewYoti extends JViewLegacy
         /** @var \Joomla\Registry\Registry $config */
         $config = $component->params;
 
-        // check has preliminary extensions to run
+        // Check has preliminary extensions to run
         $errors = array();
         if (!function_exists('curl_version'))
         {

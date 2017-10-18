@@ -16,7 +16,7 @@
                            class="form-control input-xlarge"
                            required="true"
                     />
-                    <span class="help-block">Copy the App ID of your Yoti App here</span>
+                    <span class="help-block">Copy the App ID from your Yoti App here</span>
                 </div>
             </div>
             <div class="control-group">
@@ -38,7 +38,7 @@
                            class="form-control input-xlarge"
                            required="true"
                     />
-                    <span class="help-block">Copy the SDK ID of your Yoti App here</span>
+                    <span class="help-block">Copy the SDK ID from your Yoti App here</span>
                 </div>
             </div>
             <div class="control-group">

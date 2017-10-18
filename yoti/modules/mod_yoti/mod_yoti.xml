@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="3.0" client="site" method="upgrade">
-    <name>Yoti Module</name>
+    <name>Yoti Login</name>
     <author>Yoti Ltd</author>
     <authorEmail>sdksupport@yoti.com</authorEmail>
     <authorUrl>http://www.yoti.com</authorUrl>

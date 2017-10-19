@@ -54,12 +54,21 @@ Yoti also allows you to enable user details verification from your mobile app by
 To import the Yoti SDK inside your project:
 
 1) Log on to the admin console of your Joomla website. e.g. Https://www.joomladev.com/administrator
-2) Navigate to at `Extensions-> Manage -> Install`, click `Install from Web` link and Search for Yoti - you can also download the package from [here](https://extensions.joomla.org/yoti).
-3) Install and enable the Yoti login module and Yoti User profile plugin.
+2) Navigate to at `Extensions-> Manage -> Install` and do one of the following:
+- click `Install from Web` link and Search for Yoti
+- click `Upload Package File` then you can download the package from [here](https://extensions.joomla.org/yoti).
+- you can also `Install from URL` or `Install from folder
+3) Install and enable the `Yoti login` module and `Yoti - User profile` plugin.
 
 ## Component Setup
 
-To set things up, navigate on Joomla to the components-> Yoti
+To set things up:
+
+1) Navigate on Joomla to the Components-> Yoti (details in `Yoti Components settings` below)
+2) Navigate to `Extensions -> Modules`, search for `Yoti Login` module and enable it.
+3) Navigate to `Extensions -> Plugins`, search for `Yoti - User Profile` plugin and enable it.
+
+### Yoti Components Settings 
 
 Here you will be asked to add the following information:
  
@@ -86,7 +95,7 @@ Where:
 
 Please do not open the pem file as this might corrupt the key and you will need to create a new application.
 
- ## Linking existing accounts to use Yoti authentication
+## Linking existing accounts to use Yoti authentication
 
 To allow your existing users to log in using Yoti instead of entering thier username/password combination, there is a tick box when installing the module which allows Yoti accounts to link to email addresses.
 

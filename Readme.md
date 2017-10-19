@@ -58,11 +58,11 @@ To import the Yoti SDK inside your project:
 - click `Install from Web` link and Search for Yoti
 - click `Upload Package File` then you can download the package from [here](https://extensions.joomla.org/yoti).
 - you can also `Install from URL` or `Install from folder
-3) Install and enable the `Yoti login` module and `Yoti - User profile` plugin.
+3) Install and enable `Yoti login` module and `Yoti - User profile` plugin.
 
 ## Component Setup
 
-To set things up:
+To set things up follow the instruction below:
 
 1) Navigate on Joomla to the Components-> Yoti (details in `Yoti Components settings` below)
 2) Navigate to `Extensions -> Modules`, search for `Yoti Login` module and enable it.

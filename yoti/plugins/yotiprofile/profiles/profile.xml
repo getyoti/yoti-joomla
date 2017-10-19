@@ -1,98 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form class="form-group">
-<fields name="yotiprofile">
-    <fieldset name="yotiprofile"
-              label="Yoti Profile"
-    >
-        <field
-                name="selfie_filename"
-                type="yotiavatar"
-                id="selfie_filename"
-                alt="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_DESC"
-                label="Selfie"
-                filter=""
-                width="100"
-        />
-        <field
-                name="family_name"
-                type="static"
-                id="family_name"
-                description="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_DESC"
-                filter="string"
-                label="Family Name"
-                message="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_MESSAGE"
-                size="30"
-        />
-        <field
-                name="given_names"
-                type="static"
-                id="given_names"
-                description="PLG_USER_YOTIPROFILE_FIELD_GIVEN_NAMES_DESC"
-                filter="string"
-                label="Given Names"
-                message="PLG_USER_YOTIPROFILE_FIELD_GIVEN_NAMES_MESSAGE"
-                size="30"
-        />
-        <field
-                name="phone_number"
-                type="static"
-                id="phone_number"
-                description="PLG_USER_YOTIPROFILE_FIELD_PHONE_NUMBER_DESC"
-                filter="string"
-                label="Phone"
-                message="PLG_USER_YOTIPROFILE_FIELD_PHONE_NUMBER_MESSAGE"
-                size="30"
-        />
-        <field
-                name="nationality"
-                type="static"
-                id="nationality"
-                description="PLG_USER_YOTIPROFILE_FIELD_NATIONALITY_DESC"
-                filter="string"
-                label="Nationality"
-                message="PLG_USER_YOTIPROFILE_FIELD_NATIONALITY_MESSAGE"
-                size="30"
-        />
-        <field
-                name="gender"
-                type="static"
-                id="gender"
-                description="PLG_USER_YOTIPROFILE_FIELD_GENDER_DESC"
-                filter="string"
-                label="Gender"
-                message="PLG_USER_YOTIPROFILE_FIELD_GENDER_MESSAGE"
-                size="30"
-        />
-        <field
-                name="email_address"
-                type="static"
-                id="email_address"
-                description="PLG_USER_YOTIPROFILE_FIELD_EMAIL_ADDRESS_DESC"
-                filter="string"
-                label="Email Address"
-                message="PLG_USER_YOTIPROFILE_FIELD_EMAIL_ADDRESS_MESSAGE"
-                size="30"
-        />
-        <field
-                name="postal_address"
-                type="static"
-                id="postal_address"
-                description="PLG_USER_YOTIPROFILE_FIELD_POSTAL_ADDRESS_DESC"
-                filter="string"
-                label="Postal Address"
-                message="PLG_USER_YOTIPROFILE_FIELD_POSTAL_ADDRESS_MESSAGE"
-                size="30"
-        />
-        <field
-                name="date_of_birth"
-                type="static"
-                id="date_of_birth"
-                description="PLG_USER_YOTIPROFILE_FIELD_DATE_OF_BIRTH_DESC"
-                filter="string"
-                label="Date Of Birth"
-                message="PLG_USER_YOTIPROFILE_FIELD_DATE_OF_BIRTH_MESSAGE"
-                size="30"
-        />
-    </fieldset>
-</fields>
+    <fields name="yotiprofile">
+        <fieldset name="yotiprofile"
+                  label="PLG_USER_YOTIPROFILE_SLIDER_LABEL">
+
+            <field name="selfie_filename"
+                    type="yotiavatar"
+                    id="selfie_filename"
+                    alt="PLG_USER_YOTIPROFILE_FIELD_SELFIE_FILENAME_ALT"
+                    label="PLG_USER_YOTIPROFILE_FIELD_SELFIE_FILENAME_LABEL"
+                    filter=""
+                    width="100"
+            />
+
+            <field name="family_name"
+                    type="static"
+                    id="family_name"
+                    description="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_DESC"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_LABEL"
+                    message="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_MESSAGE"
+                    size="30"
+            />
+
+            <field name="given_names"
+                    type="static"
+                    id="given_names"
+                    description="PLG_USER_YOTIPROFILE_FIELD_GIVEN_NAMES_DESC"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_GIVEN_NAMES_LABEL"
+                    message="PLG_USER_YOTIPROFILE_FIELD_GIVEN_NAMES_MESSAGE"
+                    size="30"
+            />
+
+            <field name="phone_number"
+                    type="static"
+                    id="phone_number"
+                    description="PLG_USER_YOTIPROFILE_FIELD_PHONE_NUMBER_DESC"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_PHONE_NUMBER_LABEL"
+                    message="PLG_USER_YOTIPROFILE_FIELD_PHONE_NUMBER_MESSAGE"
+                    size="30"
+            />
+
+            <field name="nationality"
+                    type="static"
+                    id="nationality"
+                    description="PLG_USER_YOTIPROFILE_FIELD_NATIONALITY_DESC"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_NATIONALITY_LABEL"
+                    message="PLG_USER_YOTIPROFILE_FIELD_NATIONALITY_MESSAGE"
+                    size="30"
+            />
+
+            <field name="gender"
+                    type="static"
+                    id="gender"
+                    description="PLG_USER_YOTIPROFILE_FIELD_GENDER_DESC"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_GENDER_LABEL"
+                    message="PLG_USER_YOTIPROFILE_FIELD_GENDER_MESSAGE"
+                    size="30"
+            />
+
+            <field name="email_address"
+                    type="static"
+                    id="email_address"
+                    description="PLG_USER_YOTIPROFILE_FIELD_EMAIL_ADDRESS_DESC"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_EMAIL_ADDRESS_LABEL"
+                    message="PLG_USER_YOTIPROFILE_FIELD_EMAIL_ADDRESS_MESSAGE"
+                    size="30"
+            />
+
+            <field name="postal_address"
+                    type="static"
+                    id="postal_address"
+                    description="PLG_USER_YOTIPROFILE_FIELD_POSTAL_ADDRESS_DESC"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_POSTAL_ADDRESS_LABEL"
+                    message="PLG_USER_YOTIPROFILE_FIELD_POSTAL_ADDRESS_MESSAGE"
+                    size="30"
+            />
+
+            <field name="date_of_birth"
+                    type="static"
+                    id="date_of_birth"
+                    description="PLG_USER_YOTIPROFILE_FIELD_DATE_OF_BIRTH_DESC"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_DATE_OF_BIRTH_LABEL"
+                    message="PLG_USER_YOTIPROFILE_FIELD_DATE_OF_BIRTH_MESSAGE"
+                    size="30"
+            />
+
+        </fieldset>
+
+    </fields>
 </form>

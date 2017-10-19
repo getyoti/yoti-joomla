@@ -52,39 +52,6 @@ class com_yotiInstallerScript
      */
     public function uninstall(JAdapterInstance $adapter)
     {
-        $db = JFactory::getDBO();
-        $app = JFactory::getApplication();
-        $installer = new JInstaller;
-
-        $moduleQuery = $db->getQuery(true)
-                ->select('extension_id')
-                ->from('#__extensions')
-                ->where($db->quoteName('element') . '=' . $db->quote('mod_yoti'))
-                 ->where($db->quoteName('type') . '=' . $db->quote('module'));
-        $moduleId = $db->setQuery($moduleQuery)->loadResult();
-        if ($moduleId)
-        {
-            try {
-                $installer->uninstall('module', $moduleId, 1);
-                $app->enqueueMessage('Uninstalling module [mod_yoti] was successful.', 'message');
-            } catch(\Exception $e) {
-                $app->enqueueMessage("Error uninstalling module [mod_yoti] " . $e->getMessage(), 'error');
-            }
-        }
-        $pluginQuery = $db->getQuery(true)
-            ->select('extension_id')
-            ->from($db->quoteName('#__extensions'))
-            ->where($db->quoteName('element') . '=' . $db->quote('yotiprofile'))
-            ->where($db->quoteName('type') . '=' . $db->quote('plugin'));
-        $pluginId = $db->setQuery($pluginQuery)->loadResult();
-        if($pluginId)
-        {
-            try {
-                $installer->uninstall('plugin', $pluginId, 1);
-                $app->enqueueMessage('Uninstalling plugin [plg_user_yotiprofile] was successful.', 'message');
-            } catch(\Exception $e) {
-                $app->enqueueMessage("Error uninstalling plugin [plg_user_yotiprofile] " . $e->getMessage(), 'error');
-            }
-        }
+        // Leave it empty
     }
 }

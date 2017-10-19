@@ -46,11 +46,11 @@ class plgUserYotiprofile extends JPlugin
      *
      * @since   1.0.0
      */
-    /*public function __construct(& $subject, $config)
+    public function __construct(& $subject, $config)
     {
         parent::__construct($subject, $config);
         JFormHelper::addFieldPath(__DIR__ . '/fields');
-    }*/
+    }
 
     /**
      * @param	string	The context for the data
@@ -89,7 +89,7 @@ class plgUserYotiprofile extends JPlugin
 
         foreach ($profileArr as $key => $value) {
             if ($key == YotiHelper::ATTR_SELFIE_FILE_NAME) {
-                $profilePic = '<pre><code><img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" /></code></pre>';
+                //$profilePic = '<img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" />';
                 //$data->yotiprofile[$key] = $profilePic;
                 $data->yotiprofile[$key] = 'Edit your profile to see your Selfie';
                 $profile_image = JHtml::_('image', "http://".$_SERVER['HTTP_HOST'].JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie'), 'my profile');

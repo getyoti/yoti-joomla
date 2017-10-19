@@ -42,7 +42,6 @@ class YotiController extends JControllerLegacy
             case 'unlink':
                 $helper->unlink();
                 $this->setRedirect($redirect);
-                //JFactory::getApplication()->redirect($redirect);
                 return;
                 break;
 

@@ -644,7 +644,8 @@ class YotiHelper
                 mkdir(self::uploadDir(), 0777, true);
             }
 
-            $selfieFilename = "selfie_$userId.png";
+            //$selfieFilename = "selfie_$userId.png";
+            $selfieFilename = md5("selfie_$userId" . time()) . ".png";
             file_put_contents(self::uploadDir() . "/$selfieFilename", $activityDetails->getSelfie());
         }
 

@@ -61,7 +61,7 @@
                            value="<?php if (!empty($this->data['yoti_company_name'])) echo htmlspecialchars($this->data['yoti_company_name']); ?>"
                            class="form-control input-xlarge"
                     />
-                    <span class="help-block"><?php echo JText::_("To tailor our Yoti plugin please add your company name"); ?></span>
+                    <span class="help-block"><?php echo JText::_("To tailor the login form messages please add your company name"); ?></span>
                 </div>
             </div>
             <div class="control-group">

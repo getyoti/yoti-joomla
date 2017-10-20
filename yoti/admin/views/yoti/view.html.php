@@ -3,7 +3,7 @@ defined('_JEXEC') or die('Restricted access');
 
 /**
  * Admin view class
- * @author Moussa Sidibe <moussa.sidibe@yoti.com>
+ * @author Moussa Sidibe <sdksupport@yoti.com>
  */
 class AdminYotiViewYoti extends JViewLegacy
 {
@@ -40,7 +40,7 @@ class AdminYotiViewYoti extends JViewLegacy
         /** @var \Joomla\Registry\Registry $config */
         $config = $component->params;
 
-        // Check has preliminary extensions to run
+        // Check that the dependency requirements are met
         $errors = array();
         if (!function_exists('curl_version'))
         {
@@ -55,7 +55,7 @@ class AdminYotiViewYoti extends JViewLegacy
             $errors[] = "PHP module 'json' not installed. Yoti requires it to work. Please contact your server administrator.";
         }
 
-        // get data
+        // Get config data
         $data = $config;
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
@@ -72,7 +72,7 @@ class AdminYotiViewYoti extends JViewLegacy
             $data['yoti_only_existing_user'] = ($this->postVar('yoti_only_existing_user')) ? true : false;
             $data['yoti_user_email'] = ($this->postVar('yoti_user_email')) ? true : false;
 
-            // validation
+            // Validation
             if(!empty($errorMsg)) {
                 $errors['validation_error'] = $errorMsg;
             }
@@ -85,7 +85,7 @@ class AdminYotiViewYoti extends JViewLegacy
                 $errors['yoti_pem'] = 'PEM file is invalid.';
             }
 
-            // no errors? proceed
+            // If there is no errors? proceed
             if ($errors)
             {
                 foreach ($errors as $err)
@@ -95,7 +95,7 @@ class AdminYotiViewYoti extends JViewLegacy
             }
             else
             {
-                // if pem file uploaded then process
+                // If pem file uploaded then process
                 $name = $pemContents = null;
                 if (!empty($pemFile['tmp_name']))
                 {
@@ -106,20 +106,20 @@ class AdminYotiViewYoti extends JViewLegacy
                     }
                     $pemContents = file_get_contents($pemFile['tmp_name']);
                 }
-                // If delete not ticked
+                // If "Delete this PEM file" not ticked
                 elseif (!$data['yoti_delete_pem'])
                 {
                     $name = $config['yoti_pem']->name;
                     $pemContents = $config['yoti_pem']->contents;
                 }
 
-                // set pem file
+                // Set pem file
                 $data['yoti_pem'] = array(
                     'name' => $name,
                     'contents' => $pemContents,
                 );
 
-                // save config
+                // Save config data
                 $config->set('yoti_app_id', $data['yoti_app_id']);
                 $config->set('yoti_scenario_id', $data['yoti_scenario_id']);
                 $config->set('yoti_sdk_id', $data['yoti_sdk_id']);

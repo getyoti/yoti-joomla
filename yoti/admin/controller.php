@@ -3,7 +3,7 @@ defined('_JEXEC') or die; // No direct access
 
 /**
  * Admin controller
- * @author Moussa Sidibe <moussa.sidibe@yoti.com>
+ * @author Moussa Sidibe <sdksupport@yoti.com>
  */
 class AdminYotiController extends JControllerLegacy
 {

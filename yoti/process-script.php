@@ -4,7 +4,7 @@ defined('_JEXEC') or die('Restricted access'); // no direct access
 /**
  * Class com_YotiInstallerScript
  *
- * @author Moussa Sidibe <moussa.sidibe@yoti.com>
+ * @author Moussa Sidibe <sdksupport@yoti.com>
  */
 class com_yotiInstallerScript
 {

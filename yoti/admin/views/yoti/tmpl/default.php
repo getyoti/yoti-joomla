@@ -6,6 +6,7 @@
 <div class="row-fluid">
     <div class="span12">
         <form id="yoti-form" method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>" class="form-horizontal">
+            <div class="alert">
             <p>
                 <?php echo JText::_("You need to first create a Yoti App at"); ?> <a href="<?php echo \Yoti\YotiClient::DASHBOARD_URL; ?>" target="_blank">
                     <?php echo JText::_("Yoti Dashboard"); ?>
@@ -13,8 +14,9 @@
             </p>
             <p>
                 <?php echo JText::_("Note: On the Yoti Dashboard the callback URL should be set to:"); ?>
-                <code><?php echo JUri::root(false).'index.php?option=com_yoti&task=login'; ?></code>
+                <strong><?php echo JUri::root(false).'index.php?option=com_yoti&task=login'; ?></strong>
             </p>
+            </div>
             <div class="control-group">
                 <label for="yoti_app_id" class="col-md-6 control-label"><?php echo JText::_("App ID"); ?> <span><strong>*</strong></span></label>
                 <div class="controls">
@@ -101,7 +103,7 @@
                     {
                         $pemFileRequired = '';
                         echo '<div class="pem-file">' .
-                            '<code><strong>' . JText::_("Current file") . ':</strong> ' . htmlspecialchars($this->data['yoti_pem.name']) . '</code>' .
+                            '<span class="alert alert-no-item"><strong>' . JText::_("Current file") . ':</strong> ' . htmlspecialchars($this->data['yoti_pem.name']) . '</span>' .
                             '<label class="checkbox"><input type="checkbox" name="yoti_delete_pem" value="1"' . $this->pemFilechecked . ' />' .
                             JText::_("Delete this PEM file") . '</label>' .
                             '</div>';

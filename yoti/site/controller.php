@@ -40,6 +40,8 @@ class YotiController extends JControllerLegacy
                 break;
 
             case 'unlink':
+                // After unlinking account, redirect to user profile
+                $redirect = JRoute::_('index.php?option=com_users&view=profile', false);
                 $helper->unlink();
                 $this->setRedirect($redirect);
                 return;

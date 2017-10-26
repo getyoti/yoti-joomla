@@ -320,11 +320,11 @@ class YotiHelper
     {
         $currentUser = JFactory::getUser();
 
-        // unlink
-        if (!$currentUser->guest)
+        // Unlink
+        if (!$currentUser->guest && $this->yotiUserModel->deleteYotiUser($currentUser->id))
         {
-            $this->yotiUserModel->deleteYotiUser($currentUser->id);
             self::setFlash('Your Yoti profile is successfully unlinked from your account.');
+            YotiHelper::clearYotiUserFromSession();
 
             return true;
         }

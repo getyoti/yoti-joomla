@@ -89,18 +89,49 @@ class plgUserYotiprofile extends JPlugin
 
         foreach ($profileArr as $key => $value) {
             if ($key == YotiHelper::ATTR_SELFIE_FILE_NAME) {
-                //$profilePic = '<img src="' . JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie') . '" width="100" />';
-                //$data->yotiprofile[$key] = $profilePic;
-                $data->yotiprofile[$key] = 'Edit your profile to see your Selfie';
-                $profile_image = JHtml::_('image', "http://".$_SERVER['HTTP_HOST'].JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie'), 'my profile');
-                //$profile_link = JHtml::_('link', "http://".$_SERVER['HTTP_HOST'].JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie'), 'my profile');
-                //$data->yotiprofile[$key] = $profile_link;
-
+                $data->yotiprofile[$key] = JText::_('PLG_USER_YOTIPROFILE_SELFIE_FIELD_MESSAGE');
             } else {
                 $data->yotiprofile[$key] = $value;
             }
         }
+
+        // Set the unlink account message if we have profile data
+        if(!empty($data->yotiprofile)) {
+            $data->yotiprofile = $this->setUnlinkButtonMessage($data->yotiprofile);
+        }
+
+        // Register Yoti link button
+        if (!JHtml::isRegistered('users.yotilinkbutton'))
+        {
+            JHtml::register('users.yotilinkbutton', [__CLASS__, 'yotilinkbutton']);
+        }
+
+        // Register Yoti avatar
+        if (!JHtml::isRegistered('users.yotiavatar'))
+        {
+            JHtml::register('users.yotiavatar', [__CLASS__, 'yotiavatar']);
+        }
+
+        // Register Yoti spacer
+        if (!JHtml::isRegistered('users.yotispacer'))
+        {
+            JHtml::register('users.yotispacer', [__CLASS__, 'yotispacer']);
+        }
+
         return true;
+    }
+
+    /**
+     * Add unlink button to yotiprofile data
+     * @param array $yotiprofile
+     * @return array
+     */
+    protected function setUnlinkButtonMessage(array $yotiprofile)
+    {
+
+        $yotiprofile['yoti_unlink_account'] = JText::_('PLG_USER_YOTIPROFILE_FIELD_UNLINK_ACCOUNT_LABEL');
+
+        return $yotiprofile;
     }
 
     /**
@@ -111,9 +142,6 @@ class plgUserYotiprofile extends JPlugin
      */
     public function onContentPrepareForm($form, $data)
     {
-        // Load user_profile plugin language
-        //$lang = JFactory::getLanguage();
-        //$lang->load('plg_user_yotiprofile', JPATH_SITE);
         $config = YotiHelper::getConfig();
 
         if (!($form instanceof JForm))
@@ -151,9 +179,59 @@ class plgUserYotiprofile extends JPlugin
         {
             JForm::addFormPath(dirname(__FILE__) . '/profiles');
             $form->loadFile('profile', false);
+
+            // Remove the spacer and unlink button in profile edit mode
+            if (isset($_REQUEST['layout']) && $_REQUEST['layout'] == 'edit') {
+                $form->removeField('yotispacer', 'yotiprofile');
+                $form->removeField('yoti_unlink_account', 'yotiprofile');
+            }
         }
 
         return true;
+    }
+
+    /**
+     * Returns Yoti button link
+     *
+     * @param $value
+     * @return string
+     */
+    public static function yotilinkbutton($value)
+    {
+        $urlLink = JRoute::_('index.php?option=com_yoti&task=unlink');
+        $promptMessage = JText::_('PLG_USER_YOTIPROFILE_UNLINK_ACCOUNT_BUTTON_PROMPT_MESSAGE');
+        $html = "<div class=\"yoti-connect\">" .
+            "<a class=\"yoti-unlink-button\" onclick=\"return confirm('{$promptMessage}')\" href=\"$urlLink\">" .
+            JText::_($value) .
+            "</a></div>";
+
+        return $html;
+    }
+
+    /**
+     * Returns Yoti user profile image.
+     *
+     * @param $value
+     * @return mixed
+     */
+    public static function yotiavatar($value)
+    {
+        $srcValue = JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie');
+        $width = 100;
+        $avatarHTML = JHtml::_('image', trim(JUri::base(), '/') . $srcValue, 'Your Selfie', ['width'=>$width]);
+
+        return $avatarHTML;
+    }
+
+    /**
+     * Returns line break.
+     *
+     * @param $value
+     * @return string
+     */
+    public static function yotispacer($value)
+    {
+        return '<br/>';
     }
 
     /**

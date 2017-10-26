@@ -80,11 +80,7 @@ else
     }
     else
     {
-        $url = JRoute::_('index.php?option=com_yoti&task=unlink');
-        $label = 'Unlink account from Yoti';
-        $button = '<a class="yoti-unlink-button" href="'
-            . $url . '" onclick="return confirm(\'This will unlink your account from Yoti.\')">'
-            . $label . '</a>';
+        $button = "<strong>Yoti</strong>  Linked";
     }
 }
 echo '<div class="yoti-connect">' . $button . '</div>';

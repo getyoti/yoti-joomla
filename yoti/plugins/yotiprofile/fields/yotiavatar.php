@@ -43,16 +43,10 @@ class JFormFieldYotiAvatar extends JFormFieldFile
         {
             $srcValue = JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie');
             $width = (isset($this->element['width'])) ? $this->element['width'] : 100;
-            $currentAvatar = '<img src="' . $srcValue . '" width="' . $width . '" />';
+            $value = JText::_('PLG_USER_YOTIPROFILE_FIELD_SELFIE_FILENAME_ALT');
+            $currentAvatar = '<img src="' . $srcValue . '" width="' . $width . ' alt="' . trim($value). '" />';
         }
 
-        $data = array(
-            'yotiavatar'	=> $currentAvatar,
-        );
-
-        $layout = new JLayoutFile('default', $basePath = JPATH_PLUGINS . '/user/yotiprofile/layouts');
-        $html = $layout->render($data);
-
-        return $html;
+        return $currentAvatar;
     }
 }

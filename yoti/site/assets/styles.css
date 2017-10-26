@@ -1,4 +1,4 @@
-div.yoti-connect a.yoti-unlink-button {
+.yoti-connect a.yoti-unlink-button {
     display: inline-block;
     cursor: pointer;
     background-color: #2D9FFF;
@@ -11,4 +11,24 @@ div.yoti-connect a.yoti-unlink-button {
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
+}
+
+#users-profile-custom-yotiprofile
+{
+    margin:10px 0 15px 0;
+    padding:15px;
+}
+
+#users-profile-custom-yotiprofile dt
+{
+    float:left;
+    width:12em;
+    padding:3px 0;
+
+
+}
+
+#users-profile-custom-yotiprofile dd
+{
+    padding:3px 0;
 }

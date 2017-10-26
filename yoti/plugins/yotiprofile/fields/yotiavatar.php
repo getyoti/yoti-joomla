@@ -1,13 +1,13 @@
 <?php
 /**
- * @package    PlgUserCMAvatar
- * @copyright  Copyright (C) 2015 CMExtension Team http://www.cmext.vn/
+ * @package    PlgUserYotiavatar
+ * @copyright  Copyright (C) 2016 YotiExtension Team http://www.yoti.com/
  * @license    GNU General Public License version 2 or later
  */
 
 defined('_JEXEC') or die;
 
-JFormHelper::loadFieldClass('file');
+jimport('joomla.form.formfield');
 
 /**
  * Form field for avatar.
@@ -15,7 +15,7 @@ JFormHelper::loadFieldClass('file');
  * @package  PlgUserYotiAvatar
  * @since    1.0.0
  */
-class JFormFieldYotiAvatar extends JFormFieldFile
+class JFormFieldYotiAvatar extends JFormField
 {
     /**
      * The form field type.
@@ -42,7 +42,7 @@ class JFormFieldYotiAvatar extends JFormFieldFile
         else
         {
             $srcValue = JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie');
-            $width = (isset($this->element['width'])) ? $this->element['width'] : 100;
+            $width = isset($this->element['width']) ? $this->element['width'] : 100;
             $value = JText::_('PLG_USER_YOTIPROFILE_FIELD_SELFIE_FILENAME_ALT');
             $currentAvatar = '<img src="' . $srcValue . '" width="' . $width . ' alt="' . trim($value). '" />';
         }

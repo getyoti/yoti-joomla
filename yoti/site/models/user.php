@@ -11,9 +11,6 @@ defined('_JEXEC') or die;
 
 require_once JPATH_ROOT . '/components/com_yoti/YotiHelper.php';
 
-use Joomla\Registry\Registry;
-use Joomla\Utilities\ArrayHelper;
-
 /**
  * User model.
  *
@@ -26,7 +23,7 @@ class YotiModelUser extends JModelForm
      *
      * @var    array
      */
-    protected $_item = null;
+    protected $_item;
 
     /**
      * Get the prefix count.
@@ -63,7 +60,7 @@ class YotiModelUser extends JModelForm
     public function getCheckUserEmailExistsQuery($userEmail)
     {
         $db = JFactory::getDbo();
-        $query = $db->getQuery(true);
+        $query = $db->getQuery(TRUE);
         if(!empty($userEmail)) {
             $query->select('id')
                 ->from($db->quoteName('#__users'))
@@ -84,7 +81,7 @@ class YotiModelUser extends JModelForm
     public function getCheckUsernameExistsQuery($username)
     {
         $db = JFactory::getDbo();
-        $query = $db->getQuery(true);
+        $query = $db->getQuery(TRUE);
         if(!empty($username)) {
             $query->select('id')
                 ->from($db->quoteName('#__users'))
@@ -107,7 +104,7 @@ class YotiModelUser extends JModelForm
         $user = NULL;
         if (!empty($email)) {
             $db = JFactory::getDbo();
-            $query = $db->getQuery(true)
+            $query = $db->getQuery(TRUE)
                 ->select('id')
                 ->from($db->quoteName('#__users'))
                 ->where($db->quoteName('email') . '=' . $db->quote($email))
@@ -137,7 +134,7 @@ class YotiModelUser extends JModelForm
             $count  = $db->setQuery($query)->loadResult();
         }
 
-        return ($count) ? true : false;
+        return ($count) ? TRUE : FALSE;
     }
 
     /**
@@ -154,7 +151,7 @@ class YotiModelUser extends JModelForm
         if($yotiId) {
             $db = JFactory::getDbo();
 
-            $query = $db->getQuery(true)
+            $query = $db->getQuery(TRUE)
                 ->select('joomla_userid')
                 ->from(YotiHelper::YOTI_USER_TABLE_NAME)
                 ->where('identifier=' . $db->quote($yotiId));
@@ -174,12 +171,12 @@ class YotiModelUser extends JModelForm
     public static function yotiUserIsLinkedToJoomlaUser($userId)
     {
         $db = JFactory::getDbo();
-        $query = $db->getQuery(true)
+        $query = $db->getQuery(TRUE)
             ->select('joomla_userid')
             ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
             ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId))
             ->setLimit('1');
-        return ($db->setQuery($query)->loadResult());
+        return $db->setQuery($query)->loadResult();
     }
 
     /**
@@ -193,17 +190,17 @@ class YotiModelUser extends JModelForm
     public function deleteYotiUser($userId)
     {
         if(!$userId) {
-            return false;
+            return FALSE;
         }
 
         $db = JFactory::getDbo();
 
-        $query = $db->getQuery(true)
+        $query = $db->getQuery(TRUE)
             ->delete(YotiHelper::YOTI_USER_TABLE_NAME)
             ->where('joomla_userid=' . $db->quote($userId));
         $db->setQuery($query)->execute();
 
-        return true;
+        return TRUE;
     }
 
     /**
@@ -222,7 +219,7 @@ class YotiModelUser extends JModelForm
         if($userId) {
             $db = JFactory::getDbo();
 
-            $query = $db->getQuery(true);
+            $query = $db->getQuery(TRUE);
             $query->select('*')
                 ->from($db->quoteName('#__users'))
                 ->where($db->quoteName('id') . '=' . $db->quote($userId));
@@ -245,7 +242,7 @@ class YotiModelUser extends JModelForm
         $userData = [];
         if($userId) {
             $db = JFactory::getDbo();
-            $query = $db->getQuery(true)
+            $query = $db->getQuery(TRUE)
                 ->select('*')
                 ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
                 ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId));
@@ -260,9 +257,9 @@ class YotiModelUser extends JModelForm
      * @param bool $loadData
      * @return bool
      */
-    public function getForm($data = array(), $loadData = true)
+    public function getForm($data = array(), $loadData = TRUE)
     {
-        return false;
+        return FALSE;
     }
 
 }

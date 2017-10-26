@@ -2,7 +2,7 @@
 defined('_JEXEC') or die('Restricted access'); // no direct access
 
 // Include the syndicate functions only once
-require_once dirname(__FILE__) . '/helper.php';
+require_once __DIR__ . '/helper.php';
 
 // Include the latest functions only once
 JLoader::register('ModYotiHelper', __DIR__ . '/helper.php');

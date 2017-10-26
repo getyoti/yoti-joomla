@@ -5,7 +5,6 @@
  * @license        GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-
 defined('JPATH_BASE') or die;
 
 require_once JPATH_ROOT . '/components/com_yoti/sdk/boot.php';
@@ -62,11 +61,11 @@ class plgUserYotiprofile extends JPlugin
     public function onContentPrepareData($context, $data)
     {
         // Check we are manipulating a valid form.
-        if (!in_array($context, array('com_users.profile','com_users.registration','com_users.user','com_admin.profile'))){
+        if (!in_array($context, ['com_users.profile','com_users.registration','com_users.user','com_admin.profile'], TRUE)){
             return true;
         }
 
-        $userId = (isset($data->id)) ? $data->id : 0;
+        $userId = isset($data->id) ? $data->id : 0;
 
         // Load the profile data from the database.
         $db = JFactory::getDbo();
@@ -88,7 +87,7 @@ class plgUserYotiprofile extends JPlugin
         $profileArr = (!empty($result['data'])) ? unserialize($result['data']) : [];
 
         foreach ($profileArr as $key => $value) {
-            if ($key == YotiHelper::ATTR_SELFIE_FILE_NAME) {
+            if ($key === YotiHelper::ATTR_SELFIE_FILE_NAME) {
                 $data->yotiprofile[$key] = JText::_('PLG_USER_YOTIPROFILE_SELFIE_FIELD_MESSAGE');
             } else {
                 $data->yotiprofile[$key] = $value;
@@ -151,33 +150,34 @@ class plgUserYotiprofile extends JPlugin
         }
 
         if (
-            $form->getName() === 'com_users.login'
-            && $config['yoti_only_existing_user']
-            && !is_null(YotiHelper::getYotiUserFromSession())
+            $config['yoti_only_existing_user']
+            && $form->getName() === 'com_users.login'
+            && null !== YotiHelper::getYotiUserFromSession()
         ) {
             // Reorder the form to put the warning message on top
-            JForm::addFieldPath(dirname(__FILE__) . '/fields');
-            $yotiLoginXml = simplexml_load_file(dirname(__FILE__) . "/profiles/login.xml");
-            $formXml = $form->getXML();
-            $form->reset(true);
-            $form->setFields($yotiLoginXml);
-            $form->setFields($formXml);
+            JForm::addFieldPath(__DIR__ . '/fields');
+            if($yotiLoginXml = simplexml_load_string(file_get_contents(__DIR__ . "/profiles/login.xml"))){
+                $formXml = $form->getXML();
+                $form->reset(true);
+                $form->setFields($yotiLoginXml);
+                $form->setFields($formXml);
+            }
         }
 
         // Check we are manipulating a valid form.
-        $forms = array('com_users.profile', 'com_users.registration', 'com_users.user', 'com_admin.profile');
-        if (!in_array($form->getName(), $forms))
+        $formNames = ['com_users.profile', 'com_users.registration', 'com_users.user', 'com_admin.profile'];
+        if (!in_array($form->getName(), $formNames, TRUE))
         {
             return true;
         }
 
         if (
             !empty($data->yotiprofile)
-            && ($form->getName() == 'com_users.profile'
-            || $form->getName() == 'com_users.user')
+            && ($form->getName() === 'com_users.profile'
+            || $form->getName() === 'com_users.user')
         )
         {
-            JForm::addFormPath(dirname(__FILE__) . '/profiles');
+            JForm::addFormPath(__DIR__ . '/profiles');
             $form->loadFile('profile', false);
 
             // Remove the spacer and unlink button in profile edit mode
@@ -200,10 +200,10 @@ class plgUserYotiprofile extends JPlugin
     {
         $urlLink = JRoute::_('index.php?option=com_yoti&task=unlink');
         $promptMessage = JText::_('PLG_USER_YOTIPROFILE_UNLINK_ACCOUNT_BUTTON_PROMPT_MESSAGE');
-        $html = "<div class=\"yoti-connect\">" .
+        $html = '<div class="yoti-connect">' .
             "<a class=\"yoti-unlink-button\" onclick=\"return confirm('{$promptMessage}')\" href=\"$urlLink\">" .
             JText::_($value) .
-            "</a></div>";
+            '</a></div>';
 
         return $html;
     }
@@ -301,7 +301,7 @@ class plgUserYotiprofile extends JPlugin
     {
         $input  = JFactory::getApplication()->input;
         $user = $options['user'];
-        $userId = (is_object($user)) ? $user->id : 0;
+        $userId = is_object($user) ? $user->id : 0;
         $yotiUserModel = new YotiModelUser();
 
         if ($input->post) {

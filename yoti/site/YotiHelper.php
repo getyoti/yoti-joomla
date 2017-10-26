@@ -140,7 +140,7 @@ class YotiHelper
         $userId = $this->yotiUserModel->getUserIdByYotiId($activityDetails->getUserId());
 
         // If Yoti user exists in db but isn't an actual account then remove it from yoti table
-        if (!$currentUser->guest && $userId && $currentUser->id != $userId)
+        if (!$currentUser->guest && $userId && $currentUser->id !== $userId)
         {
             // Remove users account
             $this->yotiUserModel->deleteYotiUser($userId);
@@ -152,7 +152,7 @@ class YotiHelper
             // Register new user
             if (!$userId)
             {
-                $errMsg = null;
+                $errMsg = NULL;
 
                 // Attempt to connect by email.
                 $userId = $this->loginByEmail($activityDetails);
@@ -194,7 +194,7 @@ class YotiHelper
         else
         {
             // If logged in user doesn't match yoti user registered then bail
-            if ($userId && $currentUser->id != $userId)
+            if ($userId && $currentUser->id !== $userId)
             {
                 YotiHelper::setFlash('This Yoti account is already linked to another account.', 'error');
             }
@@ -242,7 +242,7 @@ class YotiHelper
     protected function yotiApiCallIsSuccessfull($outcome)
     {
         // If unsuccessful then bail
-        if ($outcome != YotiClient::OUTCOME_SUCCESS)
+        if ($outcome !== YotiClient::OUTCOME_SUCCESS)
         {
             self::setFlash('Yoti could not successfully connect to your account.', 'error');
 
@@ -266,13 +266,12 @@ class YotiHelper
         $userId = 0;
         $config = self::getConfig();
         $config = ($config instanceof Joomla\Registry\Registry) ? $config->toArray() : $config;
-        if (isset($config['yoti_user_email']) && !empty($config['yoti_user_email'])) {
-            if (($email = $activityDetails->getEmailAddress())) {
-                $joomlaUser = $this->yotiUserModel->getJoomlaUserByEmail($email);
-                if ($joomlaUser) {
-                    $userId = $joomlaUser->get('id');
-                    $this->createYotiUser($activityDetails, $userId);
-                }
+        $email = $activityDetails->getEmailAddress();
+        if (NULL !== $email && isset($config['yoti_user_email']) && !empty($config['yoti_user_email'])) {
+            $joomlaUser = $this->yotiUserModel->getJoomlaUserByEmail($email);
+            if ($joomlaUser) {
+                $userId = $joomlaUser->get('id');
+                $this->createYotiUser($activityDetails, $userId);
             }
         }
 
@@ -348,7 +347,7 @@ class YotiHelper
             return;
         }
 
-        $field = ($field == 'selfie') ? 'selfie_filename' : $field;
+        $field = ($field === 'selfie') ? 'selfie_filename' : $field;
 
         $yotiUserData = $this->yotiUserModel->getYotiUserById($user->id);
         $userProfileArr = (!empty($yotiUserData) && isset($yotiUserData['data'])) ? unserialize($yotiUserData['data']) : [];
@@ -408,10 +407,10 @@ class YotiHelper
         $givenNames = $this->getUserGivenNames($activityDetails);
         $familyName = $activityDetails->getFamilyName();
 
-        if (!empty($givenNames) && !empty($familyName)) {
-            $userFullName = $givenNames . " " . $familyName;
-            $userProvidedPrefix = strtolower(str_replace(" ", ".", $userFullName));
-            $prefix = ($this->isValidUsername($userProvidedPrefix)) ? $userProvidedPrefix : $prefix;
+        if (NULL !== $givenNames && NULL !== $familyName) {
+            $userFullName = $givenNames . ' ' . $familyName;
+            $userProvidedPrefix = strtolower(str_replace(' ', '.', $userFullName));
+            $prefix = $this->isValidUsername($userProvidedPrefix) ? $userProvidedPrefix : $prefix;
         }
 
         // Generate username
@@ -495,7 +494,7 @@ class YotiHelper
      */
     private function getUserGivenNames(ActivityDetails $activityDetails) {
         $givenNames = $activityDetails->getGivenNames();
-        $givenNamesArr = explode(" ", $activityDetails->getGivenNames());
+        $givenNamesArr = explode(' ', $activityDetails->getGivenNames());
         return (count($givenNamesArr) > 1) ? $givenNamesArr[0] : $givenNames;
     }
 
@@ -516,7 +515,7 @@ class YotiHelper
         $usersConfig = JComponentHelper::getParams('com_users');
         $newUserType = $usersConfig->get('new_usertype', 2);
 
-        $userFullName = $activityDetails->getGivenNames() . " " . $activityDetails->getFamilyName();
+        $userFullName = $activityDetails->getGivenNames() . ' ' . $activityDetails->getFamilyName();
         $userFullName = (!empty($userFullName)) ? $userFullName : $defaultUserName;
 
         $userProvidedEmail = $activityDetails->getEmailAddress();
@@ -524,7 +523,7 @@ class YotiHelper
         // otherwise use Yoti generic email.
         $isValidEmail = $this->isValidEmail($userProvidedEmail);
         $userProvidedEmailCanBeUsed = $isValidEmail && !$this->emailExists($userProvidedEmail);
-        $userEmail = ($userProvidedEmailCanBeUsed) ? $userProvidedEmail : $this->generateEmail();
+        $userEmail = $userProvidedEmailCanBeUsed ? $userProvidedEmail : $this->generateEmail();
         // generate fields
         $username = $this->generateUsername($activityDetails);
         $password = $this->generatePassword();
@@ -542,13 +541,13 @@ class YotiHelper
         // Save user
         if (!$user->bind($userData, 'usertype'))
         {
-            throw new Exception("Create user error: " . $user->getError());
+            throw new \Exception('Create user error: ' . $user->getError());
         }
         $user->set('groups', array($newUserType));
         $user->set('registerDate', JFactory::getDate()->toSql());
         if (!$user->save())
         {
-            throw new Exception("Could not save Yoti user");
+            throw new \Exception('Could not save Yoti user');
         }
 
         // Set new user Id
@@ -586,7 +585,7 @@ class YotiHelper
             $count  = $db->setQuery($query)->loadResult();
         }
 
-        return ($count) ? true : false;
+        return $count ? TRUE : FALSE;
     }
 
     /**
@@ -687,12 +686,12 @@ class YotiHelper
 
         $user = $this->yotiUserModel->getUserById($userId);
 
-        $options = array(
+        $options = [
             'action' => 'core.login.site',
-            'remember' => false,
-        );
+            'remember' => FALSE,
+        ];
 
-        $app->triggerEvent('onUserLogin', array($user, $options));
+        $app->triggerEvent('onUserLogin', [$user, $options]);
     }
 
     /**
@@ -726,7 +725,7 @@ class YotiHelper
     {
         if (self::mockRequests())
         {
-            $config = require_once JPATH_BASE.'/components/com_yoti/sdk/sample-data/config.php';
+            $config = require JPATH_BASE .'/components/com_yoti/sdk/sample-data/config.php';
             $config['yoti_pem'] = (object)$config['yoti_pem'];
 
             return $config;
@@ -767,11 +766,10 @@ class YotiHelper
     public static function makeYotiUserProfile(array $userProfile, $userId)
     {
         $userProfile[ActivityDetails::ATTR_SELFIE] = NULL;
-        if (isset($userProfile[self::ATTR_SELFIE_FILE_NAME])) {
+        $selfieFileExists = file_exists(self::uploadDir() . $userProfile[self::ATTR_SELFIE_FILE_NAME]);
+        if (isset($userProfile[self::ATTR_SELFIE_FILE_NAME]) && $selfieFileExists) {
             // Set Yoti user selfie image in the profile array.
-            if (file_exists(self::uploadDir() . $userProfile[self::ATTR_SELFIE_FILE_NAME])) {
-                $userProfile[ActivityDetails::ATTR_SELFIE] = file_get_contents(self::uploadDir() . $userProfile[self::ATTR_SELFIE_FILE_NAME]);
-            }
+            $userProfile[ActivityDetails::ATTR_SELFIE] = file_get_contents(self::uploadDir() . $userProfile[self::ATTR_SELFIE_FILE_NAME]);
         }
         return new ActivityDetails($userProfile, (int) $userId);
     }

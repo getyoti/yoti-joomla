@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form class="form-group yoti-user-profile">
+<form class="form-group">
     <fields name="yotiprofile">
         <fieldset name="yotiprofile"
                   label="PLG_USER_YOTIPROFILE_SLIDER_LABEL">

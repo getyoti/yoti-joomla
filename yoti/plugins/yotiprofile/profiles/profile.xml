@@ -4,6 +4,13 @@
         <fieldset name="yotiprofile"
                   label="PLG_USER_YOTIPROFILE_SLIDER_LABEL">
 
+            <field name="yoti_user_notice"
+                   type="yotinote"
+                   id="yoti_user_notice"
+                   value="PLG_USER_YOTIPROFILE_NOTICE_MESSAGE"
+                   required="true"
+                   />
+
             <field name="selfie_filename"
                     type="yotiavatar"
                     id="selfie_filename"

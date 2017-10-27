@@ -180,6 +180,9 @@ class plgUserYotiprofile extends JPlugin
             if (isset($_REQUEST['layout']) && $_REQUEST['layout'] == 'edit') {
                 $form->removeField('yotispacer', 'yotiprofile');
                 $form->removeField('yoti_unlink_account', 'yotiprofile');
+            } else {
+                // Remove yoti_user_notice attribute if we are not in edit mode
+                $form->removeField('yoti_user_notice', 'yotiprofile');
             }
         }
 

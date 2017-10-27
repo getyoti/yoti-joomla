@@ -87,11 +87,7 @@ class plgUserYotiprofile extends JPlugin
         $profileArr = (!empty($result['data'])) ? unserialize($result['data']) : [];
 
         foreach ($profileArr as $key => $value) {
-            if ($key === YotiHelper::ATTR_SELFIE_FILE_NAME) {
-                $data->yotiprofile[$key] = JText::_('PLG_USER_YOTIPROFILE_SELFIE_FIELD_MESSAGE');
-            } else {
-                $data->yotiprofile[$key] = $value;
-            }
+            $data->yotiprofile[$key] = $value;
         }
 
         // Set the unlink account message if we have profile data

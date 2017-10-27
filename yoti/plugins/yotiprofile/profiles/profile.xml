@@ -99,7 +99,6 @@
                    type="yotilinkbutton"
                    id="yoti_unlink_account"
                    required="true"
-                   default="PLG_USER_YOTIPROFILE_SELFIE_FIELD_MESSAGE"
                    data-button-text="PLG_USER_YOTIPROFILE_FIELD_UNLINK_ACCOUNT_LABEL"
             />
 

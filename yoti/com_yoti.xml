@@ -7,7 +7,7 @@
     <creationDate>August 2016</creationDate>
     <version>1.0.1</version>
     <license>Link to licence url</license>
-    <copyright>Copyright (C) 2016 http://www.yoti.com. All rights reserved.</copyright>
+    <copyright>Copyright (C) 2017 http://www.yoti.com. All rights reserved.</copyright>
     <description>Let Yoti users quickly register on your site. Note: Need to enable Yoti module and Yoti plugin.</description>
     <scriptfile>process-script.php</scriptfile>
     <install>

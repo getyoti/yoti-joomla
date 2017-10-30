@@ -1,15 +1,15 @@
 #!/bin/bash
 #!/bin/bash
-NAME="yoti-connect-1.0.0-edge.zip"
+NAME="yoti-joomla-v1.0.1-edge.zip"
 SDK_RELATIVE_PATH="sdk"
-curl https://github.com/getyoti/php/archive/master.zip -O -L
+curl https://github.com/getyoti/yoti-php-sdk/archive/master.zip -O -L
 unzip master.zip -d sdk
-mv sdk/php-master/src/* sdk
-rm -rf sdk/php-master
+mv sdk/yoti-php-sdk-master/src/* sdk
+rm -rf sdk/yoti-php-sdk-master
 
 
-if [ ! -d "./yoti-connect" ]; then
-    echo "ERROR: Must be in directory containing ./yoti-connect folder"
+if [ ! -d "./yoti" ]; then
+    echo "ERROR: Must be in directory containing ./yoti folder"
     exit
 fi
 
@@ -22,18 +22,18 @@ echo "Packing plugin ..."
 
 # move sdk symlink (used in symlink-plugin-to-site.sh)
 sym_exist=0
-if [ -L "./yoti-connect/site/sdk" ]; then
-    mv "./yoti-connect/site/sdk" "./__sdk-sym";
+if [ -L "./yoti/site/sdk" ]; then
+    mv "./yoti/site/sdk" "./__sdk-sym";
     sym_exist=1
 fi
 
-cp -R "$SDK_RELATIVE_PATH" "./yoti-connect/site/sdk"
-cd yoti-connect && zip -r "$NAME" . -i "*" && mv "$NAME" .. && cd ..
-rm -rf "./yoti-connect/site/sdk"
+cp -R "$SDK_RELATIVE_PATH" "./yoti/site/sdk"
+cd yoti && zip -r "$NAME" . -i "*" && mv "$NAME" .. && cd ..
+rm -rf "./yoti/site/sdk"
 
 # move symlink back
 if [ $sym_exist ]; then
-    mv "./__sdk-sym" "./yoti-connect/site/sdk"
+    mv "./__sdk-sym" "./yoti/site/sdk"
 fi
 
 rm -rf sdk

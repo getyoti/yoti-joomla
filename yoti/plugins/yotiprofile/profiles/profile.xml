@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form class="form-group">
+    <fields name="yotiprofile">
+        <fieldset name="yotiprofile"
+                  label="PLG_USER_YOTIPROFILE_SLIDER_LABEL">
+
+            <field name="yoti_user_notice"
+                   type="yotinote"
+                   id="yoti_user_notice"
+                   value="PLG_USER_YOTIPROFILE_NOTICE_MESSAGE"
+                   required="true"
+                   />
+
+            <field name="selfie_filename"
+                    type="yotiavatar"
+                    id="selfie_filename"
+                    alt="PLG_USER_YOTIPROFILE_FIELD_SELFIE_FILENAME_ALT"
+                    label="PLG_USER_YOTIPROFILE_FIELD_SELFIE_FILENAME_LABEL"
+                    filter=""
+                    width="100"
+                   required="true"
+            />
+
+            <field name="family_name"
+                    type="static"
+                    id="family_name"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_FAMILY_NAME_LABEL"
+                    required="true"
+                    class="yoti-user-field"
+                    size="30"
+            />
+
+            <field name="given_names"
+                    type="static"
+                    id="given_names"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_GIVEN_NAMES_LABEL"
+                    required="true"
+                    size="30"
+            />
+
+            <field name="phone_number"
+                    type="static"
+                    id="phone_number"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_PHONE_NUMBER_LABEL"
+                    required="true"
+                    size="30"
+            />
+
+            <field name="nationality"
+                    type="static"
+                    id="nationality"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_NATIONALITY_LABEL"
+                    required="true"
+                    size="30"
+            />
+
+            <field name="gender"
+                    type="static"
+                    id="gender"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_GENDER_LABEL"
+                    required="true"
+                    size="30"
+            />
+
+            <field name="email_address"
+                    type="static"
+                    id="email_address"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_EMAIL_ADDRESS_LABEL"
+                    required="true"
+                    size="30"
+            />
+
+            <field name="postal_address"
+                    type="static"
+                    id="postal_address"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_POSTAL_ADDRESS_LABEL"
+                    required="true"
+                    size="30"
+            />
+
+            <field name="date_of_birth"
+                    type="static"
+                    id="date_of_birth"
+                    filter="string"
+                    label="PLG_USER_YOTIPROFILE_FIELD_DATE_OF_BIRTH_LABEL"
+                    required="true"
+                    size="30"
+            />
+
+            <field
+                    label=""
+                    type="yotispacer"
+                    name="yotispacer"
+                    filter="safehtml"
+            />
+
+            <field name="yoti_unlink_account"
+                   label=""
+                   type="yotilinkbutton"
+                   id="yoti_unlink_account"
+                   required="true"
+                   data-button-text="PLG_USER_YOTIPROFILE_FIELD_UNLINK_ACCOUNT_LABEL"
+            />
+
+        </fieldset>
+
+    </fields>
+</form>

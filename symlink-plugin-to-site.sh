@@ -11,14 +11,14 @@ if [ ! -d "$BASE" ]; then
 fi
 
 declare -A dirs=(
-    ["admin"]="administrator/components/com_yoticonnect"
-    ["modules/mod_yoticonnect"]="modules/mod_yoticonnect"
+    ["admin"]="administrator/components/com_yoti"
+    ["modules/mod_yoti"]="modules/mod_yoti"
     ["plugins/yotiprofile"]="plugins/user/yotiprofile"
-    ["site"]="components/com_yoticonnect"
+    ["site"]="components/com_yoti"
 )
 for i in ${!dirs[@]}
 do
-    target="$PWD/yoti-connect/$i"
+    target="$PWD/yoti/$i"
     link="$BASE/${dirs[$i]}"
 
     # if link already exists then don't create

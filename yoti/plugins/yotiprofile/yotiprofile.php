@@ -2,7 +2,7 @@
 /**
  * @version
  * @copyright    Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
- * @license        GNU General Public License version 2 or later; see LICENSE.txt
+ * @license        GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html; see LICENSE.txt
  */
 
 defined('JPATH_BASE') or die;

@@ -1,8 +1,11 @@
 <?php
+/**
+ * @license     GNU General Public License version 3; see LICENSE.txt
+ */
+defined('_JEXEC') or die('Restricted access');
 
 use Yoti\ActivityDetails;
 use Yoti\YotiClient;
-use Carbon\Carbon;
 
 //Load the Joomla Model framework
 jimport('joomla.application.component.model');

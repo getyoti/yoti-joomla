@@ -1,7 +1,9 @@
 <?php
 /**
  * @var $this AdminYotiViewYoti
+ * @license     GNU General Public License version 3; see LICENSE.txt
  */
+defined('_JEXEC') or die('Restricted access');
 ?>
 <div class="row-fluid">
     <div class="span12">

@@ -3,6 +3,7 @@ defined('_JEXEC') or die('Restricted access');
 
 /**
  * Admin view class
+ * @license     GNU General Public License version 3; see LICENSE.txt
  * @author Moussa Sidibe <sdksupport@yoti.com>
  */
 class AdminYotiViewYoti extends JViewLegacy

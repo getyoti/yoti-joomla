@@ -1,4 +1,7 @@
 <?php
+/**
+ * @license     GNU General Public License version 3; see LICENSE.txt
+ */
 defined('_JEXEC') or die('Restricted access'); // no direct access
 
 use Yoti\YotiClient;

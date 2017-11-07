@@ -1,4 +1,7 @@
 <?php
+/**
+ * @license     GNU General Public License version 3; see LICENSE.txt
+ */
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
 

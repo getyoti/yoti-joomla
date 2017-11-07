@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update>
+        <name>Yoti</name>
+        <description>Yoti extension for Joomla!</description>
+        <element>pkg_yoti</element>
+        <type>package</type>
+        <client>0</client>
+        <client_id>0</client_id>
+        <version>1.0.1</version>
+        <infourl title="Yoti 1.0.1 Released">
+            https://github.com/getyoti/yoti-joomla/releases
+        </infourl>
+        <downloads>
+            <downloadurl type="full" format="zip">
+                https://github.com/getyoti/yoti-joomla/releases/download/1.0.1/yoti-1.0.1.zip
+            </downloadurl>
+        </downloads>
+        <maintainer>Moussa Sidibe</maintainer>
+        <maintainerurl>https://www.yoti.com</maintainerurl>
+        <targetplatform name="joomla" version="3.0"/>
+    </update>
+</updates>

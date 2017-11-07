@@ -6,6 +6,7 @@ defined('_JEXEC') or die('Restricted access'); // no direct access
  * @package    Yoti
  * @subpackage Modules
  * @link http://www.yoti.com
+ * @license     GNU General Public License version 3; see LICENSE.txt
  */
 
 jimport('joomla.application.component.model');

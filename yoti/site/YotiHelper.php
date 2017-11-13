@@ -59,6 +59,11 @@ class YotiHelper
     const USERNAME_VALIDATION_PATTERN = '/^[A-z0-9\._-]{3,32}$/i';
 
     /**
+     * Yoti Joomla SDK identifier.
+     */
+    const SDK_IDENTIFIER = 'Joomla';
+
+    /**
      * @var YotiModelUser
      *   Yoti User Model.
      */
@@ -123,7 +128,12 @@ class YotiHelper
         // Init Yoti client and attempt to request user details
         try
         {
-            $yotiClient = new YotiClient($yotiSDKID, $yotiPemContents);
+            $yotiClient = new YotiClient(
+                $yotiSDKID,
+                $yotiPemContents,
+                YotiClient::DEFAULT_CONNECT_API,
+                self::SDK_IDENTIFIER
+            );
             $yotiClient->setMockRequests(self::mockRequests());
             $activityDetails = $yotiClient->getActivityDetails($token);
         }
@@ -158,7 +168,7 @@ class YotiHelper
                 $errMsg = NULL;
 
                 // Attempt to connect by email.
-                $userId = $this->loginByEmail($activityDetails);
+                $userId = $this->shouldLoginByEmail($activityDetails, $config['yoti_user_email']);
 
                 // If config 'only log in existing user' is enabled then check
                 // if user exists, if not then redirect to login page.
@@ -260,24 +270,23 @@ class YotiHelper
      *
      * @param ActivityDetails $activityDetails
      *   Yoti user data.
+     * @param string $configEmail
+     *   Yoti settings use_email_only param.
      *
      * @return int userId
      *  Joomla userId.
      */
-    protected function loginByEmail(ActivityDetails $activityDetails)
+    protected function shouldLoginByEmail(ActivityDetails $activityDetails, $configEmail)
     {
         $userId = 0;
-        $config = self::getConfig();
-        $config = ($config instanceof Joomla\Registry\Registry) ? $config->toArray() : $config;
         $email = $activityDetails->getEmailAddress();
-        if (NULL !== $email && isset($config['yoti_user_email']) && !empty($config['yoti_user_email'])) {
+        if (NULL !== $email && !empty($configEmail)) {
             $joomlaUser = $this->yotiUserModel->getJoomlaUserByEmail($email);
             if ($joomlaUser) {
                 $userId = $joomlaUser->get('id');
                 $this->createYotiUser($activityDetails, $userId);
             }
         }
-
         return $userId;
     }
 

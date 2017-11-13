@@ -56,7 +56,7 @@ To import the Yoti Joomla extension inside your project:
 1) Log on to the admin console of your Joomla website. e.g. https://www.joomladev.com/administrator
 2) Navigate to at `Extensions-> Manage -> Install` and do one of the following:
 - click `Install from Web` link and Search for `Yoti`
-- click `Upload Package File` and upload the downloaded zip file from [our extension page](https://extensions.joomla.org/yoti).
+- click `Upload Package File` and upload the downloaded zip file from [our extension page](https://extensions.joomla.org/extensions/extension/access-a-security/yoti/).
 - you can also `Install from URL` or `Install from folder`
 3) Install and enable `Yoti login` module and `Yoti - User profile` plugin.
 

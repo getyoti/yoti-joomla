@@ -12,7 +12,7 @@
     <scriptfile>process-script.php</scriptfile>
 
     <updateservers>
-        <server type="extension" name="Yoti Updates" priority="1">https://github.com/getyoti/yoti-joomla/yoti-joomla.xml</server>
+        <server type="extension" name="Yoti Updates" priority="1">https://github.com/getyoti/yoti-joomla/blob/master/yoti-joomla.xml</server>
     </updateservers>
 
     <install>

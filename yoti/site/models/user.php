@@ -86,7 +86,7 @@ class YotiModelUser extends JModelForm
             $query->select('id')
                 ->from($db->quoteName('#__users'))
                 ->where($db->quoteName('username') . '=' . $db->quote($username))
-                ->setLimit('1');
+                ->setLimit(1);
         }
         return $query;
     }
@@ -134,7 +134,7 @@ class YotiModelUser extends JModelForm
             $count  = $db->setQuery($query)->loadResult();
         }
 
-        return ($count) ? TRUE : FALSE;
+        return $count ? TRUE : FALSE;
     }
 
     /**
@@ -154,7 +154,8 @@ class YotiModelUser extends JModelForm
             $query = $db->getQuery(TRUE)
                 ->select('joomla_userid')
                 ->from(YotiHelper::YOTI_USER_TABLE_NAME)
-                ->where('identifier=' . $db->quote($yotiId));
+                ->where('identifier=' . $db->quote($yotiId))
+                ->setLimit(1);
             $userId = $db->setQuery($query)->loadResult();
         }
         return $userId;
@@ -175,7 +176,7 @@ class YotiModelUser extends JModelForm
             ->select('joomla_userid')
             ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
             ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId))
-            ->setLimit('1');
+            ->setLimit(1);
         return $db->setQuery($query)->loadResult();
     }
 
@@ -222,7 +223,8 @@ class YotiModelUser extends JModelForm
             $query = $db->getQuery(TRUE);
             $query->select('*')
                 ->from($db->quoteName('#__users'))
-                ->where($db->quoteName('id') . '=' . $db->quote($userId));
+                ->where($db->quoteName('id') . '=' . $db->quote($userId))
+                ->setLimit(1);
             $joomlaUser = $db->setQuery($query)->loadAssoc();
         }
 
@@ -245,7 +247,8 @@ class YotiModelUser extends JModelForm
             $query = $db->getQuery(TRUE)
                 ->select('*')
                 ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
-                ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId));
+                ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId))
+                ->setLimit(1);
             $userData = $db->setQuery($query)->loadAssoc();
         }
 

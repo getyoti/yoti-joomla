@@ -152,7 +152,7 @@ class plgUserYotiprofile extends JPlugin
         ) {
             // Reorder the form to put the warning message on top
             JForm::addFieldPath(__DIR__ . '/fields');
-            if($yotiLoginXml = simplexml_load_string(file_get_contents(__DIR__ . "/profiles/login.xml"))){
+            if($yotiLoginXml = simplexml_load_string(file_get_contents(__DIR__ . '/profiles/login.xml'))){
                 $formXml = $form->getXML();
                 $form->reset(true);
                 $form->setFields($yotiLoginXml);
@@ -251,7 +251,7 @@ class plgUserYotiprofile extends JPlugin
 
         $yotiUserModel = new YotiModelUser();
 
-        $userId = (isset($user['id'])) ? $user['id'] : 0;
+        $userId = isset($user['id']) ? $user['id'] : 0;
 
         if ($userId)
         {

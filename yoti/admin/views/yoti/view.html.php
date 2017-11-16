@@ -42,14 +42,13 @@ class AdminYotiViewYoti extends JViewLegacy
         $config = $component->params;
 
         // Check that the dependency requirements are met
-        $errors = array();
+        $errors = [];
+        if (version_compare(phpversion(), '5.4.0', '<')) {
+            $errors[] = "Yoti could not be installed. Yoti PHP SDK requires PHP 5.4 or higher.";
+        }
         if (!function_exists('curl_version'))
         {
             $errors[] = "PHP module 'curl' not installed. Yoti requires it to work. Please contact your server administrator.";
-        }
-        if (!function_exists('mcrypt_encrypt'))
-        {
-            $errors[] = "PHP module 'mcrypt' not installed. Yoti requires it to work. Please contact your server administrator.";
         }
         if (!function_exists('json_decode'))
         {

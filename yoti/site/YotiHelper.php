@@ -59,6 +59,11 @@ class YotiHelper
     const USERNAME_VALIDATION_PATTERN = '/^[A-z0-9\._-]{3,32}$/i';
 
     /**
+     * Yoti Joomla SDK identifier.
+     */
+    const SDK_IDENTIFIER = 'Joomla';
+
+    /**
      * @var YotiModelUser
      *   Yoti User Model.
      */
@@ -109,7 +114,7 @@ class YotiHelper
         $yotiSDKID = $config['yoti_sdk_id'];
         $yotiPemContents = $config['yoti_pem']->contents;
 
-        $token = (!empty($_GET['token'])) ? $_GET['token'] : null;
+        $token = (!empty($_GET['token'])) ? $_GET['token'] : NULL;
         $token = YotiHelper::sanitizeToken($token);
 
         // If no token then ignore
@@ -117,13 +122,18 @@ class YotiHelper
         {
             self::setFlash('Could not get Yoti token.', 'error');
 
-            return false;
+            return FALSE;
         }
 
         // Init Yoti client and attempt to request user details
         try
         {
-            $yotiClient = new YotiClient($yotiSDKID, $yotiPemContents);
+            $yotiClient = new YotiClient(
+                $yotiSDKID,
+                $yotiPemContents,
+                YotiClient::DEFAULT_CONNECT_API,
+                self::SDK_IDENTIFIER
+            );
             $yotiClient->setMockRequests(self::mockRequests());
             $activityDetails = $yotiClient->getActivityDetails($token);
         }
@@ -131,12 +141,12 @@ class YotiHelper
         {
             self::setFlash('Yoti could not successfully connect to your account.', 'error');
 
-            return false;
+            return FALSE;
         }
 
         // If unsuccessful then bail
         if (!$this->yotiApiCallIsSuccessfull($yotiClient->getOutcome())) {
-            return false;
+            return FALSE;
         }
 
         // Check if yoti user exists
@@ -158,7 +168,7 @@ class YotiHelper
                 $errMsg = NULL;
 
                 // Attempt to connect by email.
-                $userId = $this->loginByEmail($activityDetails);
+                $userId = $this->shouldLoginByEmail($activityDetails, $config['yoti_user_email']);
 
                 // If config 'only log in existing user' is enabled then check
                 // if user exists, if not then redirect to login page.
@@ -187,7 +197,7 @@ class YotiHelper
                     // If it couldn't create a user then bail
                     self::setFlash("Could not create user account. $errMsg", 'error');
 
-                    return false;
+                    return FALSE;
                 }
             }
 
@@ -260,24 +270,23 @@ class YotiHelper
      *
      * @param ActivityDetails $activityDetails
      *   Yoti user data.
+     * @param string $configEmail
+     *   Yoti settings use_email_only param.
      *
      * @return int userId
      *  Joomla userId.
      */
-    protected function loginByEmail(ActivityDetails $activityDetails)
+    protected function shouldLoginByEmail(ActivityDetails $activityDetails, $configEmail)
     {
         $userId = 0;
-        $config = self::getConfig();
-        $config = ($config instanceof Joomla\Registry\Registry) ? $config->toArray() : $config;
         $email = $activityDetails->getEmailAddress();
-        if (NULL !== $email && isset($config['yoti_user_email']) && !empty($config['yoti_user_email'])) {
+        if (NULL !== $email && !empty($configEmail)) {
             $joomlaUser = $this->yotiUserModel->getJoomlaUserByEmail($email);
             if ($joomlaUser) {
                 $userId = $joomlaUser->get('id');
                 $this->createYotiUser($activityDetails, $userId);
             }
         }
-
         return $userId;
     }
 
@@ -328,12 +337,12 @@ class YotiHelper
             self::setFlash('Your Yoti profile is successfully unlinked from your account.');
             YotiHelper::clearYotiUserFromSession();
 
-            return true;
+            return TRUE;
         }
 
         self::setFlash('Could not unlink your account from Yoti.');
 
-        return false;
+        return FALSE;
     }
 
     /**
@@ -448,9 +457,9 @@ class YotiHelper
     protected function isValidUsername($username)
     {
         if(!preg_match(self::USERNAME_VALIDATION_PATTERN, $username)) {
-            return false;
+            return FALSE;
         }
-        return true;
+        return TRUE;
     }
 
     /**
@@ -616,6 +625,12 @@ class YotiHelper
             unset($yotiUserData[ActivityDetails::ATTR_SELFIE]);
         }
 
+        // Format the date of birth to d-m-Y
+        if(isset($yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH])) {
+            $dateOfBirth = $yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH];
+            $yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH] = date('d-m-Y', strtotime($dateOfBirth));
+        }
+
         $user = [
             'joomla_userid' => $userId,
             'identifier' => $activityDetails->getUserId(),
@@ -636,18 +651,17 @@ class YotiHelper
      */
     protected static function createUserSelfieFile(ActivityDetails $activityDetails, $userId)
     {
-        $selfieFilename = null;
+        $selfieFilename = NULL;
         $userId = (int) $userId;
         if ($userId && $activityDetails->getProfileAttribute(ActivityDetails::ATTR_SELFIE))
         {
             // Create media dir
             if (!is_dir(self::uploadDir()))
             {
-                mkdir(self::uploadDir(), 0777, true);
+                mkdir(self::uploadDir(), 0777, TRUE);
             }
 
-            //$selfieFilename = "selfie_$userId.png";
-            $selfieFilename = md5("selfie_$userId" . time()) . ".png";
+            $selfieFilename = md5("selfie_$userId" . time()) . '.png';
             file_put_contents(self::uploadDir() . "/$selfieFilename", $activityDetails->getSelfie());
         }
 
@@ -665,12 +679,6 @@ class YotiHelper
         $yotiUserData = [];
         foreach(YotiHelper::$profileFields as $attribute => $label) {
             $yotiUserData[$attribute] = $activityDetails->getProfileAttribute($attribute);
-        }
-
-        // Format the date of birth to d-m-Y
-        if(isset($yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH])) {
-            $dateOfBirth = $yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH];
-            $yotiUserData[ActivityDetails::ATTR_DATE_OF_BIRTH] = date('d-m-Y', strtotime($dateOfBirth));
         }
 
         return $yotiUserData;
@@ -749,7 +757,7 @@ class YotiHelper
         $config = self::getConfig();
         if (empty($config['yoti_app_id']))
         {
-            return null;
+            return NULL;
         }
 
         return YotiClient::getLoginUrl($config['yoti_app_id']);

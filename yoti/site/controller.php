@@ -11,10 +11,15 @@ JPluginHelper::importPlugin('user');
 /**
  * Class YotiController
  *
- * @author Moussa Sidibe <moussa.sidibe@yoti.com>
+ * @author Moussa Sidibe <sdksupport@yoti.com>
  */
 class YotiController extends JControllerLegacy
 {
+    /**
+     * User profile page
+     */
+    const USER_PROFILE_PAGE = 'index.php?option=com_users&view=profile';
+
     /**
      * @param bool $cachable
      * @param array $urlparams
@@ -31,21 +36,21 @@ class YotiController extends JControllerLegacy
             case 'login':
                 $userLinked = $helper->link();
                 if ($userLinked && empty($_GET['redirect'])) {
-                    $redirect = JRoute::_($config['yoti_success_url'], false);
+                    $redirect = $config['yoti_success_url'];
                 } else if(!$userLinked) {
                     // Redirect to failed URL
-                    $failedUrl = ($config['yoti_failed_url'] == "/") ? "index.php" : $config['yoti_failed_url'];
-                    $redirect = JRoute::_($failedUrl, false);
+                    $redirect = ($config['yoti_failed_url'] === '/') ? 'index.php' : $config['yoti_failed_url'];
                 }
+                // Make sure the custom redirect link is internal
+                $redirect = JUri::isInternal($redirect) ? $redirect : 'index.php';
                 $this->setRedirect($redirect);
                 return;
                 break;
 
             case 'unlink':
                 // After unlinking account, redirect to user profile
-                $redirect = JRoute::_('index.php?option=com_users&view=profile', false);
                 $helper->unlink();
-                $this->setRedirect($redirect);
+                $this->setRedirect(self::USER_PROFILE_PAGE);
                 return;
                 break;
 
@@ -55,7 +60,7 @@ class YotiController extends JControllerLegacy
                 break;
 
             default:
-                $this->setRedirect(JRoute::_($redirect, false));
+                $this->setRedirect($redirect);
                 return;
         }
 

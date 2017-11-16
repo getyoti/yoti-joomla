@@ -16,9 +16,9 @@ class JFormFieldPlaintext extends JFormField
     public function getInput()
     {
         $config = YotiHelper::getConfig();
-        $companyName = (isset($config['yoti_company_name'])) ? $config['yoti_company_name'] : "Joomla";
-        $warningMsg = "<strong>Warning</strong>: You are about to link your <strong>" .
-            $companyName . "</strong> account to your Yoti account.<br/> Click the box below to keep them separate.";
+        $companyName = isset($config['yoti_company_name']) ? $config['yoti_company_name'] : 'Joomla';
+        $warningMsg = '<strong>Warning</strong>: You are about to link your <strong>' .
+            $companyName . '</strong> account to your Yoti account.<br/> Click the box below to keep them separate.';
         $html = '<span style="font-size:14px;">'.$warningMsg. '</span>';
         return $html;
     }

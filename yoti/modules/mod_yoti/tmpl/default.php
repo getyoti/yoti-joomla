@@ -28,7 +28,7 @@ $currentUser = JFactory::getUser();
 $document = JFactory::getDocument();
 // Add Yoti button library
 $document->addScript(ModYotiHelper::YOTI_BUTTON_JS_LIBRARY);
-$document->addStyleSheet(JUri::base() . "components/com_yoti/assets/styles.css");
+$document->addStyleSheet(JUri::base() . 'components/com_yoti/assets/styles.css');
 
 $script = [];
 
@@ -83,7 +83,7 @@ else
     }
     else
     {
-        $button = "<strong>Yoti</strong>  Linked";
+        $button = '<strong>Yoti</strong>  Linked';
     }
 }
 echo '<div class="yoti-connect">' . $button . '</div>';

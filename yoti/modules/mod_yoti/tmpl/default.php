@@ -37,9 +37,7 @@ $isStaging = strpos(YotiClient::CONNECT_BASE_URL, 'https://staging') === 0;
 if ($isStaging) {
     // Base url for connect.
     $baseUrl = preg_replace('/^(.+)\/connect$/', '$1', YotiClient::CONNECT_BASE_URL);
-    $yotiButtonJsVersion = YotiHelper::YOTI_BUTTON_JS_LIBRARY_VERSION;
-    $yotiButtonQrVersion = (!empty($yotiButtonJsVersion)) ? $yotiButtonJsVersion . '/' : '';
-    $script[] = sprintf('_ybg.config.qr = "%s/qr/' . $yotiButtonQrVersion . '";', $baseUrl);
+    $script[] = sprintf('_ybg.config.qr = "%s/qr/";', $baseUrl);
     $script[] = sprintf('_ybg.config.service = "%s/connect/";', $baseUrl);
 }
 

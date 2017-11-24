@@ -8,6 +8,14 @@ defined('_JEXEC') or die('Restricted access');
  */
 class AdminYotiViewYoti extends JViewLegacy
 {
+    const FORM_REQUIRED_FIELDS = [
+        'yoti_sdk_id' => 'App ID',
+        'yoti_app_id' => 'Scenario ID',
+        'yoti_scenario_id' => 'SDK ID',
+        'yoti_success_url' => 'Success URL',
+        'yoti_failed_url' => 'Failed URL'
+    ];
+
     /**
      * @var array
      */
@@ -17,14 +25,6 @@ class AdminYotiViewYoti extends JViewLegacy
     protected $defaultSuccessUrl = 'index.php?option=com_users&view=profile';
     protected $defaultFailedUrl = '/';
     protected $joomlaLoginPage = 'index.php?option=com_yoti&task=login';
-
-    protected $formRequiredFields = [
-        'yoti_sdk_id' => 'App ID',
-        'yoti_app_id' => 'Scenario ID',
-        'yoti_scenario_id' => 'SDK ID',
-        'yoti_success_url' => 'Success URL',
-        'yoti_failed_url' => 'Failed URL'
-    ];
 
     /**
      * @param null $tpl
@@ -178,7 +178,7 @@ class AdminYotiViewYoti extends JViewLegacy
     protected function validateForm()
     {
        $errorMsg = '';
-       foreach($this->formRequiredFields as $fieldName => $fieldLabel) {
+       foreach(self::FORM_REQUIRED_FIELDS as $fieldName => $fieldLabel) {
            if(empty($this->postVar($fieldName))) {
                $errorMsg = "{$fieldLabel} is required!";
                break;

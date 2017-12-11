@@ -147,11 +147,11 @@ class AdminYotiViewYoti extends JViewLegacy
         $this->errors = $errors;
         $this->data = $data->flatten();
 
-        $this->successUrl = (!empty($this->data['yoti_success_url'])) ? $this->data['yoti_success_url']  : $this->defaultSuccessUrl;
-        $this->failedUrl = (!empty($this->data['yoti_failed_url'])) ? $this->data['yoti_failed_url']  : $this->defaultFailedUrl;
-        $this->pemFilechecked = (!empty($this->data['yoti_delete_pem']) ? ' checked="checked"' : '');
-        $this->onlyExitingUserChecked = (!empty($this->data['yoti_only_existing_user'])) ? ' checked="checked"'  : '';
-        $this->userEmailChecked = (!empty($this->data['yoti_user_email']) || !$config->count()) ? ' checked="checked"'  : '';
+        $this->successUrl = !empty($this->data['yoti_success_url']) ? $this->data['yoti_success_url']  : $this->defaultSuccessUrl;
+        $this->failedUrl = !empty($this->data['yoti_failed_url']) ? $this->data['yoti_failed_url']  : $this->defaultFailedUrl;
+        $this->pemFilechecked = !empty($this->data['yoti_delete_pem']) ? ' checked="checked"' : '';
+        $this->onlyExitingUserChecked = !empty($this->data['yoti_only_existing_user']) ? ' checked="checked"'  : '';
+        $this->userEmailChecked = !empty($this->data['yoti_user_email']) ? ' checked="checked"'  : '';
 
 
         return parent::display($tpl);

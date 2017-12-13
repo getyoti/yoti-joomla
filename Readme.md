@@ -13,8 +13,8 @@ Guides before you start
 3) [Installing the SDK](#installing-the-sdk)-
 How to install our SDK
 
-4) [Plugin Setup](#plugin-setup)-
-How to set up the plugin in Drupal
+4) [Extension Setup](#extension-setup)-
+How to set up the plugin in Joomla
 
 5) [Linking existing accounts to use Yoti authentication](#linking-existing-accounts-to-use-yoti-authentication)
 
@@ -63,7 +63,7 @@ To import the Yoti Joomla extension inside your project:
 - you can also `Install from URL` or `Install from folder`
 3) Install and enable `Yoti login` module and `Yoti - User profile` plugin.
 
-## Component Setup
+## Extension Setup
 
 To set Yoti up follow the instruction below:
 
@@ -107,7 +107,7 @@ To allow your existing users to log in using Yoti instead of entering thier user
         * [X] Nationality `nationality`
         
 ## Yoti Docker
-This is a Docker module for Joomla including Yoti plugin.  
+This is a Docker module for Joomla including Yoti extension.  
 
 ### Setup
 To try out our Docker module, clone this repos and run the following commands:
@@ -135,12 +135,12 @@ Database Name `yotijoomla`
 
 Table Prefix `yoti_`
 
-### Register and enable Yoti plugin
-Please register Yoti plugin which is installed along side Joomla CMS, by running the command below to process the SQL dump script.
+### Register and enable Yoti extension
+Please register Yoti extension which is installed along side Joomla CMS, by running the command below to process the SQL dump.
 
 `docker exec -i yotijoomla_yoti_joomladb_1 mysql -uroot -proot yotijoomla < ./docker/mysql-dump.sql`
 
-After running the command above, please follow the instructions in our [plugin setup](#plugin-setup) section to set it up.        
+After running the command above, please follow the instructions in our [extension setup](#extension-setup) section to set it up.        
 
 ## Support
 

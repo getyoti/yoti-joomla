@@ -21,7 +21,10 @@ How to set up the plugin in Drupal
 6) [API Coverage](#api-coverage)-
 Attributes defined
 
-7) [Support](#support)-
+7) [Yoti Docker](#yoti-docker)
+How to set up Yoti Docker module
+
+8) [Support](#support)-
 Please feel free to reach out
 
 ## An Architectural view
@@ -102,6 +105,42 @@ To allow your existing users to log in using Yoti instead of entering thier user
         * [X] Address `postal_address`
         * [X] Gender `gender`
         * [X] Nationality `nationality`
+        
+## Yoti Docker
+This is a Docker module for Joomla including Yoti plugin.  
+
+### Setup
+To try out our Docker module, clone this repos and run the following commands:
+
+`cd yoti-joomla` if this is the directory where you cloned the repos
+
+`docker-compose build` to rebuild the images if you have modified `docker-compose.yml` file
+
+`docker-compose up -d` to build the containers.    
+
+After the command above has finished running, browse the link below and follow the instructions  
+
+`http://localhost:8080`
+
+### Database Configuration
+When prompted, enter the following details for the database:
+
+Host Name `yoti_joomladb`
+
+Username `root`
+
+Password `root`
+
+Database Name `yotijoomla`
+
+Table Prefix `yoti_`
+
+### Register and enable Yoti plugin
+Please register Yoti plugin which is installed along side Joomla CMS, by running the command below to process the SQL dump script.
+
+`docker exec -i yotijoomla_yoti_joomladb_1 mysql -uroot -proot yotijoomla < ./docker/mysql-dump.sql`
+
+After running the command above, please follow the instructions in our [plugin setup](#plugin-setup) section to set it up.        
 
 ## Support
 

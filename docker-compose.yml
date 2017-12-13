@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  yoti-joomla:
+    build:
+      context: ./docker/
+      args:
+        BRANCH: "master"
+    restart: always
+    links:
+      - yoti_joomladb:mysql
+    ports:
+      - "8080:80"
+    environment:
+      JOOMLA_DB_NAME: yotijoomla
+      JOOMLA_DB_HOST: yoti_joomladb
+      JOOMLA_DB_PASSWORD: root
+
+  yoti_joomladb:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root

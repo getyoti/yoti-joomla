@@ -14,7 +14,7 @@ Guides before you start
 How to install our SDK
 
 4) [Extension Setup](#extension-setup)-
-How to set up the plugin in Joomla
+How to set up the extension in Joomla
 
 5) [Linking existing accounts to use Yoti authentication](#linking-existing-accounts-to-use-yoti-authentication)
 

@@ -114,7 +114,7 @@ To try out our Docker module, clone this repos and run the following commands:
 
 `cd yoti-joomla` if this is the directory where you cloned the repos
 
-`docker-compose build` to rebuild the images if you have modified `docker-compose.yml` file
+`docker-compose build --no-cache` to rebuild the images if you have modified `docker-compose.yml` file
 
 `docker-compose up -d` to build the containers.    
 
@@ -125,7 +125,7 @@ After the command above has finished running, browse the link below and follow t
 ### Database Configuration
 When prompted, enter the following details for the database:
 
-Host Name `yoti_joomladb`
+Host Name `joomladb`
 
 Username `root`
 

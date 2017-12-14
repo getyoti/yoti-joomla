@@ -138,7 +138,7 @@ Table Prefix `yoti_`
 ### Register and enable Yoti extension
 Please register Yoti extension which is installed along side Joomla CMS, by running the command below to process the SQL dump.
 
-`docker exec -i yotijoomla_yoti_joomladb_1 mysql -uroot -proot yotijoomla < ./docker/mysql-dump.sql`
+`docker exec -i yotijoomla_joomladb_1 mysql -uroot -proot yotijoomla < ./docker/mysql-dump.sql`
 
 After running the command above, please follow the instructions in our [extension setup](#extension-setup) section to set it up.        
 

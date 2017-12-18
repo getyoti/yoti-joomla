@@ -8,17 +8,7 @@ defined('_JEXEC') or die('Restricted access');
  */
 class AdminYotiViewYoti extends JViewLegacy
 {
-    /**
-     * @var array
-     */
-    public $data = array();
-    public $errors = array();
-
-    protected $defaultSuccessUrl = 'index.php?option=com_users&view=profile';
-    protected $defaultFailedUrl = '/';
-    protected $joomlaLoginPage = 'index.php?option=com_yoti&task=login';
-
-    protected $formRequiredFields = [
+    const FORM_REQUIRED_FIELDS = [
         'yoti_sdk_id' => 'App ID',
         'yoti_app_id' => 'Scenario ID',
         'yoti_scenario_id' => 'SDK ID',
@@ -27,11 +17,21 @@ class AdminYotiViewYoti extends JViewLegacy
     ];
 
     /**
+     * @var array
+     */
+    public $data = [];
+    public $errors = [];
+
+    protected $defaultSuccessUrl = 'index.php?option=com_users&view=profile';
+    protected $defaultFailedUrl = '/';
+    protected $joomlaLoginPage = 'index.php?option=com_yoti&task=login';
+
+    /**
      * @param null $tpl
      * @return mixed|void
      * @throws Exception
      */
-    public function display($tpl = null)
+    public function display($tpl = NULL)
     {
         $this->addSidebar();
         JFactory::getDocument()->addStyleSheet("$this->baseurl/components/com_yoti/assets/styles.css");
@@ -44,7 +44,7 @@ class AdminYotiViewYoti extends JViewLegacy
         // Check that the dependency requirements are met
         $errors = [];
         if (version_compare(phpversion(), '5.4.0', '<')) {
-            $errors[] = "Yoti could not be installed. Yoti PHP SDK requires PHP 5.4 or higher.";
+            $errors[] = 'Yoti could not be installed. Yoti PHP SDK requires PHP 5.4 or higher.';
         }
         if (!function_exists('curl_version'))
         {
@@ -66,11 +66,11 @@ class AdminYotiViewYoti extends JViewLegacy
             $data['yoti_scenario_id'] = $this->postVar('yoti_scenario_id');
             $data['yoti_sdk_id'] = $this->postVar('yoti_sdk_id');
             $data['yoti_company_name'] = $this->postVar('yoti_company_name');
-            $data['yoti_delete_pem'] = ($this->postVar('yoti_delete_pem')) ? true : false;
+            $data['yoti_delete_pem'] = $this->postVar('yoti_delete_pem') ? TRUE : FALSE;
             $data['yoti_success_url'] = $this->postVar('yoti_success_url');
             $data['yoti_failed_url'] = $this->postVar('yoti_failed_url');
-            $data['yoti_only_existing_user'] = ($this->postVar('yoti_only_existing_user')) ? true : false;
-            $data['yoti_user_email'] = ($this->postVar('yoti_user_email')) ? true : false;
+            $data['yoti_only_existing_user'] = $this->postVar('yoti_only_existing_user') ? TRUE : FALSE;
+            $data['yoti_user_email'] = $this->postVar('yoti_user_email') ? TRUE : FALSE;
 
             // Validation
             if(!empty($errorMsg)) {
@@ -96,7 +96,7 @@ class AdminYotiViewYoti extends JViewLegacy
             else
             {
                 // If pem file uploaded then process
-                $name = $pemContents = null;
+                $name = $pemContents = NULL;
                 if (!empty($pemFile['tmp_name']))
                 {
                     $name = preg_replace('/[^a-zA-Z0-9_\-\.]/', '', $pemFile['name']);
@@ -114,10 +114,10 @@ class AdminYotiViewYoti extends JViewLegacy
                 }
 
                 // Set pem file
-                $data['yoti_pem'] = array(
+                $data['yoti_pem'] = [
                     'name' => $name,
                     'contents' => $pemContents,
-                );
+                ];
 
                 // Save config data
                 $config->set('yoti_app_id', $data['yoti_app_id']);
@@ -132,8 +132,8 @@ class AdminYotiViewYoti extends JViewLegacy
 
                 $table = JTable::getInstance('extension');
                 $table->load($component->id);
-                $table->bind(array('params' => $config->toString()));
-                if (!$table->store(true))
+                $table->bind(['params' => $config->toString()]);
+                if (!$table->store(TRUE))
                 {
                     JFactory::getApplication()->enqueueMessage("Couldn't save settings.", 'error');
                 }
@@ -147,11 +147,11 @@ class AdminYotiViewYoti extends JViewLegacy
         $this->errors = $errors;
         $this->data = $data->flatten();
 
-        $this->successUrl = (!empty($this->data['yoti_success_url'])) ? $this->data['yoti_success_url']  : $this->defaultSuccessUrl;
-        $this->failedUrl = (!empty($this->data['yoti_failed_url'])) ? $this->data['yoti_failed_url']  : $this->defaultFailedUrl;
-        $this->pemFilechecked = (!empty($this->data['yoti_delete_pem']) ? ' checked="checked"' : '');
-        $this->onlyExitingUserChecked = (!empty($this->data['yoti_only_existing_user'])) ? ' checked="checked"'  : '';
-        $this->userEmailChecked = (!empty($this->data['yoti_user_email'])) ? ' checked="checked"'  : '';
+        $this->successUrl = !empty($this->data['yoti_success_url']) ? $this->data['yoti_success_url']  : $this->defaultSuccessUrl;
+        $this->failedUrl = !empty($this->data['yoti_failed_url']) ? $this->data['yoti_failed_url']  : $this->defaultFailedUrl;
+        $this->pemFilechecked = !empty($this->data['yoti_delete_pem']) ? ' checked="checked"' : '';
+        $this->onlyExitingUserChecked = !empty($this->data['yoti_only_existing_user']) ? ' checked="checked"'  : '';
+        $this->userEmailChecked = !empty($this->data['yoti_user_email']) ? ' checked="checked"'  : '';
 
 
         return parent::display($tpl);
@@ -178,7 +178,7 @@ class AdminYotiViewYoti extends JViewLegacy
     protected function validateForm()
     {
        $errorMsg = '';
-       foreach($this->formRequiredFields as $fieldName => $fieldLabel) {
+       foreach(self::FORM_REQUIRED_FIELDS as $fieldName => $fieldLabel) {
            if(empty($this->postVar($fieldName))) {
                $errorMsg = "{$fieldLabel} is required!";
                break;

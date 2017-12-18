@@ -33,12 +33,7 @@ class YotiHelper
     /**
      * Yoti Button javascript library.
      */
-    const YOTI_BUTTON_JS_LIBRARY = 'https://sdk.yoti.com/clients/browser.js';
-
-    /**
-     * Yoti Button version, leave it blank for version 1.
-     */
-    const YOTI_BUTTON_JS_LIBRARY_VERSION = '';
+    const YOTI_BUTTON_JS_LIBRARY = 'https://sdk.yoti.com/clients/browser.2.0.1.js';
 
     /**
      * Yoti files upload dir

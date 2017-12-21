@@ -1,6 +1,6 @@
 #!/bin/bash
 #!/bin/bash
-NAME="yoti-joomla-v1.0.2-edge.zip"
+NAME="yoti-joomla-extension-edge.zip"
 SDK_RELATIVE_PATH="sdk"
 curl https://github.com/getyoti/yoti-php-sdk/archive/master.zip -O -L
 unzip master.zip -d sdk

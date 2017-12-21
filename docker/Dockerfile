@@ -24,7 +24,7 @@ VOLUME /var/www/html
 # Define Joomla version and expected SHA1 signature
 ENV JOOMLA_VERSION 3.8.2
 ENV DEFAULT_BRANCH master
-ENV PLUGIN_PACKAGE_NAME yoti-joomla-v1.0.2-edge.zip
+ENV PLUGIN_PACKAGE_NAME yoti-joomla-extension-edge.zip
 ENV JOOMLA_SHA1 e68745d55cc5b1a7bb46f72f4296c6550e088543
 
 RUN if [ "$BRANCH" = "" ]; then \

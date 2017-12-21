@@ -13,15 +13,18 @@ Guides before you start
 3) [Installing the SDK](#installing-the-sdk)-
 How to install our SDK
 
-4) [Plugin Setup](#plugin-setup)-
-How to set up the plugin in Drupal
+4) [Extension Setup](#extension-setup)-
+How to set up the extension in Joomla
 
 5) [Linking existing accounts to use Yoti authentication](#linking-existing-accounts-to-use-yoti-authentication)
 
 6) [API Coverage](#api-coverage)-
 Attributes defined
 
-7) [Support](#support)-
+7) [Yoti Docker](#yoti-docker)
+How to set up Yoti Docker module
+
+8) [Support](#support)-
 Please feel free to reach out
 
 ## An Architectural view
@@ -60,7 +63,7 @@ To import the Yoti Joomla extension inside your project:
 - you can also `Install from URL` or `Install from folder`
 3) Install and enable `Yoti login` module and `Yoti - User profile` plugin.
 
-## Component Setup
+## Extension Setup
 
 To set Yoti up follow the instruction below:
 
@@ -102,6 +105,42 @@ To allow your existing users to log in using Yoti instead of entering thier user
         * [X] Address `postal_address`
         * [X] Gender `gender`
         * [X] Nationality `nationality`
+        
+## Yoti Docker
+This is a Docker module for Joomla including Yoti extension.  
+
+### Setup
+To try out our Docker module, clone this repos and run the following commands:
+
+`cd yoti-joomla` if this is the directory where you cloned the repos
+
+`docker-compose build --no-cache` to rebuild the images if you have modified `docker-compose.yml` file
+
+`docker-compose up -d` to build the containers.    
+
+After the command above has finished running, browse the link below and follow the instructions  
+
+`http://localhost:8080`
+
+### Database Configuration
+When prompted, enter the following details for the database:
+
+Host Name `joomladb`
+
+Username `root`
+
+Password `root`
+
+Database Name `yotijoomla`
+
+Table Prefix `yoti_`
+
+### Register and enable Yoti extension
+Please register Yoti extension which is installed along side Joomla CMS, by running the command below to process the SQL dump.
+
+`docker exec -i yotijoomla_joomladb_1 mysql -uroot -proot yotijoomla < ./docker/mysql-dump.sql`
+
+After running the command above, please follow the instructions in our [extension setup](#extension-setup) section to set it up.        
 
 ## Support
 

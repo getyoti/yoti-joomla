@@ -35,7 +35,7 @@ class plgUserYotiprofile extends JPlugin
      *
      * @since  1.0.0
      */
-    protected $autoloadLanguage = true;
+    protected $autoloadLanguage = TRUE;
 
     /**
      * Constructor.
@@ -62,14 +62,14 @@ class plgUserYotiprofile extends JPlugin
     {
         // Check we are manipulating a valid form.
         if (!in_array($context, ['com_users.profile','com_users.registration','com_users.user','com_admin.profile'], TRUE)){
-            return true;
+            return TRUE;
         }
 
         $userId = isset($data->id) ? $data->id : 0;
 
         // Load the profile data from the database.
         $db = JFactory::getDbo();
-        $query = $db->getQuery(true)
+        $query = $db->getQuery(TRUE)
             ->select('data')
             ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
             ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId))
@@ -79,7 +79,7 @@ class plgUserYotiprofile extends JPlugin
         // Check for a database error.
         if ($db->getErrorNum()) {
             $this->_subject->setError($db->getErrorMsg());
-            return false;
+            return FALSE;
         }
 
         // Merge the profile data.
@@ -113,7 +113,7 @@ class plgUserYotiprofile extends JPlugin
             JHtml::register('users.yotispacer', [__CLASS__, 'yotispacer']);
         }
 
-        return true;
+        return TRUE;
     }
 
     /**
@@ -142,19 +142,19 @@ class plgUserYotiprofile extends JPlugin
         if (!($form instanceof JForm))
         {
             $this->_subject->setError('JERROR_NOT_A_FORM');
-            return false;
+            return FALSE;
         }
 
         if (
             $config['yoti_only_existing_user']
             && $form->getName() === 'com_users.login'
-            && null !== YotiHelper::getYotiUserFromSession()
+            && NULL !== YotiHelper::getYotiUserFromSession()
         ) {
             // Reorder the form to put the warning message on top
             JForm::addFieldPath(__DIR__ . '/fields');
             if($yotiLoginXml = simplexml_load_string(file_get_contents(__DIR__ . '/profiles/login.xml'))){
                 $formXml = $form->getXML();
-                $form->reset(true);
+                $form->reset(TRUE);
                 $form->setFields($yotiLoginXml);
                 $form->setFields($formXml);
             }
@@ -164,7 +164,7 @@ class plgUserYotiprofile extends JPlugin
         $formNames = ['com_users.profile', 'com_users.registration', 'com_users.user', 'com_admin.profile'];
         if (!in_array($form->getName(), $formNames, TRUE))
         {
-            return true;
+            return TRUE;
         }
 
         if (
@@ -174,7 +174,7 @@ class plgUserYotiprofile extends JPlugin
         )
         {
             JForm::addFormPath(__DIR__ . '/profiles');
-            $form->loadFile('profile', false);
+            $form->loadFile('profile', FALSE);
 
             // Remove the spacer and unlink button in profile edit mode
             if (isset($_REQUEST['layout']) && $_REQUEST['layout'] == 'edit') {
@@ -186,7 +186,7 @@ class plgUserYotiprofile extends JPlugin
             }
         }
 
-        return true;
+        return TRUE;
     }
 
     /**
@@ -246,7 +246,7 @@ class plgUserYotiprofile extends JPlugin
     {
         if (!$success)
         {
-            return false;
+            return FALSE;
         }
 
         $yotiUserModel = new YotiModelUser();
@@ -264,11 +264,11 @@ class plgUserYotiprofile extends JPlugin
             catch (\Exception $e)
             {
                 $this->_subject->setError($e->getMessage());
-                return false;
+                return FALSE;
             }
         }
 
-        return true;
+        return TRUE;
     }
 
     /**
@@ -313,7 +313,7 @@ class plgUserYotiprofile extends JPlugin
                     }
                 } catch(\Exception $e) {
                     $this->_subject->setError($e->getMessage());
-                    return false;
+                    return FALSE;
                 }
             } else if (YotiHelper::getYotiUserFromSession()) {
                 // If the session is set then create Yoti user.
@@ -325,14 +325,14 @@ class plgUserYotiprofile extends JPlugin
                         $yotiHelper->createYotiUser($activityDetails, $userId);
                     } catch(\Exception $e) {
                         $this->_subject->setError($e->getMessage());
-                        return false;
+                        return FALSE;
                     }
                 }
             }
             YotiHelper::clearYotiUserFromSession();
         }
 
-        return true;
+        return TRUE;
     }
 
 }

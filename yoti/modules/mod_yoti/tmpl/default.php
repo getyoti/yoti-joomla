@@ -17,12 +17,6 @@ if (
     return;
 }
 
-$testToken = null;
-if (ModYotiHelper::mockRequests())
-{
-    $testToken = file_get_contents(JPATH_SITE.'/components/com_yoti/sdk/sample-data/connect-token.txt');
-}
-
 $currentUser = JFactory::getUser();
 
 $document = JFactory::getDocument();
@@ -54,29 +48,14 @@ $linkButton = '<span
 
 if ($currentUser->guest)
 {
-    if (ModYotiHelper::mockRequests())
-    {
-        $url = JRoute::_('index.php?option=com_yoti&task=login&token=' . $testToken);
-    }
-    else
-    {
-        $url = ModYotiHelper::getLoginUrl();
-    }
-
+    $url = ModYotiHelper::getLoginUrl();
     $button = sprintf($linkButton, ModYotiHelper::YOTI_LINK_BUTTON_DEFAULT_TEXT);
 }
 else
 {
     if (!YotiModelUser::yotiUserIsLinkedToJoomlaUser($currentUser->id))
     {
-        if (ModYotiHelper::mockRequests())
-        {
-            $url = JRoute::_('index.php?option=com_yoti&task=login&token=' . $testToken);
-        }
-        else
-        {
-            $url = ModYotiHelper::getLoginUrl();
-        }
+        $url = ModYotiHelper::getLoginUrl();
         $button = sprintf($linkButton, 'Link to Yoti');
     }
     else

@@ -71,6 +71,7 @@ class AdminYotiViewYoti extends JViewLegacy
             $data['yoti_failed_url'] = $this->postVar('yoti_failed_url');
             $data['yoti_only_existing_user'] = $this->postVar('yoti_only_existing_user') ? TRUE : FALSE;
             $data['yoti_user_email'] = $this->postVar('yoti_user_email') ? TRUE : FALSE;
+            $data['yoti_age_verification'] = $this->postVar('yoti_age_verification') ? TRUE : FALSE;
 
             // Validation
             if(!empty($errorMsg)) {
@@ -129,6 +130,7 @@ class AdminYotiViewYoti extends JViewLegacy
                 $config->set('yoti_failed_url', $data['yoti_failed_url']);
                 $config->set('yoti_only_existing_user', $data['yoti_only_existing_user']);
                 $config->set('yoti_user_email', $data['yoti_user_email']);
+                $config->set('yoti_age_verification', $data['yoti_age_verification']);
 
                 $table = JTable::getInstance('extension');
                 $table->load($component->id);
@@ -152,7 +154,7 @@ class AdminYotiViewYoti extends JViewLegacy
         $this->pemFilechecked = !empty($this->data['yoti_delete_pem']) ? ' checked="checked"' : '';
         $this->onlyExitingUserChecked = !empty($this->data['yoti_only_existing_user']) ? ' checked="checked"'  : '';
         $this->userEmailChecked = !empty($this->data['yoti_user_email']) ? ' checked="checked"'  : '';
-
+        $this->ageVerificationChecked = !empty($this->data['yoti_age_verification']) ? ' checked="checked"'  : '';
 
         return parent::display($tpl);
     }

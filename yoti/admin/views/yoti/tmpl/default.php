@@ -137,7 +137,7 @@ defined('_JEXEC') or die('Restricted access');
                     <label class="checkbox"><input type="checkbox" name="yoti_age_verification" value="1"
                             <?php echo $this->ageVerificationChecked ?>
                         />
-                        <?php echo JText::_('Prevent users who have not passed age verification to access your website'); ?>
+                        <?php echo JText::_('Prevent users who have not passed age verification to access your site'); ?>
                     </label>
                     <span class="help-block">
                         <?php echo JText::_('(Requires Age verify condition to be set in the Yoti Dashboard)'); ?>

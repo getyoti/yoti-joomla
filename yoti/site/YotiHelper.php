@@ -701,7 +701,8 @@ class YotiHelper
             $yotiUserData[$attribute] = $activityDetails->getProfileAttribute($attribute);
         }
 
-        // Add age verification data to user profile
+        // Extract age verification values if the option is set in the dashboard
+        // and in the Yoti's config in Joomla admin
         $yotiUserData[self::AGE_VERIFICATION_ATTR] = 'N/A';
         $ageVerified = $activityDetails->isAgeVerified();
         if(is_bool($ageVerified) && $config['yoti_age_verification']) {

@@ -216,12 +216,9 @@ class plgUserYotiprofile extends JPlugin
      */
     public static function yotiavatar($value)
     {
-        $jUri = JUri::getInstance();
-        $domain = $jUri->getScheme() . '://' . $jUri->getHost();
-        $imagePath = JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie');
-
+        $imagePath = JRoute::_(JUri::base() . 'index.php?option=com_yoti&task=bin-file&field=selfie');
         $width = 100;
-        $avatarHTML = JHtml::_('image',  $domain . $imagePath, 'Your Selfie', ['width'=>$width]);
+        $avatarHTML = JHtml::_('image',  $imagePath, 'Your Selfie', ['width'=>$width]);
 
         return $avatarHTML;
     }

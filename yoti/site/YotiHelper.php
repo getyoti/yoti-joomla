@@ -58,11 +58,20 @@ class YotiHelper
      */
     const SDK_IDENTIFIER = 'Joomla';
 
+    const AGE_VERIFICATION_ATTR = 'age_verified';
+
     /**
      * @var YotiModelUser
      *   Yoti User Model.
      */
     public $yotiUserModel;
+
+    /**
+     * Admin configuration.
+     *
+     * @var array
+     */
+    private $config;
 
     /**
      * Yoti user profile attributes.
@@ -84,15 +93,7 @@ class YotiHelper
     public function __construct()
     {
         $this->yotiUserModel = new YotiModelUser();
-    }
-
-    /**
-     * Running mock requests instead of going to yoti
-     * @return bool
-     */
-    public static function mockRequests()
-    {
-        return defined('YOTI_MOCK_REQUEST') && YOTI_MOCK_REQUEST;
+        $this->config = self::getConfig();
     }
 
     /**
@@ -105,9 +106,8 @@ class YotiHelper
     public function link()
     {
         $currentUser = JFactory::getUser();
-        $config = self::getConfig();
-        $yotiSDKID = $config['yoti_sdk_id'];
-        $yotiPemContents = $config['yoti_pem']->contents;
+        $yotiSDKID = $this->config['yoti_sdk_id'];
+        $yotiPemContents = $this->config['yoti_pem']->contents;
 
         $token = (!empty($_GET['token'])) ? $_GET['token'] : NULL;
         $token = YotiHelper::sanitizeToken($token);
@@ -129,7 +129,6 @@ class YotiHelper
                 YotiClient::DEFAULT_CONNECT_API,
                 self::SDK_IDENTIFIER
             );
-            $yotiClient->setMockRequests(self::mockRequests());
             $activityDetails = $yotiClient->getActivityDetails($token);
         }
         catch (Exception $e)
@@ -144,10 +143,14 @@ class YotiHelper
             return FALSE;
         }
 
+        if (!$this->passedAgeVerification($activityDetails))
+        {
+            return FALSE;
+        }
+
         // Check if yoti user exists
         $userId = $this->yotiUserModel->getUserIdByYotiId($activityDetails->getUserId());
-
-        // If Yoti user exists in db but isn't an actual account then remove it from yoti table
+        // If Yoti user exists in db but isn't an actual account then remove it from Yoti table
         if (!$currentUser->guest && $userId && $currentUser->id !== $userId)
         {
             // Remove users account
@@ -163,12 +166,12 @@ class YotiHelper
                 $errMsg = NULL;
 
                 // Attempt to connect by email.
-                $userId = $this->shouldLoginByEmail($activityDetails, $config['yoti_user_email']);
+                $userId = $this->shouldLoginByEmail($activityDetails, $this->config['yoti_user_email']);
 
                 // If config 'only log in existing user' is enabled then check
                 // if user exists, if not then redirect to login page.
                 if (!$userId) {
-                    if (empty($config['yoti_only_existing_user'])) {
+                    if (empty($this->config['yoti_only_existing_user'])) {
                         try {
                             $userId = $this->createUser($activityDetails);
                         }
@@ -191,7 +194,6 @@ class YotiHelper
                 {
                     // If it couldn't create a user then bail
                     self::setFlash("Could not create user account. $errMsg", 'error');
-
                     return FALSE;
                 }
             }
@@ -218,6 +220,26 @@ class YotiHelper
     }
 
     /**
+     * Check if age verification applies and is valid.
+     *
+     * @param ActivityDetails $activityDetails
+     *
+     * @return bool
+     */
+    public function passedAgeVerification(ActivityDetails $activityDetails)
+    {
+        $ageVerified = $activityDetails->isAgeVerified();
+        if ($this->config['yoti_age_verification'] && is_bool($ageVerified) && !$ageVerified)
+        {
+            $verifiedAge = $activityDetails->getVerifiedAge();
+            // If it couldn't create a user then bail
+            self::setFlash("Could not log you in as you haven't passed the age verification ({$verifiedAge})", 'error');
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    /**
      * Remove query params from the end of the token.
      *
      * @param string $token
@@ -228,12 +250,12 @@ class YotiHelper
      */
     public static function sanitizeToken($token)
     {
-        $delimitor = "==";
-        //Remove anything after ==
-        if (!empty($token) && ($pos = strpos($token, $delimitor)) !== FALSE) {
-            $firstToken = strtok($token, $delimitor);
+        $filter = '==';
+        // Remove anything after ==
+        if (!empty($token) && strpos($token, $filter) !== FALSE) {
+            $firstToken = strtok($token, $filter);
             if($firstToken !== FALSE) {
-                $token = $firstToken . $delimitor;
+                $token = $firstToken . $filter;
             }
         }
         return trim($token);
@@ -265,17 +287,15 @@ class YotiHelper
      *
      * @param ActivityDetails $activityDetails
      *   Yoti user data.
-     * @param string $configEmail
-     *   Yoti settings use_email_only param.
      *
      * @return int userId
      *  Joomla userId.
      */
-    protected function shouldLoginByEmail(ActivityDetails $activityDetails, $configEmail)
+    protected function shouldLoginByEmail(ActivityDetails $activityDetails)
     {
         $userId = 0;
         $email = $activityDetails->getEmailAddress();
-        if (NULL !== $email && !empty($configEmail)) {
+        if ($this->config['yoti_user_email']) {
             $joomlaUser = $this->yotiUserModel->getJoomlaUserByEmail($email);
             if ($joomlaUser) {
                 $userId = $joomlaUser->get('id');
@@ -357,14 +377,17 @@ class YotiHelper
         $field = ($field === 'selfie') ? 'selfie_filename' : $field;
 
         $yotiUserData = $this->yotiUserModel->getYotiUserById($user->id);
+
         $userProfileArr = (!empty($yotiUserData) && isset($yotiUserData['data'])) ? unserialize($yotiUserData['data']) : [];
         if (empty($userProfileArr) || !array_key_exists($field, $userProfileArr))
         {
             return;
         }
 
-        $file = YotiHelper::uploadDir() . "/{$userProfileArr[$field]}";
-        if (!file_exists($file))
+        $imagePath = isset($userProfileArr[$field]) ? $userProfileArr[$field] : '';
+
+        $file = YotiHelper::uploadDir() . "/{$imagePath}";
+        if (empty($imagePath) || !file_exists($file))
         {
             return;
         }
@@ -467,7 +490,7 @@ class YotiHelper
         $db = JFactory::getDbo();
         $userEmailCount = $this->yotiUserModel->getUserPrefixCount($prefix, 'email');
 
-        // generate email
+        // Generate user email
         $userEmail = "{$prefix}@{$domain}";
         if ($userEmailCount > 0) {
             do
@@ -671,14 +694,25 @@ class YotiHelper
      */
     protected static function getYotiUserData(ActivityDetails $activityDetails)
     {
+        $config = self::getConfig();
         $yotiUserData = [];
+
         foreach(YotiHelper::$profileFields as $attribute => $label) {
             $yotiUserData[$attribute] = $activityDetails->getProfileAttribute($attribute);
         }
 
+        // Extract age verification values if the option is set in the dashboard
+        // and in the Yoti's config in Joomla admin
+        $yotiUserData[self::AGE_VERIFICATION_ATTR] = 'N/A';
+        $ageVerified = $activityDetails->isAgeVerified();
+        if(is_bool($ageVerified) && $config['yoti_age_verification']) {
+            $ageVerified = $ageVerified ? 'yes' : 'no';
+            $verifiedAge = $activityDetails->getVerifiedAge();
+            $yotiUserData[self::AGE_VERIFICATION_ATTR] = "({$verifiedAge}) : $ageVerified";
+        }
+
         return $yotiUserData;
     }
-
 
     /**
      * Log user in.
@@ -729,14 +763,6 @@ class YotiHelper
      */
     public static function getConfig()
     {
-        if (self::mockRequests())
-        {
-            $config = require JPATH_BASE .'/components/com_yoti/sdk/sample-data/config.php';
-            $config['yoti_pem'] = (object)$config['yoti_pem'];
-
-            return $config;
-        }
-
         $config =  JComponentHelper::getParams('com_yoti');
 
         return $config;

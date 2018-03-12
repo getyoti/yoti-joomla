@@ -264,5 +264,4 @@ class YotiModelUser extends JModelForm
     {
         return FALSE;
     }
-
 }

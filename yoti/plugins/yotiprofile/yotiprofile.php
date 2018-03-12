@@ -117,13 +117,13 @@ class plgUserYotiprofile extends JPlugin
     }
 
     /**
-     * Add unlink button to yotiprofile data
+     * Add unlink button to yotiprofile data.
+     *
      * @param array $yotiprofile
      * @return array
      */
     protected function setUnlinkButtonMessage(array $yotiprofile)
     {
-
         $yotiprofile['yoti_unlink_account'] = JText::_('PLG_USER_YOTIPROFILE_FIELD_UNLINK_ACCOUNT_LABEL');
 
         return $yotiprofile;
@@ -215,9 +215,9 @@ class plgUserYotiprofile extends JPlugin
      */
     public static function yotiavatar($value)
     {
-        $srcValue = JRoute::_('index.php?option=com_yoti&task=bin-file&field=selfie');
+        $imagePath = JRoute::_(JUri::base() . 'index.php?option=com_yoti&task=bin-file&field=selfie');
         $width = 100;
-        $avatarHTML = JHtml::_('image', trim(JUri::base(), '/') . $srcValue, 'Your Selfie', ['width'=>$width]);
+        $avatarHTML = JHtml::_('image',  $imagePath, 'Your Selfie', ['width'=>$width]);
 
         return $avatarHTML;
     }
@@ -281,6 +281,7 @@ class plgUserYotiprofile extends JPlugin
         if(!YotiHelper::getYotiUserFromSession()) {
             $yotiUserModel = new YotiModelUser();
             $yotiUserData = $yotiUserModel->getYotiUserById($user['id']);
+
             if(!empty($yotiUserData) && isset($yotiUserData['data'])) {
                 // After successful login store Yoti user data in the session
                 $yotiuserProfile = YotiHelper::makeYotiUserProfile(unserialize($yotiUserData['data']), $user['id']);
@@ -334,5 +335,4 @@ class plgUserYotiprofile extends JPlugin
 
         return TRUE;
     }
-
 }

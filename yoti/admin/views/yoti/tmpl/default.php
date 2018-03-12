@@ -96,7 +96,7 @@ defined('_JEXEC') or die('Restricted access');
             </div>
             <div class="control-group">
                 <label for="yoti_pem" class="col-md-6 control-label">
-                    <?php echo JText::_("PEM File"); ?> <span><strong>*</strong></span>
+                    <?php echo JText::_('PEM File'); ?> <span><strong>*</strong></span>
                 </label>
                 <div class="controls">
                     <?php
@@ -130,6 +130,18 @@ defined('_JEXEC') or die('Restricted access');
                         />
                         <?php echo JText::_('Attempt to link Yoti email address with Joomla user account for first time users'); ?>
                     </label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox"><input type="checkbox" name="yoti_age_verification" value="1"
+                            <?php echo $this->ageVerificationChecked ?>
+                        />
+                        <?php echo JText::_('Prevent users who have not passed age verification to access your site'); ?>
+                    </label>
+                    <span class="help-block">
+                        <?php echo JText::_('(Requires Age verify condition to be set in the Yoti Dashboard)'); ?>
+                    </span>
                 </div>
             </div>
             <div class="btn-wrapper controls">

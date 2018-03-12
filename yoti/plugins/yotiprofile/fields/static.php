@@ -10,7 +10,7 @@ jimport('joomla.form.formfield');
 // The class name must always be the same as the filename (in camel case)
 class JFormFieldStatic extends JFormField
 {
-    //The field class must know its own type through the variable $type.
+    // The field class must know its own type through the variable $type.
     protected $type = 'Static';
 
     public function getInput()

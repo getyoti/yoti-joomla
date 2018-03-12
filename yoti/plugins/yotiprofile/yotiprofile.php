@@ -124,7 +124,6 @@ class plgUserYotiprofile extends JPlugin
      */
     protected function setUnlinkButtonMessage(array $yotiprofile)
     {
-
         $yotiprofile['yoti_unlink_account'] = JText::_('PLG_USER_YOTIPROFILE_FIELD_UNLINK_ACCOUNT_LABEL');
 
         return $yotiprofile;

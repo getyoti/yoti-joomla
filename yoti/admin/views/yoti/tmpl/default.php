@@ -18,6 +18,9 @@ defined('_JEXEC') or die('Restricted access');
                 <?php echo JText::_('Note: On the Yoti Dashboard the callback URL should be set to:'); ?>
                 <strong><?php echo JUri::root(false).'index.php?option=com_yoti&task=login'; ?></strong>
             </p>
+            <p>
+                <?php echo JText::_('Warning: User IDs provided by Yoti are only valid within the scope of the application. Changing your Yoti application will result in different Yoti user IDs.'); ?>
+            </p>
             </div>
             <div class="control-group">
                 <label for="yoti_app_id" class="col-md-6 control-label"><?php echo JText::_("App ID"); ?> <span><strong>*</strong></span></label>

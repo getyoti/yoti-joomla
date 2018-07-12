@@ -2,13 +2,17 @@ FROM php:7.1-apache
 
 ARG BRANCH
 
-MAINTAINER Michael Babker <michael.babker@joomla.org> (@mbabker)
+MAINTAINER Yoti SDK <sdksupport@yoti.com>
+
+COPY default.conf /etc/apache2/sites-available/000-default.conf
+COPY ./keys/server.crt /etc/apache2/ssl/server.crt
+COPY ./keys/server.key /etc/apache2/ssl/server.key
 
 # Disable remote database security requirements.
 ENV JOOMLA_INSTALLATION_DISABLE_LOCALHOST_CHECK=1
 
 # Enable Apache Rewrite Module
-RUN a2enmod rewrite
+RUN a2enmod rewrite ssl
 
 # Install PHP extensions
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libmcrypt-dev zip unzip && rm -rf /var/lib/apt/lists/* \
@@ -40,7 +44,7 @@ RUN curl -o joomla.zip -SL https://github.com/joomla/joomla-cms/releases/downloa
 	&& chown -R www-data:www-data /usr/src/joomla
 
 RUN git clone -b ${BRANCH} https://github.com/getyoti/yoti-joomla.git --single-branch /usr/src/yoti-joomla \
-    	&& echo "Finished cloning ${BRANCH}" \
+    && echo "Finished cloning ${BRANCH}" \
 	&& chown -R www-data:www-data /usr/src/yoti-joomla \
 	&& cd /usr/src/yoti-joomla \
 	&& mkdir __sdk-sym \
@@ -70,3 +74,6 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"] 
+
+EXPOSE 80
+EXPOSE 443

@@ -9,9 +9,9 @@ To import the Yoti Joomla extension inside your project:
 1. Log on to the admin console of your Joomla website. e.g. `https://www.joomladev.com/administrator`
 2. Navigate at `Extensions-> Manage -> Install` and do one of the following:
 
-* click the `Install from Web` link and search for `Yoti`
-* click `Upload Package File` and upload the downloaded zip file from [our extension page](https://extensions.joomla.org/extensions/extension/access-a-security/yoti/).
-* alternatively, you can use the `Install from URL` or `Install from folder` options
+    * click the `Install from Web` link and search for `Yoti`
+    * click `Upload Package File` and upload the downloaded zip file from [our extension page](https://extensions.joomla.org/extensions/extension/access-a-security/yoti/).
+    * alternatively, you can use the `Install from URL` or `Install from folder` options
 
 3. Install and enable `Yoti login` module and `Yoti - User profile` plugin.
 
@@ -54,29 +54,29 @@ Please do not open the .pem file as this might corrupt the key and you will need
 
 ## Docker
 
-We provide a Docker container that includes the Yoti extension.
+We provide a [Docker](https://docs.docker.com/) container that includes the Yoti extension.
 
 ### Setup
 
 Clone this repository and go into the folder:
 
 ```shell
-cd yoti-joomla
+$ cd yoti-joomla
 ```
 
 Rebuild the images if you have modified the `docker-compose.yml` file:
 
 ```shell
-docker-compose build --no-cache
+$ docker-compose build --no-cache
 ```
 
 Build the containers:
 
 ```shell
-docker-compose up -d
+$ docker-compose up -d
 ```
 
-After the command has finished running, go to [http://localhost:8080](http://localhost:8080) and follow the instructions.
+After the command has finished running, go to [https://localhost:6001](https://localhost:6001) and follow the instructions.
 
 ### Database Configuration
 
@@ -92,7 +92,9 @@ When prompted, enter the following database details:
 
 The Yoti extension will be installed alongside Joomla. Register it by running the command below to process the SQL dump.
 
-`docker exec -i yotijoomla_joomladb_1 mysql -uroot -proot yotijoomla < ./docker/mysql-dump.sql`
+```shell
+$ docker exec -i yoti-joomla_joomladb_1 mysql -uroot -proot yotijoomla < ./docker/mysql-dump.sql
+```
 
 After running the command above, follow our [extension setup process](#extension-setup).
 
@@ -101,8 +103,8 @@ After running the command above, follow our [extension setup process](#extension
 Run the following commands to remove docker containers:
 
 ```shell
-docker-compose stop
-docker-compose rm
+$ docker-compose stop
+$ docker-compose rm
 ```
 
 ## Support

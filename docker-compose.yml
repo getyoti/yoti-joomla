@@ -10,7 +10,7 @@ services:
     links:
       - joomladb:mysql
     ports:
-      - "8080:80"
+      - "6001:443"
     environment:
       JOOMLA_DB_NAME: yotijoomla
       JOOMLA_DB_HOST: joomladb

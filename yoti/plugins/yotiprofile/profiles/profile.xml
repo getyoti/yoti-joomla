@@ -40,6 +40,16 @@
                     size="30"
             />
 
+            <field name="full_name"
+                   type="static"
+                   id="full_name"
+                   filter="string"
+                   label="PLG_USER_YOTIPROFILE_FIELD_FULL_NAME_LABEL"
+                   required="true"
+                   class="yoti-user-field"
+                   size="30"
+            />
+
             <field name="phone_number"
                     type="static"
                     id="phone_number"

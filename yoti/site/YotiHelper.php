@@ -80,10 +80,11 @@ class YotiHelper
      */
     public static $profileFields = [
         ActivityDetails::ATTR_SELFIE => 'Selfie',
-        ActivityDetails::ATTR_PHONE_NUMBER => 'Phone number',
-        ActivityDetails::ATTR_DATE_OF_BIRTH => 'Date of birth',
         ActivityDetails::ATTR_GIVEN_NAMES => 'Given names',
         ActivityDetails::ATTR_FAMILY_NAME => 'Family name',
+        ActivityDetails::ATTR_FULL_NAME => 'Full Name',
+        ActivityDetails::ATTR_PHONE_NUMBER => 'Phone number',
+        ActivityDetails::ATTR_DATE_OF_BIRTH => 'Date of birth',
         ActivityDetails::ATTR_NATIONALITY => 'Nationality',
         ActivityDetails::ATTR_GENDER => 'Gender',
         ActivityDetails::ATTR_EMAIL_ADDRESS => 'Email Address',

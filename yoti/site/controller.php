@@ -31,6 +31,7 @@ class YotiController extends JControllerLegacy
         $config = YotiHelper::getConfig();
 
         $redirect = (!empty($_GET['redirect'])) ? $_GET['redirect'] : 'index.php';
+
         switch ($this->input->get('task'))
         {
             case 'login':
@@ -50,7 +51,7 @@ class YotiController extends JControllerLegacy
             case 'unlink':
                 // After unlinking account, redirect to user profile
                 $helper->unlink();
-                $this->setRedirect(self::USER_PROFILE_PAGE);
+                $this->setRedirect('index.php');
                 return;
                 break;
 

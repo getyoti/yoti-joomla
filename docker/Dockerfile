@@ -26,10 +26,10 @@ RUN apt-get update && apt-get install -y zip unzip git vim nano
 VOLUME /var/www/html
 
 # Define Joomla version and expected SHA1 signature
-ENV JOOMLA_VERSION 3.8.2
+ENV JOOMLA_VERSION 3.9.1
 ENV DEFAULT_BRANCH master
 ENV PLUGIN_PACKAGE_NAME yoti-joomla-extension-edge.zip
-ENV JOOMLA_SHA1 e68745d55cc5b1a7bb46f72f4296c6550e088543
+ENV JOOMLA_SHA1 cde0c0996b7a1277ae9b97fbc2c9c350d1546317
 
 RUN if [ "$BRANCH" = "" ]; then \
   $BRANCH = $DEFAULT_BRANCH; \

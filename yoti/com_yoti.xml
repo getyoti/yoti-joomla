@@ -35,6 +35,8 @@
         <filename>yoti.php</filename>
         <filename>controller.php</filename>
         <filename>YotiHelper.php</filename>
+        <filename>ActivityDetailsAdapter.php</filename>
+        <filename>ProfileAdapter.php</filename>
         <folder>sdk</folder>
         <folder>models</folder>
         <folder>assets</folder>

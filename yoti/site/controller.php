@@ -35,7 +35,12 @@ class YotiController extends JControllerLegacy
         switch ($this->input->get('task'))
         {
             case 'login':
-                $userLinked = $helper->link();
+                try {
+                    $userLinked = $helper->link();
+                } catch(Exception $ex) {
+                    YotiHelper::setFlash('Yoti could not successfully link your account.', 'error');
+                }
+
                 if ($userLinked && empty($_GET['redirect'])) {
                     $redirect = $config['yoti_success_url'];
                 } else if(!$userLinked) {

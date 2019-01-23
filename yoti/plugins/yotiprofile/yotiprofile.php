@@ -87,6 +87,9 @@ class plgUserYotiprofile extends JPlugin
         $profileArr = (!empty($result['data'])) ? unserialize($result['data']) : [];
 
         foreach ($profileArr as $key => $value) {
+            if ($key === 'age_verifications' && !empty($value)) {
+                $value = YotiHelper::getAgeVerificationsAsString($value);
+            }
             $data->yotiprofile[$key] = $value;
         }
 
@@ -316,18 +319,14 @@ class plgUserYotiprofile extends JPlugin
                     $this->_subject->setError($e->getMessage());
                     return FALSE;
                 }
-            } else if (YotiHelper::getYotiUserFromSession()) {
-                // If the session is set then create Yoti user.
-                $activityDetails = YotiHelper::getYotiUserFromSession();
+            } else if ($profileAdapter = YotiHelper::getYotiUserFromSession()) {
 
-                if ($activityDetails) {
-                    try {
-                        $yotiHelper = new YotiHelper();
-                        $yotiHelper->createYotiUser($activityDetails, $userId);
-                    } catch(\Exception $e) {
-                        $this->_subject->setError($e->getMessage());
-                        return FALSE;
-                    }
+                try {
+                    $yotiHelper = new YotiHelper();
+                    $yotiHelper->createYotiUser($profileAdapter, $userId);
+                } catch(\Exception $e) {
+                    $this->_subject->setError($e->getMessage());
+                    return FALSE;
                 }
             }
             YotiHelper::clearYotiUserFromSession();

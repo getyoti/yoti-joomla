@@ -89,8 +89,12 @@ class plgUserYotiprofile extends JPlugin
         foreach ($profileArr as $key => $value) {
             if ($key === 'age_verifications' && !empty($value)) {
                 $value = YotiHelper::getAgeVerificationsAsString($value);
+                // Keep this attr Name to main backward compatibility
+                $data->yotiprofile[YotiHelper::AGE_VERIFICATION_ATTR] = $value;
             }
-            $data->yotiprofile[$key] = $value;
+            else {
+                $data->yotiprofile[$key] = $value;
+            }
         }
 
         // Set the unlink account message if we have profile data

@@ -104,9 +104,9 @@
                     size="30"
             />
 
-            <field name="age_verifications"
+            <field name="age_verified"
                    type="static"
-                   id="age_verifications"
+                   id="age_verified"
                    filter="string"
                    label="PLG_USER_YOTIPROFILE_FIELD_AGE_VERIFICATION_LABEL"
                    required="true"

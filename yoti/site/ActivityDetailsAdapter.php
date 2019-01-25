@@ -54,20 +54,16 @@ class ActivityDetailsAdapter
                 continue;
             }
             $attrValue = $attrObj ? $attrObj->getValue() : NULL;
-            $attributesArr[$attrName] = $attrValue;
+
             if ($attrName === Profile::ATTR_DATE_OF_BIRTH && $attrValue !== NULL) {
-                $attributesArr[$attrName] = $attrValue->format('d-m-Y');
+                $attrValue = $attrValue->format('d-m-Y');
             }
+            if ($attrName === Profile::ATTR_SELFIE && NULL !== $attrValue) {
+                $attrValue = $attrValue->getContent();
+            }
+            $attributesArr[$attrName] = $attrValue;
         }
         $ageVerificationsArr = $this->getAgeVerificationsData($profile);
-
-        $ageVerified = 'N/A';
-
-//        if (!empty($ageVerificationsArr)) {
-//            $key = key($ageVerificationsArr[0]);
-//            $val = current($ageVerificationsArr[0]);
-//            $ageVerified = "({$key}) : {$val}";
-//        }
 
         $attributesArr = array_merge(
             $attributesArr,

@@ -8,10 +8,8 @@ require_once JPATH_ROOT . '/components/com_yoti/ActivityDetailsAdapter.php';
 
 use Yoti\YotiClient;
 use Yoti\Entity\Profile;
-use Yoti\ActivityDetails;
 use YotiJoomla\ActivityDetailsAdapter;
 use YotiJoomla\ProfileAdapter;
-use Yoti\Entity\AgeVerification;
 
 //Load the Joomla Model framework
 jimport('joomla.application.component.model');
@@ -63,6 +61,8 @@ class YotiHelper
      * Yoti Joomla SDK identifier.
      */
     const SDK_IDENTIFIER = 'Joomla';
+
+    const AGE_VERIFICATION_ATTR = 'age_verified';
 
     /**
      * @var YotiModelUser

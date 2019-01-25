@@ -3,7 +3,7 @@
 SDK_TAG=$1
 
 NAME="yoti-joomla-extension-edge.zip"
-DEFAULT_SDK_TAG="1.2.1"
+DEFAULT_SDK_TAG="2.0.0"
 SDK_RELATIVE_PATH="sdk"
 
 if [ "$SDK_TAG" = "" ]; then

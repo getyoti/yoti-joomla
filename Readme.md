@@ -72,44 +72,27 @@ $ cd yoti-joomla
 Rebuild the images if you have modified the `docker-compose.yml` file:
 
 ```shell
+$ cd docker
 $ docker-compose build --no-cache
 ```
 
-Build the containers:
+Installing Joomla:
 
 ```shell
-$ docker-compose up -d
+$ cd docker
+$ ./install-joomla.sh
 ```
 
-After the command has finished running, go to [https://localhost:6001](https://localhost:6001) and follow the instructions.
-
-### Database Configuration
-
-When prompted, enter the following database details:
-
-* Host Name `joomladb`
-* Username `root`
-* Password `root`
-* Database Name `yotijoomla`
-* Table Prefix `yoti_`
-
-### Register and enable Yoti extension
-
-The Yoti extension will be installed alongside Joomla. Register it by running the command below to process the SQL dump.
-
-```shell
-$ docker exec -i yoti-joomla_joomladb_1 mysql -uroot -proot yotijoomla < ./docker/mysql-dump.sql
-```
-
-After running the command above, follow our [extension setup process](#extension-setup).
+After the command has finished running, go to [https://localhost:6001](https://localhost:6001) 
+and follow our [extension setup process](#extension-setup).
 
 ### Removing the Docker containers
 
 Run the following commands to remove docker containers:
 
 ```shell
-$ docker-compose stop
-$ docker-compose rm
+$ cd docker
+$ docker-compose down
 ```
 
 ## Support

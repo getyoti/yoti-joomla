@@ -1,6 +1,4 @@
-FROM php:7.1-apache
-
-ARG BRANCH
+FROM php:7.1-apache as joomla_base
 
 MAINTAINER Yoti SDK <sdksupport@yoti.com>
 
@@ -23,17 +21,12 @@ RUN docker-php-ext-install mcrypt
 RUN docker-php-ext-install zip
 RUN apt-get update && apt-get install -y zip unzip git vim nano
 
-VOLUME /var/www/html
+# Install MySQL Client.
+RUN apt-get install -y mysql-client
 
 # Define Joomla version and expected SHA1 signature
 ENV JOOMLA_VERSION 3.9.1
-ENV DEFAULT_BRANCH master
-ENV PLUGIN_PACKAGE_NAME yoti-joomla-extension-edge.zip
 ENV JOOMLA_SHA1 cde0c0996b7a1277ae9b97fbc2c9c350d1546317
-
-RUN if [ "$BRANCH" = "" ]; then \
-  $BRANCH = $DEFAULT_BRANCH; \
-fi
 
 # Download package and extract to web volume
 RUN curl -o joomla.zip -SL https://github.com/joomla/joomla-cms/releases/download/${JOOMLA_VERSION}/Joomla_${JOOMLA_VERSION}-Stable-Full_Package.zip \
@@ -43,28 +36,22 @@ RUN curl -o joomla.zip -SL https://github.com/joomla/joomla-cms/releases/downloa
 	&& rm joomla.zip \
 	&& chown -R www-data:www-data /usr/src/joomla
 
-RUN git clone -b ${BRANCH} https://github.com/getyoti/yoti-joomla.git --single-branch /usr/src/yoti-joomla \
-    && echo "Finished cloning ${BRANCH}" \
-	&& chown -R www-data:www-data /usr/src/yoti-joomla \
-	&& cd /usr/src/yoti-joomla \
-	&& mkdir __sdk-sym \
-	&& ./pack-plugin.sh \
-	&& mv ./${PLUGIN_PACKAGE_NAME} /usr/src/joomla \
-	&& cd /usr/src/joomla \
-	&& mkdir yoti && mv ./${PLUGIN_PACKAGE_NAME} yoti \
-	&& cd yoti && unzip ${PLUGIN_PACKAGE_NAME} \
-	&& cd .. \
-	&& mv yoti/com_yoti.xml yoti/admin/ \
-	&& mv yoti/process-script.php yoti/admin/ \
-	&& mv yoti/admin yoti/com_yoti \
-	&& mv yoti/com_yoti administrator/components \
-	&& mv yoti/site yoti/com_yoti \
-	&& mv yoti/com_yoti components \
-	&& mv yoti/modules/mod_yoti modules \
-	&& mv yoti/plugins/yotiprofile plugins/user \
-	&& echo "Yoti extension installled" 
+# Install Composer
+RUN EXPECTED_SIGNATURE="$(curl https://composer.github.io/installer.sig)" \
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+  ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', 'composer-setup.php');")" \
+  if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ] \
+  then \
+    >&2 echo 'ERROR: Invalid installer signature' \
+    rm composer-setup.php \
+    exit 1 \
+  fi \
+  && php composer-setup.php --quiet --filename=composer \
+  && mv composer /usr/local/bin \
+  && rm composer-setup.php
 
-RUN echo "Yoti Branch ${BRANCH}"
+# Install Joomlatools Console
+RUN composer require joomlatools/console ^1.5
 
 # Copy init scripts and custom .htaccess
 COPY docker-entrypoint.sh /entrypoint.sh

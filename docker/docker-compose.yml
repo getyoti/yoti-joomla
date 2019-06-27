@@ -1,9 +1,20 @@
 version: '3.1'
 
 services:
-  joomla:
+  joomla-base:
+    depends_on:
+      - joomladb
     build:
-      context: ./docker/
+      context: ./
+      dockerfile: app.base.dockerfile
+
+  joomla:
+    depends_on:
+      - joomladb
+      - joomla-base
+    build:
+      context: ./
+      dockerfile: app.dockerfile
       args:
         BRANCH: "master"
     restart: always
@@ -17,7 +28,7 @@ services:
       JOOMLA_DB_PASSWORD: root
 
   joomladb:
-    image: mysql:latest
+    image: mysql:5.6
     ports:
       - "3306:3306"
     restart: always

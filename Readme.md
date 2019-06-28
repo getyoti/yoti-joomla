@@ -86,6 +86,27 @@ $ ./install-joomla.sh
 After the command has finished running, go to [https://localhost:6001](https://localhost:6001) 
 and follow our [extension setup process](#extension-setup).
 
+### Local Development
+
+#### Fetching the SDK
+
+To fetch the latest SDK and place in ./yoti/site/sdk directory:
+
+```shell
+$ ./checkout-sdk.sh
+```
+
+#### Running the local working extension
+
+To run the local working copy of the extension:
+
+```shell
+$ cd docker
+$ ./install-joomla.sh joomla-dev
+```
+
+After the command has finished running, go to https://localhost:6002
+
 ### Removing the Docker containers
 
 Run the following commands to remove docker containers:

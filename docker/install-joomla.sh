@@ -19,4 +19,6 @@ docker-compose exec -e JOOMLA_DB_HOST=joomladb $TARGET joomla site:install Yoti 
   --use-webroot-dir
 
 # Enable Yoti module
-docker-compose exec -T joomladb mysql -uroot -proot yotijoomla < ./mysql-dump.sql
+if [ "$TARGET" != "joomla-standalone" ]; then
+  docker-compose exec -T joomladb mysql -uroot -proot yotijoomla < ./mysql-dump.sql
+fi

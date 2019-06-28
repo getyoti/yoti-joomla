@@ -2,53 +2,58 @@ version: '3.1'
 
 services:
   joomla-base:
-    depends_on:
-      - joomladb
     build:
       context: ./
       dockerfile: app.base.dockerfile
+    environment: &joomla-env
+      JOOMLA_DB_NAME: yotijoomla
+      JOOMLA_DB_HOST: joomladb
+      JOOMLA_DB_PASSWORD: root
 
   joomla:
     depends_on:
       - joomladb
-      - joomla-base
     build:
       context: ./
       dockerfile: app.dockerfile
       args:
         BRANCH: "master"
     restart: always
-    links:
-      - joomladb:mysql
     ports:
       - "6001:443"
     environment:
-      JOOMLA_DB_NAME: yotijoomla
-      JOOMLA_DB_HOST: joomladb
-      JOOMLA_DB_PASSWORD: root
+      <<: *joomla-env
 
   joomla-dev:
     depends_on:
       - joomladb
-      - joomla-base
-    build:
+    build: &dev-build
       context: ../
       dockerfile: docker/app.dev.dockerfile
     restart: always
-    links:
-      - joomladb:mysql
     ports:
       - "6002:443"
     environment:
-      JOOMLA_DB_NAME: yotijoomla
-      JOOMLA_DB_HOST: joomladb
-      JOOMLA_DB_PASSWORD: root
+      <<: *joomla-env
     volumes:
       - ../yoti/com_yoti.xml:/var/www/html/administrator/components/com_yoti/com_yoti.xml
       - ../yoti/admin:/var/www/html/administrator/components/com_yoti
       - ../yoti/site:/var/www/html/components/com_yoti
       - ../yoti/modules/mod_yoti:/var/www/html/modules/mod_yoti
       - ../yoti/plugins/yotiprofile:/var/www/html/plugins/user/yotiprofile
+
+  joomla-standalone:
+    depends_on:
+      - joomladb
+    build:
+      <<: *dev-build
+    restart: always
+    links:
+      - joomladb:mysql
+    ports:
+      - "6003:443"
+    environment:
+      <<: *joomla-env
 
   joomladb:
     image: mysql:5.6

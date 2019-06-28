@@ -26,6 +26,6 @@ RUN git clone -b ${BRANCH} https://github.com/getyoti/yoti-joomla.git --single-b
 	&& mv yoti/site components/com_yoti \
 	&& mv yoti/modules/mod_yoti modules \
 	&& mv yoti/plugins/yotiprofile plugins/user \
-	&& echo "Yoti extension installled"
+	&& echo "Yoti extension installed"
 
 RUN echo "Yoti Branch ${BRANCH}"

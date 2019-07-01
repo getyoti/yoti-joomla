@@ -107,6 +107,18 @@ $ ./install-joomla.sh joomla-dev
 
 After the command has finished running, go to https://localhost:6002
 
+#### Manual Installation
+
+Run Joomla without the plugin:
+
+```shell
+$ cd docker
+$ ./install-joomla.sh joomla-base
+```
+
+After the command has finished running, go to https://localhost:6003 and install the plugin
+through the administrator UI.
+
 ### Removing the Docker containers
 
 Run the following commands to remove docker containers:

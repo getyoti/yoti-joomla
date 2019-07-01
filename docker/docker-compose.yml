@@ -9,6 +9,11 @@ services:
       JOOMLA_DB_NAME: yotijoomla
       JOOMLA_DB_HOST: joomladb
       JOOMLA_DB_PASSWORD: root
+    depends_on:
+      - joomladb
+    restart: always
+    ports:
+      - "6003:443"
 
   joomla:
     depends_on:
@@ -41,19 +46,6 @@ services:
       - ../yoti/site:/var/www/html/components/com_yoti
       - ../yoti/modules/mod_yoti:/var/www/html/modules/mod_yoti
       - ../yoti/plugins/yotiprofile:/var/www/html/plugins/user/yotiprofile
-
-  joomla-standalone:
-    depends_on:
-      - joomladb
-    build:
-      <<: *dev-build
-    restart: always
-    links:
-      - joomladb:mysql
-    ports:
-      - "6003:443"
-    environment:
-      <<: *joomla-env
 
   joomladb:
     image: mysql:5.6

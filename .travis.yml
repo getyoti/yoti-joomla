@@ -1,0 +1,11 @@
+language: minimal
+
+git:
+  depth: 1
+
+before_install:
+    - ./checkout-sdk.sh
+
+script:
+    - cd docker
+    - ./run-tests.sh

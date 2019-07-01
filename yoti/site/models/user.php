@@ -18,12 +18,6 @@ require_once JPATH_ROOT . '/components/com_yoti/YotiHelper.php';
  */
 class YotiModelUser extends JModelForm
 {
-    /**
-     * An item.
-     *
-     * @var    array
-     */
-    protected $_item;
 
     /**
      * Get the prefix count.
@@ -38,12 +32,11 @@ class YotiModelUser extends JModelForm
     public function getUserPrefixCount($prefix, $fieldName)
     {
         $count = 0;
-        if(!empty($prefix) && !empty($fieldName)) {
+        if (!empty($prefix) && !empty($fieldName)) {
             $db = JFactory::getDbo();
             $db->setQuery("SELECT COUNT(*) FROM " . $db->quoteName('#__users') .
                 " WHERE " . $db->quoteName($fieldName) . " LIKE " .
-                $db->quote($prefix. "%")
-            );
+                $db->quote($prefix. "%"));
             $count = $db->loadResult();
         }
         return $count;
@@ -60,8 +53,8 @@ class YotiModelUser extends JModelForm
     public function getCheckUserEmailExistsQuery($userEmail)
     {
         $db = JFactory::getDbo();
-        $query = $db->getQuery(TRUE);
-        if(!empty($userEmail)) {
+        $query = $db->getQuery(true);
+        if (!empty($userEmail)) {
             $query->select('id')
                 ->from($db->quoteName('#__users'))
                 ->where($db->quoteName('email') . '=' . $db->quote($userEmail))
@@ -81,8 +74,8 @@ class YotiModelUser extends JModelForm
     public function getCheckUsernameExistsQuery($username)
     {
         $db = JFactory::getDbo();
-        $query = $db->getQuery(TRUE);
-        if(!empty($username)) {
+        $query = $db->getQuery(true);
+        if (!empty($username)) {
             $query->select('id')
                 ->from($db->quoteName('#__users'))
                 ->where($db->quoteName('username') . '=' . $db->quote($username))
@@ -101,16 +94,16 @@ class YotiModelUser extends JModelForm
      */
     public function getJoomlaUserByEmail($email)
     {
-        $user = NULL;
+        $user = null;
         if (!empty($email)) {
             $db = JFactory::getDbo();
-            $query = $db->getQuery(TRUE)
+            $query = $db->getQuery(true)
                 ->select('id')
                 ->from($db->quoteName('#__users'))
                 ->where($db->quoteName('email') . '=' . $db->quote($email))
                 ->setLimit(1);
             $id = $db->setQuery($query)->loadResult();
-            if($id) {
+            if ($id) {
                 $user = JFactory::getUser($id);
             }
         }
@@ -134,7 +127,7 @@ class YotiModelUser extends JModelForm
             $count  = $db->setQuery($query)->loadResult();
         }
 
-        return $count ? TRUE : FALSE;
+        return $count ? true : false;
     }
 
     /**
@@ -148,10 +141,10 @@ class YotiModelUser extends JModelForm
     public function getUserIdByYotiId($yotiId)
     {
         $userId = 0;
-        if($yotiId) {
+        if ($yotiId) {
             $db = JFactory::getDbo();
 
-            $query = $db->getQuery(TRUE)
+            $query = $db->getQuery(true)
                 ->select('joomla_userid')
                 ->from(YotiHelper::YOTI_USER_TABLE_NAME)
                 ->where('identifier=' . $db->quote($yotiId))
@@ -172,7 +165,7 @@ class YotiModelUser extends JModelForm
     public static function yotiUserIsLinkedToJoomlaUser($userId)
     {
         $db = JFactory::getDbo();
-        $query = $db->getQuery(TRUE)
+        $query = $db->getQuery(true)
             ->select('joomla_userid')
             ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
             ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId))
@@ -190,18 +183,18 @@ class YotiModelUser extends JModelForm
      */
     public function deleteYotiUser($userId)
     {
-        if(!$userId) {
-            return FALSE;
+        if (!$userId) {
+            return false;
         }
 
         $db = JFactory::getDbo();
 
-        $query = $db->getQuery(TRUE)
+        $query = $db->getQuery(true)
             ->delete(YotiHelper::YOTI_USER_TABLE_NAME)
             ->where('joomla_userid=' . $db->quote($userId));
         $db->setQuery($query)->execute();
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -217,10 +210,10 @@ class YotiModelUser extends JModelForm
     {
         $joomlaUser = [];
 
-        if($userId) {
+        if ($userId) {
             $db = JFactory::getDbo();
 
-            $query = $db->getQuery(TRUE);
+            $query = $db->getQuery(true);
             $query->select('*')
                 ->from($db->quoteName('#__users'))
                 ->where($db->quoteName('id') . '=' . $db->quote($userId))
@@ -242,9 +235,9 @@ class YotiModelUser extends JModelForm
     public function getYotiUserById($userId)
     {
         $userData = [];
-        if($userId) {
+        if ($userId) {
             $db = JFactory::getDbo();
-            $query = $db->getQuery(TRUE)
+            $query = $db->getQuery(true)
                 ->select('*')
                 ->from($db->quoteName(YotiHelper::YOTI_USER_TABLE_NAME))
                 ->where($db->quoteName('joomla_userid') . '=' . $db->quote($userId))
@@ -260,8 +253,8 @@ class YotiModelUser extends JModelForm
      * @param bool $loadData
      * @return bool
      */
-    public function getForm($data = array(), $loadData = TRUE)
+    public function getForm($data = array(), $loadData = true)
     {
-        return FALSE;
+        return false;
     }
 }

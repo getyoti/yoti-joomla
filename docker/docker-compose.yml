@@ -41,6 +41,7 @@ services:
     environment:
       <<: *joomla-env
     volumes:
+      - ../yoti/:/usr/src/yoti-joomla
       - ../yoti/com_yoti.xml:/var/www/html/administrator/components/com_yoti/com_yoti.xml
       - ../yoti/admin:/var/www/html/administrator/components/com_yoti
       - ../yoti/site:/var/www/html/components/com_yoti

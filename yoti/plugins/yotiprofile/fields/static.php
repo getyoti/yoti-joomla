@@ -17,7 +17,7 @@ class JFormFieldStatic extends JFormField
     {
 
         $value = $this->element['value'];
-        if(empty($value)){
+        if (empty($value)) {
             $elementName = $this->element['name'];
             $data = $this->form->getData()->get('yotiprofile');
             if (is_object($data) && isset($data->{$elementName})) {

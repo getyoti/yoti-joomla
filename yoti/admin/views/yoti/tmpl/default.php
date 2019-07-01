@@ -26,7 +26,7 @@ defined('_JEXEC') or die('Restricted access');
                 <label for="yoti_app_id" class="col-md-6 control-label"><?php echo JText::_("App ID"); ?> <span><strong>*</strong></span></label>
                 <div class="controls">
                     <input type="text" name="yoti_app_id" id="yoti_app_id" placeholder="Yoti App ID"
-                           value="<?php if (!empty($this->data['yoti_app_id'])) echo htmlspecialchars($this->data['yoti_app_id']); ?>"
+                           value="<?php echo !empty($this->data['yoti_app_id']) ? htmlspecialchars($this->data['yoti_app_id']) : ''; ?>"
                            class="form-control input-xlarge"
                            required="true"
                     />
@@ -37,7 +37,7 @@ defined('_JEXEC') or die('Restricted access');
                 <label for="yoti_scenario_id" class="col-md-6 control-label"><?php echo JText::_('Scenario ID'); ?> <span><strong>*</strong></span></label>
                 <div class="controls">
                     <input type="text" name="yoti_scenario_id" id="yoti_scenario_id" placeholder="Yoti Scenario ID"
-                           value="<?php if (!empty($this->data['yoti_scenario_id'])) echo htmlspecialchars($this->data['yoti_scenario_id']); ?>"
+                           value="<?php echo !empty($this->data['yoti_scenario_id']) ? htmlspecialchars($this->data['yoti_scenario_id']) : ''; ?>"
                            class="form-control input-xlarge"
                            required="true"
                     />
@@ -52,7 +52,7 @@ defined('_JEXEC') or die('Restricted access');
                 </label>
                 <div class="controls">
                     <input type="text" name="yoti_sdk_id" id="yoti_sdk_id" placeholder="Yoti SDK ID"
-                           value="<?php if (!empty($this->data['yoti_sdk_id'])) echo htmlspecialchars($this->data['yoti_sdk_id']); ?>"
+                           value="<?php echo !empty($this->data['yoti_sdk_id']) ? htmlspecialchars($this->data['yoti_sdk_id']) : ''; ?>"
                            class="form-control input-xlarge"
                            required="true"
                     />
@@ -63,7 +63,7 @@ defined('_JEXEC') or die('Restricted access');
                 <label for="yoti_company_name" class="col-md-6 control-label"><?php echo JText::_('Company Name'); ?></label>
                 <div class="controls">
                     <input type="text" name="yoti_company_name" id="yoti_company_name" placeholder="Company Name"
-                           value="<?php if (!empty($this->data['yoti_company_name'])) echo htmlspecialchars($this->data['yoti_company_name']); ?>"
+                           value="<?php echo !empty($this->data['yoti_company_name']) ? htmlspecialchars($this->data['yoti_company_name']) : ''; ?>"
                            class="form-control input-xlarge"
                     />
                     <span class="help-block"><?php echo JText::_('To tailor the login form messages please add your company name'); ?></span>
@@ -104,8 +104,7 @@ defined('_JEXEC') or die('Restricted access');
                 <div class="controls">
                     <?php
                     $pemFileRequired = 'required="true"';
-                    if (!empty($this->data['yoti_pem.name']))
-                    {
+                    if (!empty($this->data['yoti_pem.name'])) {
                         $pemFileRequired = '';
                         echo '<div class="pem-file">' .
                             '<span class="alert alert-no-item"><strong>' . JText::_('Current file') . ':</strong> ' . htmlspecialchars($this->data['yoti_pem.name']) . '</span>' .

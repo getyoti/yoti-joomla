@@ -1,0 +1,29 @@
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - JoomlaBrowser:
+            url: 'http://selenium/'
+            host: 'selenium'
+            port: 4444
+            browser: chrome
+        - Helper\Acceptance
+    config:
+        JoomlaBrowser:
+            url: 'https://joomla-dev'
+            browser: 'chrome'
+            window_size: 1440x900
+            capabilities:
+              unexpectedAlertBehaviour: 'accept'
+            username: 'admin'
+            password: 'admin'
+            database host: 'joomladb'
+            database user: 'root'
+            database password: ''
+            database name: 'yotijoomla'
+            database type: 'mysql'
+            database prefix: 'j_'
+            install sample data: 'No'
+            sample data: 'Default English (GB) Sample Data'
+            admin email: 'admin@mydomain.com'
+            language: 'English (United Kingdom)'
+            joomla folder: '/var/www/html'

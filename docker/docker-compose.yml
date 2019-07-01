@@ -42,6 +42,8 @@ services:
       <<: *joomla-env
     volumes:
       - ../yoti/:/var/www/html/yoti-joomla
+      - ../codeception.yml:/var/www/html/codeception.yml
+      - ../tests/:/var/www/html/tests/
       - ../yoti/com_yoti.xml:/var/www/html/administrator/components/com_yoti/com_yoti.xml
       - ../yoti/admin:/var/www/html/administrator/components/com_yoti
       - ../yoti/site:/var/www/html/components/com_yoti
@@ -55,3 +57,19 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+
+  selenium:
+    image: selenium/hub:3.141.59-krypton
+    container_name: selenium-hubdocker
+    ports:
+      - "4444:4444"
+
+  selenium-node:
+    image: selenium/node-chrome:3.141.59-krypton
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium
+    environment:
+      - HUB_HOST=selenium
+      - HUB_PORT=4444

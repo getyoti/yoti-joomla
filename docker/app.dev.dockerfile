@@ -7,6 +7,9 @@ RUN cd /usr/src/composer \
   && ln -s /usr/src/composer/vendor/bin/phpcs /usr/local/bin/phpcs \
   && ln -s /usr/src/composer/vendor/bin/phpcbf /usr/local/bin/phpcbf \
   && phpcs --config-set installed_paths /usr/src/composer/vendor/joomla/coding-standards
-
-# Copy PHP Code Sniffer configuration.
 COPY ./phpcs.xml.dist .
+
+# Install Codeception.
+RUN cd /usr/src/joomla \
+  && composer require codeception/codeception "~2.4" \
+  && composer require joomla-projects/joomla-browser "^v3.9.0"

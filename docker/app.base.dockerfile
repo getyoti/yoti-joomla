@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y zip unzip git vim nano
 # Install MySQL Client.
 RUN apt-get install -y mysql-client
 
-# Install Composer
+# Install Composer.
 RUN EXPECTED_SIGNATURE="$(curl https://composer.github.io/installer.sig)" \
   php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
   ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', 'composer-setup.php');")" \
@@ -31,10 +31,10 @@ RUN EXPECTED_SIGNATURE="$(curl https://composer.github.io/installer.sig)" \
   && mv composer /usr/local/bin \
   && rm composer-setup.php
 
-# Install Joomlatools Console
+# Install Joomlatools Console.
 RUN mkdir /usr/src/composer \
   && cd /usr/src/composer \
-  && composer require joomlatools/console ^1.5 \
+  && composer require joomlatools/console "^1.5" \
   && ln -s /usr/src/composer/vendor/bin/joomla /usr/local/bin/joomla
 
 EXPOSE 80

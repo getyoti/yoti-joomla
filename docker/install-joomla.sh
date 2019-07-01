@@ -8,7 +8,7 @@ fi
 docker-compose up -d $TARGET
 
 # Wait for services to be ready
-sleep 10
+sleep 15
 
 # Install Joomla
 docker-compose exec -e JOOMLA_DB_HOST=joomladb $TARGET joomla site:install Yoti \

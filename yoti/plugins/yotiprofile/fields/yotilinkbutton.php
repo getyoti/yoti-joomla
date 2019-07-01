@@ -15,7 +15,12 @@ class JFormFieldYotilinkbutton extends JFormField
 
     public function getInput()
     {
-        $urlText = isset($this->element['data-button-text']) ? $this->element['data-button-text'] : 'Unlink Yoti account';
+        if (isset($this->element['data-button-text'])) {
+            $urlText = $this->element['data-button-text'];
+        } else {
+            $urlText = 'Unlink Yoti account';
+        }
+
         $urlLink = JRoute::_('index.php?option=com_yoti&task=unlink');
         $promptMessage = JText::_('PLG_USER_YOTIPROFILE_UNLINK_ACCOUNT_BUTTON_PROMPT_MESSAGE');
         $html = '<div class="yoti-connect">' .

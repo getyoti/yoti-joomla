@@ -8,12 +8,10 @@ use Yoti\YotiClient;
 
 // Don't show button until we have pem, SDK ID And Scenario ID.
 $config = ModYotiHelper::getConfig();
-if (
-    !$config['yoti_sdk_id']
+if (!$config['yoti_sdk_id']
     || !$config['yoti_scenario_id']
     || !$config['yoti_pem']->contents
-)
-{
+) {
     return;
 }
 
@@ -46,20 +44,14 @@ $linkButton = '<span
         </span>
         <script>' . implode("\r\n", $script) . '</script>';
 
-if ($currentUser->guest)
-{
+if ($currentUser->guest) {
     $url = ModYotiHelper::getLoginUrl();
     $button = sprintf($linkButton, ModYotiHelper::YOTI_LINK_BUTTON_DEFAULT_TEXT);
-}
-else
-{
-    if (!YotiModelUser::yotiUserIsLinkedToJoomlaUser($currentUser->id))
-    {
+} else {
+    if (!YotiModelUser::yotiUserIsLinkedToJoomlaUser($currentUser->id)) {
         $url = ModYotiHelper::getLoginUrl();
         $button = sprintf($linkButton, 'Link to Yoti');
-    }
-    else
-    {
+    } else {
         $button = '<strong>Yoti</strong>  Linked';
     }
 }

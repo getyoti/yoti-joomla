@@ -114,19 +114,18 @@ class YotiHelper
         $yotiSDKID = $this->config['yoti_sdk_id'];
         $yotiPemContents = $this->config['yoti_pem']->contents;
 
-        $token = (!empty($_GET['token'])) ? $_GET['token'] : NULL;
+        $token = (!empty($_GET['token'])) ? $_GET['token'] : null;
         $token = YotiHelper::sanitizeToken($token);
 
         // If no token then ignore
         if (!$token) {
             self::setFlash('Could not get Yoti token.', 'error');
 
-            return FALSE;
+            return false;
         }
 
         // Init Yoti client and attempt to request user details
-        try
-        {
+        try {
             $yotiClient = new YotiClient(
                 $yotiSDKID,
                 $yotiPemContents,
@@ -136,17 +135,15 @@ class YotiHelper
             $activityDetails = $yotiClient->getActivityDetails($token);
             $activityDetailsAdapter = new ActivityDetailsAdapter($activityDetails);
             $profileAdapter = $activityDetailsAdapter->getProfile();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             self::setFlash('Yoti could not successfully connect to your account.', 'error');
 
-            return FALSE;
+            return false;
         }
 
         if (!$this->passedAgeVerification($profileAdapter)) {
             self::setFlash("Could not log you in as you haven't passed the age verification.", 'error');
-            return FALSE;
+            return false;
         }
 
         // Check if yoti user exists
@@ -161,7 +158,7 @@ class YotiHelper
         if ($currentUser->guest) {
             // Register new user
             if (!$joomlaUserId) {
-                $errMsg = NULL;
+                $errMsg = null;
 
                 // Attempt to connect by email.
                 $joomlaUserId = $this->shouldLoginByEmail($profileAdapter);
@@ -172,12 +169,10 @@ class YotiHelper
                     if (empty($this->config['yoti_only_existing_user'])) {
                         try {
                             $joomlaUserId = $this->createJoomlaUser($profileAdapter);
-                        }
-                        catch (Exception $e) {
+                        } catch (Exception $e) {
                             $errMsg = $e->getMessage();
                         }
-                    }
-                    else {
+                    } else {
                         // Only link existing users account, so redirect to login page
                         self::storeYotiUserInSession($profileAdapter);
                         // Generate the registration path.
@@ -191,28 +186,24 @@ class YotiHelper
                 if (!$joomlaUserId) {
                     // If it couldn't create a user then bail
                     self::setFlash("Could not create user account. $errMsg", 'error');
-                    return FALSE;
+                    return false;
                 }
             }
 
             // Log user in
             $this->loginUser($joomlaUserId);
-        }
-        else
-        {
+        } else {
             // If logged in user doesn't match yoti user registered then bail
             if ($joomlaUserId && ($currentUser->id !== $joomlaUserId)) {
                 YotiHelper::setFlash('This Yoti account is already linked to another account.', 'error');
-            }
-            // If Joomla user not found in Yoti table then create new yoti user
-            elseif (!$joomlaUserId)
-            {
+            } elseif (!$joomlaUserId) {
+                // If Joomla user not found in Yoti table then create new yoti user
                 $this->createYotiUser($profileAdapter, $currentUser->id);
                 YotiHelper::setFlash('Your Yoti account has been successfully linked.');
             }
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -230,17 +221,17 @@ class YotiHelper
     private function oneAgeIsVerified(ProfileAdapter $profile)
     {
         $ageVerificationsArr = $profile->getAgeVerifications();
-        foreach($ageVerificationsArr as $ageArr) {
+        foreach ($ageVerificationsArr as $ageArr) {
             if (in_array('Yes', $ageArr)) {
-                return TRUE;
+                return true;
             }
         }
-        return FALSE;
+        return false;
     }
     public static function getAgeVerificationsAsString(array $ageVerifications)
     {
         $ageStr = '';
-        foreach($ageVerifications as $ageArr) {
+        foreach ($ageVerifications as $ageArr) {
             $ageStr .= key($ageArr) . ': ' . current($ageArr) . ',';
         }
         return rtrim($ageStr, ',');
@@ -259,9 +250,9 @@ class YotiHelper
     {
         $filter = '==';
         // Remove anything after ==
-        if (!empty($token) && strpos($token, $filter) !== FALSE) {
+        if (!empty($token) && strpos($token, $filter) !== false) {
             $firstToken = strtok($token, $filter);
-            if($firstToken !== FALSE) {
+            if ($firstToken !== false) {
                 $token = $firstToken . $filter;
             }
         }
@@ -312,7 +303,7 @@ class YotiHelper
     {
         $session = JFactory::getSession();
         $yotiUser = $session->get('yoti-user');
-        return $yotiUser ? unserialize($yotiUser) : NULL;
+        return $yotiUser ? unserialize($yotiUser) : null;
     }
 
     /**
@@ -333,17 +324,16 @@ class YotiHelper
         $currentUser = JFactory::getUser();
 
         // Unlink
-        if (!$currentUser->guest && $this->yotiUserModel->deleteYotiUser($currentUser->id))
-        {
+        if (!$currentUser->guest && $this->yotiUserModel->deleteYotiUser($currentUser->id)) {
             self::setFlash('Your Yoti profile is successfully unlinked from your account.');
             YotiHelper::clearYotiUserFromSession();
 
-            return TRUE;
+            return true;
         }
 
         self::setFlash('Could not unlink your account from Yoti.');
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -355,8 +345,7 @@ class YotiHelper
     public function binFile($field)
     {
         $user = JFactory::getUser();
-        if (!$user)
-        {
+        if (!$user) {
             return;
         }
 
@@ -366,16 +355,14 @@ class YotiHelper
 
         $userProfileArr = ($yotiUserData && isset($yotiUserData['data'])) ? unserialize($yotiUserData['data']) : [];
 
-        if (empty($userProfileArr) || !array_key_exists($field, $userProfileArr))
-        {
+        if (empty($userProfileArr) || !array_key_exists($field, $userProfileArr)) {
             return;
         }
 
         $imagePath = isset($userProfileArr[$field]) ? $userProfileArr[$field] : '';
 
         $file = YotiHelper::uploadDir() . "/{$imagePath}";
-        if (empty($imagePath) || !file_exists($file))
-        {
+        if (empty($imagePath) || !file_exists($file)) {
             return;
         }
 
@@ -423,7 +410,7 @@ class YotiHelper
         $givenNames = $this->getUserGivenNames($profile);
         $familyName = $profile->getFamilyName();
 
-        if (NULL !== $givenNames && NULL !== $familyName) {
+        if (null !== $givenNames && null !== $familyName) {
             $userFullName = $givenNames . ' ' . $familyName;
             $userProvidedPrefix = strtolower(str_replace(' ', '.', $userFullName));
             $prefix = $this->isValidUsername($userProvidedPrefix) ? $userProvidedPrefix : $prefix;
@@ -433,13 +420,11 @@ class YotiHelper
         $username = $prefix;
         $usernameCount = $this->yotiUserModel->getUserPrefixCount($prefix, 'username');
         if ($usernameCount > 0) {
-            do
-            {
+            do {
                 $username = $prefix . ++$usernameCount;
                 $query = $this->yotiUserModel->getCheckUsernameExistsQuery($username);
                 $db->setQuery($query);
-            }
-            while ($db->loadResult());
+            } while ($db->loadResult());
         }
 
         return $username;
@@ -460,10 +445,10 @@ class YotiHelper
      */
     protected function isValidUsername($username)
     {
-        if(!preg_match(self::USERNAME_VALIDATION_PATTERN, $username)) {
-            return FALSE;
+        if (!preg_match(self::USERNAME_VALIDATION_PATTERN, $username)) {
+            return false;
         }
-        return TRUE;
+        return true;
     }
 
     /**
@@ -479,13 +464,11 @@ class YotiHelper
         // Generate user email
         $userEmail = "{$prefix}@{$domain}";
         if ($userEmailCount > 0) {
-            do
-            {
+            do {
                 $userEmail = $prefix . ++$userEmailCount . "@$domain";
                 $query = $this->yotiUserModel->getCheckUserEmailExistsQuery($userEmail);
                 $db->setQuery($query);
-            }
-            while ($db->loadResult());
+            } while ($db->loadResult());
         }
         return $userEmail;
     }
@@ -508,7 +491,8 @@ class YotiHelper
      * @return null|string
      *   Return single user given name
      */
-    private function getUserGivenNames(ProfileAdapter $profile) {
+    private function getUserGivenNames(ProfileAdapter $profile)
+    {
         $givenNames = $profile->getGivenNames();
         $givenNamesArr = explode(' ', $givenNames);
         return (count($givenNamesArr) > 1) ? $givenNamesArr[0] : $givenNames;
@@ -600,7 +584,7 @@ class YotiHelper
             $count  = $db->setQuery($query)->loadResult();
         }
 
-        return $count ? TRUE : FALSE;
+        return $count ? true : false;
     }
 
     /**
@@ -623,7 +607,7 @@ class YotiHelper
         $yotiUserData = YotiHelper::getYotiUserData($profileAdapter);
 
         // Replace selfie attribute with the file name attribute
-        if(isset($yotiUserData[Profile::ATTR_SELFIE])) {
+        if (isset($yotiUserData[Profile::ATTR_SELFIE])) {
             $selfieAttr = [self::ATTR_SELFIE_FILE_NAME => $selfieFilename];
             $yotiUserData = array_merge(
                 $selfieAttr,
@@ -653,13 +637,13 @@ class YotiHelper
      */
     protected static function createUserSelfieFile(ProfileAdapter $profile, $joomlaUserId)
     {
-        $selfieFilename = NULL;
+        $selfieFilename = null;
         $joomlaUserId = (int) $joomlaUserId;
         $selfie = $profile->getSelfie();
         if ($joomlaUserId && $selfie) {
             // Create media dir
             if (!is_dir(self::uploadDir())) {
-                mkdir(self::uploadDir(), 0777, TRUE);
+                mkdir(self::uploadDir(), 0777, true);
             }
 
             $selfieFilename = md5("selfie_$joomlaUserId" . time()) . '.png';
@@ -680,7 +664,7 @@ class YotiHelper
     {
         $yotiUserData = [];
         $attrsArr = array_keys(YotiHelper::$profileFields);
-        foreach($attrsArr as $attrName) {
+        foreach ($attrsArr as $attrName) {
             if ($attrValue =  $profile->getProfileAttribute($attrName)) {
                 $yotiUserData[$attrName] = $attrValue;
             }
@@ -708,7 +692,7 @@ class YotiHelper
 
         $options = [
             'action' => 'core.login.site',
-            'remember' => FALSE,
+            'remember' => false,
         ];
 
         $app->triggerEvent('onUserLogin', [$user, $options]);
@@ -756,9 +740,8 @@ class YotiHelper
     public static function getLoginUrl()
     {
         $config = self::getConfig();
-        if (empty($config['yoti_app_id']))
-        {
-            return NULL;
+        if (empty($config['yoti_app_id'])) {
+            return null;
         }
 
         return YotiClient::getLoginUrl($config['yoti_app_id']);
@@ -777,13 +760,13 @@ class YotiHelper
      */
     public static function makeYotiUserProfile(array $userProfile)
     {
-        $userProfile[Profile::ATTR_SELFIE] = NULL;
+        $userProfile[Profile::ATTR_SELFIE] = null;
         $selfieFileExists = file_exists(self::uploadDir() . $userProfile[self::ATTR_SELFIE_FILE_NAME]);
         if (isset($userProfile[self::ATTR_SELFIE_FILE_NAME]) && $selfieFileExists) {
             // Set Yoti user selfie image in the profile array.
-            $userProfile[Profile::ATTR_SELFIE] = file_get_contents(self::uploadDir() . $userProfile[self::ATTR_SELFIE_FILE_NAME]);
+            $filePath = self::uploadDir() . $userProfile[self::ATTR_SELFIE_FILE_NAME];
+            $userProfile[Profile::ATTR_SELFIE] = file_get_contents($filePath);
         }
-        //$userProfile['user_id'] = $userId;
 
         return new ProfileAdapter($userProfile);
     }

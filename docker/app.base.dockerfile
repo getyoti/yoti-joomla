@@ -35,7 +35,8 @@ RUN EXPECTED_SIGNATURE="$(curl https://composer.github.io/installer.sig)" \
 RUN mkdir /usr/src/composer \
   && cd /usr/src/composer \
   && composer require joomlatools/console "^1.5" \
-  && ln -s /usr/src/composer/vendor/bin/joomla /usr/local/bin/joomla
+  && ln -s /usr/src/composer/vendor/bin/joomla /usr/local/bin/joomla \
+  && mkdir /usr/src/composer/vendor/joomlatools/console/bin/.files/cache
 
 EXPOSE 80
 EXPOSE 443

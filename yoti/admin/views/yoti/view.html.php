@@ -1,7 +1,5 @@
 <?php
-// phpcs:disable PSR1.Files.SideEffects.FoundWithSymbols
 defined('_JEXEC') or die('Restricted access');
-// phpcs:enable
 
 /**
  * Admin view class

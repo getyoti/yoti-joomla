@@ -15,7 +15,7 @@ class ProfileAdapter
      */
     private $joomlaUserId;
 
-    public function __construct(array $profileAttrs, $joomlaUserIdId = NULL)
+    public function __construct(array $profileAttrs, $joomlaUserIdId = null)
     {
         $this->joomlaUserId = $joomlaUserIdId;
         $this->setAttributes($profileAttrs);
@@ -112,7 +112,7 @@ class ProfileAdapter
 
     public function getProfileAttribute($attrName)
     {
-        return isset($this->attributes[$attrName]) ? $this->attributes[$attrName] : NULL;
+        return isset($this->attributes[$attrName]) ? $this->attributes[$attrName] : null;
     }
 
     private function setAttributes(array $profileAttrs)

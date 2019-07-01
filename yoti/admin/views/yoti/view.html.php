@@ -1,5 +1,7 @@
 <?php
+// phpcs:disable PSR1.Files.SideEffects.FoundWithSymbols
 defined('_JEXEC') or die('Restricted access');
+// phpcs:enable
 
 /**
  * Admin view class
@@ -31,7 +33,7 @@ class AdminYotiViewYoti extends JViewLegacy
      * @return mixed|void
      * @throws Exception
      */
-    public function display($tpl = NULL)
+    public function display($tpl = null)
     {
         $this->addSidebar();
         JFactory::getDocument()->addStyleSheet("$this->baseurl/components/com_yoti/assets/styles.css");
@@ -46,19 +48,16 @@ class AdminYotiViewYoti extends JViewLegacy
         if (version_compare(phpversion(), '5.4.0', '<')) {
             $errors[] = 'Yoti could not be installed. Yoti PHP SDK requires PHP 5.4 or higher.';
         }
-        if (!function_exists('curl_version'))
-        {
+        if (!function_exists('curl_version')) {
             $errors[] = "PHP module 'curl' not installed. Yoti requires it to work. Please contact your server administrator.";
         }
-        if (!function_exists('json_decode'))
-        {
+        if (!function_exists('json_decode')) {
             $errors[] = "PHP module 'json' not installed. Yoti requires it to work. Please contact your server administrator.";
         }
 
         // Get config data
         $data = $config;
-        if ($_SERVER['REQUEST_METHOD'] == 'POST')
-        {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errorMsg = $this->validateForm();
             $pemFile = $this->filesVar('yoti_pem', (array)$config['yoti_pem']);
 
@@ -66,50 +65,38 @@ class AdminYotiViewYoti extends JViewLegacy
             $data['yoti_scenario_id'] = $this->postVar('yoti_scenario_id');
             $data['yoti_sdk_id'] = $this->postVar('yoti_sdk_id');
             $data['yoti_company_name'] = $this->postVar('yoti_company_name');
-            $data['yoti_delete_pem'] = $this->postVar('yoti_delete_pem') ? TRUE : FALSE;
+            $data['yoti_delete_pem'] = $this->postVar('yoti_delete_pem') ? true : false;
             $data['yoti_success_url'] = $this->postVar('yoti_success_url');
             $data['yoti_failed_url'] = $this->postVar('yoti_failed_url');
-            $data['yoti_only_existing_user'] = $this->postVar('yoti_only_existing_user') ? TRUE : FALSE;
-            $data['yoti_user_email'] = $this->postVar('yoti_user_email') ? TRUE : FALSE;
-            $data['yoti_age_verification'] = $this->postVar('yoti_age_verification') ? TRUE : FALSE;
+            $data['yoti_only_existing_user'] = $this->postVar('yoti_only_existing_user') ? true : false;
+            $data['yoti_user_email'] = $this->postVar('yoti_user_email') ? true : false;
+            $data['yoti_age_verification'] = $this->postVar('yoti_age_verification') ? true : false;
 
             // Validation
-            if(!empty($errorMsg)) {
+            if (!empty($errorMsg)) {
                 $errors['validation_error'] = $errorMsg;
-            }
-            elseif (empty($pemFile['name']))
-            {
+            } elseif (empty($pemFile['name'])) {
                 $errors['yoti_pem'] = 'PEM file is required.';
-            }
-            elseif (!empty($pemFile['tmp_name']) && !openssl_get_privatekey(file_get_contents($pemFile['tmp_name'])))
-            {
+            } elseif (!empty($pemFile['tmp_name']) && !openssl_get_privatekey(file_get_contents($pemFile['tmp_name']))) {
                 $errors['yoti_pem'] = 'PEM file is invalid.';
             }
 
             // If there is no errors? proceed
-            if ($errors)
-            {
-                foreach ($errors as $err)
-                {
+            if ($errors) {
+                foreach ($errors as $err) {
                     JFactory::getApplication()->enqueueMessage($err, 'error');
                 }
-            }
-            else
-            {
+            } else {
                 // If pem file uploaded then process
-                $name = $pemContents = NULL;
-                if (!empty($pemFile['tmp_name']))
-                {
+                $name = $pemContents = null;
+                if (!empty($pemFile['tmp_name'])) {
                     $name = preg_replace('/[^a-zA-Z0-9_\-\.]/', '', $pemFile['name']);
-                    if (!$name)
-                    {
+                    if (!$name) {
                         $name = md5($pemFile['name']) . '.pem';
                     }
                     $pemContents = file_get_contents($pemFile['tmp_name']);
-                }
-                // If "Delete this PEM file" not ticked
-                elseif (!$data['yoti_delete_pem'])
-                {
+                } elseif (!$data['yoti_delete_pem']) {
+                    // If "Delete this PEM file" not ticked
                     $name = $config['yoti_pem']->name;
                     $pemContents = $config['yoti_pem']->contents;
                 }
@@ -135,12 +122,9 @@ class AdminYotiViewYoti extends JViewLegacy
                 $table = JTable::getInstance('extension');
                 $table->load($component->id);
                 $table->bind(['params' => $config->toString()]);
-                if (!$table->store(TRUE))
-                {
+                if (!$table->store(true)) {
                     JFactory::getApplication()->enqueueMessage("Couldn't save settings.", 'error');
-                }
-                else
-                {
+                } else {
                     JFactory::getApplication()->enqueueMessage('Settings saved.');
                 }
             }
@@ -179,15 +163,15 @@ class AdminYotiViewYoti extends JViewLegacy
      */
     protected function validateForm()
     {
-       $errorMsg = '';
-       foreach(self::FORM_REQUIRED_FIELDS as $fieldName => $fieldLabel) {
-           if(empty($this->postVar($fieldName))) {
-               $errorMsg = "{$fieldLabel} is required!";
-               break;
-           }
-       }
+        $errorMsg = '';
+        foreach (self::FORM_REQUIRED_FIELDS as $fieldName => $fieldLabel) {
+            if (empty($this->postVar($fieldName))) {
+                $errorMsg = "{$fieldLabel} is required!";
+                break;
+            }
+        }
 
-       return $errorMsg;
+        return $errorMsg;
     }
 
     /**

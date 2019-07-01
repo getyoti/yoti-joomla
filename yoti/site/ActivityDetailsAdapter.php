@@ -49,16 +49,16 @@ class ActivityDetailsAdapter
         $attributesArr = [];
         $excludedAttrs = $this->getExcludedAttributes();
 
-        foreach($profile->getAttributes() as $attrName => $attrObj) {
+        foreach ($profile->getAttributes() as $attrName => $attrObj) {
             if (in_array($attrName, $excludedAttrs)) {
                 continue;
             }
-            $attrValue = $attrObj ? $attrObj->getValue() : NULL;
+            $attrValue = $attrObj ? $attrObj->getValue() : null;
 
-            if ($attrName === Profile::ATTR_DATE_OF_BIRTH && $attrValue !== NULL) {
+            if ($attrName === Profile::ATTR_DATE_OF_BIRTH && $attrValue !== null) {
                 $attrValue = $attrValue->format('d-m-Y');
             }
-            if ($attrName === Profile::ATTR_SELFIE && NULL !== $attrValue) {
+            if ($attrName === Profile::ATTR_SELFIE && null !== $attrValue) {
                 $attrValue = $attrValue->getContent();
             }
             $attributesArr[$attrName] = $attrValue;
@@ -88,8 +88,8 @@ class ActivityDetailsAdapter
         /**
          * @var AgeVerification $ageVerification
          */
-        foreach($profile->getAgeVerifications() as $ageAttr => $ageVerification) {
-            $attr = str_replace(':', '_', ucwords($ageAttr,'_'));
+        foreach ($profile->getAgeVerifications() as $ageAttr => $ageVerification) {
+            $attr = str_replace(':', '_', ucwords($ageAttr, '_'));
             if ($ageVerification instanceof AgeVerification) {
                 $ageVerificationsArr[] = [$attr => $ageVerification->getResult() ? 'Yes' : 'No'];
             }

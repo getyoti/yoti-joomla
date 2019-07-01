@@ -32,18 +32,17 @@ class YotiController extends JControllerLegacy
 
         $redirect = (!empty($_GET['redirect'])) ? $_GET['redirect'] : 'index.php';
 
-        switch ($this->input->get('task'))
-        {
+        switch ($this->input->get('task')) {
             case 'login':
                 try {
                     $userLinked = $helper->link();
-                } catch(Exception $ex) {
+                } catch (Exception $ex) {
                     YotiHelper::setFlash('Yoti could not successfully link your account.', 'error');
                 }
 
                 if ($userLinked && empty($_GET['redirect'])) {
                     $redirect = $config['yoti_success_url'];
-                } else if(!$userLinked) {
+                } elseif (!$userLinked) {
                     // Redirect to failed URL
                     $redirect = ($config['yoti_failed_url'] === '/') ? 'index.php' : $config['yoti_failed_url'];
                 }
@@ -72,5 +71,4 @@ class YotiController extends JControllerLegacy
 
         return parent::display($cachable, $urlparams);
     }
-
 }

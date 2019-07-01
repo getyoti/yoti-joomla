@@ -5,6 +5,7 @@ if [ "$TARGET" = "" ]; then
     TARGET="joomla"
 fi
 
+docker-compose down
 docker-compose build joomla-base
 docker-compose up -d $TARGET
 

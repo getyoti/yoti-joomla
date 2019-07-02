@@ -6,22 +6,23 @@ modules:
             host: 'selenium'
             port: 4444
             browser: chrome
+            request_timeout: 60
         - Helper\Acceptance
     config:
         JoomlaBrowser:
-            url: 'https://joomla-dev'
+            url: 'https://joomla-test'
             browser: 'chrome'
-            window_size: 1440x900
+            window_size: 1440x1440
             capabilities:
               unexpectedAlertBehaviour: 'accept'
             username: 'admin'
             password: 'admin'
             database host: 'joomladb'
             database user: 'root'
-            database password: ''
+            database password: 'root'
             database name: 'yotijoomla'
-            database type: 'mysql'
-            database prefix: 'j_'
+            database type: 'MySQL'
+            database prefix: 'jtest_'
             install sample data: 'No'
             sample data: 'Default English (GB) Sample Data'
             admin email: 'admin@mydomain.com'

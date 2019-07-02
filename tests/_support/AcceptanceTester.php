@@ -42,6 +42,43 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * Ensure Joomla is installed.
+     */
+    public function ensureJoomlaIsInstalled() {
+        $I = $this;
+        $I->amOnPage('/');
+        if (!$I->findElements('.site-title')) {
+            $I->installJoomlaRemovingInstallationFolder();
+            $I->amLoggedInAsAdmin();
+            $I->closeMessages();
+        }
+    }
+
+    /**
+     * Ensure Yoti module is installed.
+     */
+    public function ensureYotiIsInstalled() {
+        $I = $this;
+        $I->amLoggedInAsAdmin();
+        $I->amOnPage('/administrator/index.php?option=com_modules');
+        if (!$I->findElements(['link' => 'Yoti Login'])) {
+            $I->installExtensionFromFolder('/var/www/html/yoti-joomla');
+            $I->configureTheYotiComponent();
+        }
+    }
+
+    /**
+     * Ensure logged in as administrator.
+     */
+    public function amLoggedInAsAdmin() {
+        $I = $this;
+        $I->amOnPage('/administrator/index.php');
+        if ($I->findElements('#mod-login-username')) {
+            $I->doAdministratorLogin();
+        }
+    }
+
+    /**
      * Close/accept banner messages.
      */
     public function closeMessages() {
@@ -55,34 +92,16 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function placeTheYotiModule() {
         $I = $this;
-
-        // Browse to Yoti module.
+        $I->amLoggedInAsAdmin();
         $I->click('Extensions', '#menu');
         $I->click('Modules', '#menu');
-        $I->scrollTo('#moduleList');
-        $I->click('Yoti Login', '#moduleList .pull-left');
-
-        // Set position.
-        $I->waitForElement('#jform_position_chzn');
-        $I->click('#jform_position_chzn');
-        $I->click('#jform_position_chzn [data-option-array-index="28"]');
-
-        // Publish.
-        $I->click('#jform_published_chzn');
-        $I->click('#jform_published_chzn [data-option-array-index="0"]');
-
-        // Clear publish end date.
+        $I->click('Yoti Login');
+        $I->selectOptionInChosen('Position', 'position-7');
+        $I->selectOptionInChosen('Status', 'Published');
         $I->fillField('Finish Publishing', '');
-
         $I->click('Save');
-
-        // Browser to menu assignment.
         $I->click('Menu Assignment');
-
-        // Place on every page.
-        $I->click('#jform_assignment_chzn');
-        $I->click('#jform_assignment_chzn [data-option-array-index="0"]');
-
+        $I->selectOptionInChosenByIdUsingJs('jform_assignment', 'On all pages');
         $I->click('Save');
     }
 }

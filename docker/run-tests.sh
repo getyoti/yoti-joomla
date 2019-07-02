@@ -3,7 +3,7 @@ docker-compose build joomla-base
 docker-compose up -d joomla-test
 sleep 20
 
-# Coding Standards
+# Coding Standards.
 docker-compose exec joomla-test sh -c "phpcs ./yoti-joomla"
 
 # Run Tests.

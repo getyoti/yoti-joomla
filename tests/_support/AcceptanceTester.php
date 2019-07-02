@@ -42,6 +42,15 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * Close/accept banner messages.
+     */
+    public function closeMessages() {
+        $I = $this;
+        $I->waitForElement('.js-pstats-btn-allow-never');
+        $I->click('Never');
+    }
+
+    /**
      * Places the Yoti Module.
      */
     public function placeTheYotiModule() {

@@ -41,14 +41,27 @@ services:
     environment:
       <<: *joomla-env
     volumes:
-      - ../yoti/:/var/www/html/yoti-joomla
-      - ../codeception.yml:/var/www/html/codeception.yml
-      - ../tests/:/var/www/html/tests/
       - ../yoti/com_yoti.xml:/var/www/html/administrator/components/com_yoti/com_yoti.xml
       - ../yoti/admin:/var/www/html/administrator/components/com_yoti
       - ../yoti/site:/var/www/html/components/com_yoti
       - ../yoti/modules/mod_yoti:/var/www/html/modules/mod_yoti
       - ../yoti/plugins/yotiprofile:/var/www/html/plugins/user/yotiprofile
+
+  joomla-test:
+    depends_on:
+      - joomladb
+      - selenium-node
+    build:
+      <<: *dev-build
+    restart: always
+    ports:
+      - "6004:443"
+    environment:
+      <<: *joomla-env
+    volumes:
+      - ../yoti/:/var/www/html/yoti-joomla
+      - ../codeception.yml:/var/www/html/codeception.yml
+      - ../tests/:/var/www/html/tests/
 
   joomladb:
     image: mysql:5.6

@@ -116,7 +116,7 @@ $ cd docker
 $ ./install-joomla.sh joomla-base
 ```
 
-After the command has finished running, go to https://localhost:6003 and install the plugin
+After the command has finished running, go to <https://localhost:6003> and install the plugin
 through the administrator UI.
 
 #### Running tests

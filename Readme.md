@@ -105,7 +105,7 @@ $ cd docker
 $ ./install-joomla.sh joomla-dev
 ```
 
-After the command has finished running, go to https://localhost:6002
+After the command has finished running, go to <https://localhost:6002>
 
 #### Manual Installation
 

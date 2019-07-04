@@ -1,7 +1,5 @@
 FROM joomla:3.9-php7.1-apache as joomla_base
 
-LABEL maintainer="Yoti SDK <sdksupport@yoti.com>"
-
 VOLUME /var/www/html
 
 COPY default.conf /etc/apache2/sites-available/000-default.conf

@@ -50,7 +50,7 @@ services:
   joomla-test:
     depends_on:
       - joomladb
-      - selenium-node
+      - selenium
     build:
       <<: *dev-build
     restart: always
@@ -72,17 +72,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
 
   selenium:
-    image: selenium/hub:3.141.59-krypton
-    container_name: selenium-hubdocker
+    image: selenium/standalone-chrome:3.141.59
+    container_name: selenium-standalone-chrome
     ports:
       - "4444:4444"
-
-  selenium-node:
-    image: selenium/node-chrome:3.141.59-krypton
-    volumes:
-      - /dev/shm:/dev/shm
-    depends_on:
-      - selenium
-    environment:
-      - HUB_HOST=selenium
-      - HUB_PORT=4444

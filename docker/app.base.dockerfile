@@ -1,4 +1,4 @@
-FROM joomla:3.9-php7.1-apache as joomla_base
+FROM joomla:3.9-php7.3-apache as joomla_base
 
 VOLUME /var/www/html
 

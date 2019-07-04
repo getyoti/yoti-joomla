@@ -13,7 +13,7 @@ docker-compose up -d $TARGET
 sleep 15
 
 # Install Joomla
-docker-compose exec -e JOOMLA_DB_HOST=joomladb $TARGET joomla site:install Yoti \
+docker-compose exec -T -e JOOMLA_DB_HOST=joomladb $TARGET joomla site:install Yoti \
   -H joomladb \
   --mysql-database yotijoomla \
   --skip-create-statement \

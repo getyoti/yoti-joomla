@@ -4,7 +4,7 @@ docker-compose up -d joomla-test
 sleep 20
 
 # Coding Standards.
-docker-compose exec joomla-test sh -c "phpcs ./yoti-joomla"
+docker-compose exec -T joomla-test sh -c "phpcs ./yoti-joomla"
 
 # Run Tests.
-docker-compose exec joomla-test ./vendor/bin/codecept run acceptance --steps
+docker-compose exec -T joomla-test ./vendor/bin/codecept run acceptance --steps

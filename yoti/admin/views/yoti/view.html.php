@@ -56,6 +56,10 @@ class AdminYotiViewYoti extends JViewLegacy
         // Get config data
         $data = $config;
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (!JSession::checkToken()) {
+                $errors['token_error'] = 'Invalid form token';
+            }
+
             $errorMsg = $this->validateForm();
             $pemFile = $this->filesVar('yoti_pem', (array)$config['yoti_pem']);
 

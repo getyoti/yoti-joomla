@@ -196,16 +196,19 @@ class plgUserYotiprofile extends JPlugin
     /**
      * Returns Yoti button link
      *
-     * @param $value
+     * @param string $value
      * @return string
      */
     public static function yotilinkbutton($value)
     {
-        $urlLink = JRoute::_('index.php?option=com_yoti&task=unlink');
-        $promptMessage = JText::_('PLG_USER_YOTIPROFILE_UNLINK_ACCOUNT_BUTTON_PROMPT_MESSAGE');
+        $urlLink = JRoute::_('index.php?option=com_yoti&task=unlink&' . JSession::getFormToken() . '=1');
+
+        $promptMessage = addslashes(htmlspecialchars(
+            JText::_('PLG_USER_YOTIPROFILE_UNLINK_ACCOUNT_BUTTON_PROMPT_MESSAGE')
+        ));
         $html = '<div class="yoti-connect">' .
             "<a class=\"yoti-unlink-button\" onclick=\"return confirm('{$promptMessage}')\" href=\"$urlLink\">" .
-            JText::_($value) .
+            htmlspecialchars(JText::_($value)) .
             '</a></div>';
 
         return $html;
@@ -214,14 +217,18 @@ class plgUserYotiprofile extends JPlugin
     /**
      * Returns Yoti user profile image.
      *
-     * @param $value
-     * @return mixed
+     * @param string $value
+     * @param integer $width
+     * @return string
      */
-    public static function yotiavatar($value)
+    public static function yotiavatar($value, $width = 100)
     {
-        $imagePath = JRoute::_(JUri::base() . 'index.php?option=com_yoti&task=bin-file&field=selfie');
-        $width = 100;
-        $avatarHTML = JHtml::_('image', $imagePath, 'Your Selfie', ['width'=>$width]);
+        $imagePath = 'index.php?option=com_yoti&task=bin-file&field=selfie&' . JSession::getFormToken() . '=1';
+        $imageUrl = JRoute::_(JUri::base() . $imagePath);
+        $avatarHTML = JHtml::_('image', $imageUrl, 'Your Selfie', [
+            'width' => $width,
+            'alt' => JText::_('PLG_USER_YOTIPROFILE_FIELD_SELFIE_FILENAME_ALT'),
+        ]);
 
         return $avatarHTML;
     }

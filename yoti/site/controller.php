@@ -54,14 +54,21 @@ class YotiController extends JControllerLegacy
 
             case 'unlink':
                 // After unlinking account, redirect to user profile
-                $helper->unlink();
+                if (JSession::checkToken('get')) {
+                    $helper->unlink();
+                } else {
+                    YotiHelper::setFlash('Yoti could not successfully link your account.', 'error');
+                }
                 $this->setRedirect('index.php');
                 return;
                 break;
 
             case 'bin-file':
-                $helper->binFile('selfie');
-                exit;
+                if (JSession::checkToken('get')) {
+                    $helper->binFile('selfie');
+                    exit;
+                }
+                die(JText::_('Invalid Token'));
                 break;
 
             default:

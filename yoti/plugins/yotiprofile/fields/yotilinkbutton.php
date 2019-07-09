@@ -21,13 +21,7 @@ class JFormFieldYotilinkbutton extends JFormField
             $urlText = 'Unlink Yoti account';
         }
 
-        $urlLink = JRoute::_('index.php?option=com_yoti&task=unlink');
-        $promptMessage = JText::_('PLG_USER_YOTIPROFILE_UNLINK_ACCOUNT_BUTTON_PROMPT_MESSAGE');
-        $html = '<div class="yoti-connect">' .
-            "<a class=\"yoti-unlink-button\" onclick=\"return confirm('{$promptMessage}')\" href=\"$urlLink\">" .
-            JText::_($urlText) .
-            '</a></div>';
-        return $html;
+        return plgUserYotiprofile::yotilinkbutton($urlText);
     }
 
     public function getLabel()

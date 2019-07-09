@@ -17,7 +17,7 @@ class JFormFieldYotinote extends JFormField
     {
         $html = '<div style="font-size:14px;margin-bottom:15px;">' .
             '<strong>Notice</strong>:&nbsp;' .
-            JText::_($this->element['value']).
+            htmlspecialchars(JText::_($this->element['value'])).
             '</div>';
         return $html;
     }

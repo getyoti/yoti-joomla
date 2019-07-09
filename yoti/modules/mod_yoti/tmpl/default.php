@@ -36,9 +36,9 @@ if ($isStaging) {
 // Add init()
 $script[] = '_ybg.init();';
 $linkButton = '<span
-            data-yoti-application-id="' . $config['yoti_app_id'] . '"
+            data-yoti-application-id="' . htmlspecialchars($config['yoti_app_id']) . '"
             data-yoti-type="inline"
-            data-yoti-scenario-id="' . $config['yoti_scenario_id'] . '"
+            data-yoti-scenario-id="' . htmlspecialchars($config['yoti_scenario_id']) . '"
             data-size="small">
             %s
         </span>

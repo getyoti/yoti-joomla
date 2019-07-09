@@ -8,6 +8,7 @@ defined('_JEXEC') or die('Restricted access');
 <div class="row-fluid">
     <div class="span12">
         <form id="yoti-form" method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>" class="form-horizontal">
+            <?php echo JHTML::_('form.token'); ?>
             <div class="alert">
             <p>
                 <?php echo JText::_('You need to first create a Yoti App at'); ?> <a href="<?php echo \Yoti\YotiClient::DASHBOARD_URL; ?>" target="_blank">

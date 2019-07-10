@@ -9,11 +9,10 @@ RUN if [ "$BRANCH" = "" ]; then \
   $BRANCH = $DEFAULT_BRANCH; \
 fi
 
-RUN git clone -b ${BRANCH} https://github.com/getyoti/yoti-joomla.git --single-branch /usr/src/yoti-joomla \
+RUN git clone -b ${BRANCH} https://github.com/getyoti/yoti-joomla.git --single-branch /usr/src/yoti \
     && echo "Finished cloning ${BRANCH}" \
-	&& chown -R www-data:www-data /usr/src/yoti-joomla \
-	&& cd /usr/src/yoti-joomla \
-	&& mkdir __sdk-sym \
+	&& chown -R www-data:www-data /usr/src/yoti \
+	&& cd /usr/src/yoti \
 	&& ./pack-plugin.sh \
 	&& mv ./${PLUGIN_PACKAGE_NAME} /usr/src/joomla \
 	&& cd /usr/src/joomla \

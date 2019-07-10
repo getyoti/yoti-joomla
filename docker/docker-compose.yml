@@ -59,7 +59,7 @@ services:
     environment:
       <<: *joomla-env
     volumes:
-      - ../yoti/:/var/www/html/yoti-joomla
+      - ../yoti/:/var/www/html/yoti
       - ../codeception.yml:/var/www/html/codeception.yml
       - ../tests/:/var/www/html/tests/
 

@@ -2,7 +2,8 @@
 
 class YotiModuleCest
 {
-    public function _before(AcceptanceTester $I) {
+    public function _before(AcceptanceTester $I)
+    {
         $I->ensureJoomlaIsInstalled();
         $I->ensureYotiIsInstalled();
     }

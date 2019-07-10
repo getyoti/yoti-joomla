@@ -1,5 +1,6 @@
 <?php
-
+use YotiJoomla\ProfileAdapter;
+use Yoti\Entity\Profile;
 
 /**
  * Inherited Methods
@@ -21,9 +22,23 @@ class AcceptanceTester extends \Codeception\Actor
     use _generated\AcceptanceTesterActions;
 
     /**
+     * Bootstrap Joomla.
+     */
+    public function bootstrapJoomla()
+    {
+        ob_start();
+        $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $_SERVER['REQUEST_METHOD'] = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $_SERVER['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '/';
+        require_once '/var/www/html/index.php';
+        ob_end_clean();
+    }
+
+    /**
      * Configures the Yoti Component.
      */
-    public function configureTheYotiComponent() {
+    public function configureTheYotiComponent()
+    {
         $I = $this;
 
         // Browse to configuration form.
@@ -44,7 +59,8 @@ class AcceptanceTester extends \Codeception\Actor
     /**
      * Ensure Joomla is installed.
      */
-    public function ensureJoomlaIsInstalled() {
+    public function ensureJoomlaIsInstalled()
+    {
         $I = $this;
         $I->amOnPage('/');
         if (!$I->findElements('.site-title')) {
@@ -57,20 +73,23 @@ class AcceptanceTester extends \Codeception\Actor
     /**
      * Ensure Yoti module is installed.
      */
-    public function ensureYotiIsInstalled() {
+    public function ensureYotiIsInstalled()
+    {
         $I = $this;
         $I->amLoggedInAsAdmin();
         $I->amOnPage('/administrator/index.php?option=com_modules');
         if (!$I->findElements(['link' => 'Yoti Login'])) {
-            $I->installExtensionFromFolder('/var/www/html/yoti-joomla');
+            $I->installExtensionFromFolder('/var/www/html/yoti');
             $I->configureTheYotiComponent();
+            $I->enablePlugin('Yoti');
         }
     }
 
     /**
      * Ensure logged in as administrator.
      */
-    public function amLoggedInAsAdmin() {
+    public function amLoggedInAsAdmin()
+    {
         $I = $this;
         $I->amOnPage('/administrator/index.php');
         if ($I->findElements('#mod-login-username')) {
@@ -81,16 +100,20 @@ class AcceptanceTester extends \Codeception\Actor
     /**
      * Close/accept banner messages.
      */
-    public function closeMessages() {
+    public function closeMessages()
+    {
         $I = $this;
         $I->waitForElement('.js-pstats-btn-allow-never');
+        // Wait for slide transition to finish.
+        $I->wait(2);
         $I->click('Never');
     }
 
     /**
      * Places the Yoti Module.
      */
-    public function placeTheYotiModule() {
+    public function placeTheYotiModule()
+    {
         $I = $this;
         $I->amLoggedInAsAdmin();
         $I->click('Extensions', '#menu');
@@ -103,5 +126,85 @@ class AcceptanceTester extends \Codeception\Actor
         $I->click('Menu Assignment');
         $I->selectOptionInChosenByIdUsingJs('jform_assignment', 'On all pages');
         $I->click('Save');
+    }
+
+    /**
+     * Creates a Joomla user.
+     *
+     * User with same username will be replaced.
+     *
+     * @param string $username
+     */
+    private function createJoomlaUser($username)
+    {
+        // Remove user if they already exist.
+        $db = JFactory::getDbo();
+        $model = new YotiModelUser();
+        $query = $model->getCheckUsernameExistsQuery('linked_user');
+        $db->setQuery($query);
+        if ($userId = $db->loadResult()) {
+            JFactory::getUser($userId)->delete();
+        }
+
+        // Get new user type.
+        $user = JFactory::getUser(0);
+        $usersConfig = JComponentHelper::getParams('com_users');
+        $newUserType = $usersConfig->get('new_usertype', 2);
+
+        // Set user data
+        $userData = [
+            'name' => $username,
+            'username' => $username,
+            'email' => $username . '@example.com',
+            'password' => $username,
+            'password2' => $username,
+            'sendEmail' => 0,
+        ];
+
+        // Save user.
+        if (!$user->bind($userData, 'usertype')) {
+            throw new \Exception('Create user error: ' . $user->getError());
+        }
+        $user->set('groups', array($newUserType));
+        $user->set('registerDate', JFactory::getDate()->toSql());
+        if (!$user->save()) {
+            throw new \Exception('Could not save Yoti user');
+        }
+
+        // Return new user Id.
+        return $user->get('id');
+    }
+
+    /**
+     * Log in as a linked user.
+     */
+    public function amLoggedInAsLinkedUser()
+    {
+        $this->bootstrapJoomla();
+
+        $userId = $this->createJoomlaUser('linked_user');
+
+        // Generate test attributes.
+        $attributes = array_flip([
+            Profile::ATTR_FAMILY_NAME,
+            Profile::ATTR_GIVEN_NAMES,
+            Profile::ATTR_FULL_NAME,
+            Profile::ATTR_DATE_OF_BIRTH,
+            Profile::ATTR_GENDER,
+            Profile::ATTR_NATIONALITY,
+            Profile::ATTR_PHONE_NUMBER,
+            Profile::ATTR_EMAIL_ADDRESS,
+            Profile::ATTR_POSTAL_ADDRESS,
+        ]);
+        array_walk($attributes, function (&$item, $key) {
+            $item = $key . ' test value';
+        });
+        $attributes['yoti_user_id'] = 'some_remember_me_id';
+        $profileAdapter = new ProfileAdapter($attributes);
+
+        $helper = new YotiHelper();
+        $helper->createYotiUser($profileAdapter, $userId);
+
+        $this->doFrontEndLogin('linked_user', 'linked_user');
     }
 }

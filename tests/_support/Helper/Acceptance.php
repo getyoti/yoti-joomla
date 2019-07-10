@@ -6,7 +6,8 @@ namespace Helper;
 
 class Acceptance extends \Codeception\Module
 {
-    public function findElements($selector) {
+    public function findElements($selector)
+    {
         $web_driver = $this->getModule('JoomlaBrowser');
         return $web_driver->_findElements($selector);
     }

@@ -57,7 +57,7 @@ class YotiController extends JControllerLegacy
                 if (JSession::checkToken('get')) {
                     $helper->unlink();
                 } else {
-                    YotiHelper::setFlash('Yoti could not successfully link your account.', 'error');
+                    YotiHelper::setFlash('Yoti could not successfully unlink your account.', 'error');
                 }
                 $this->setRedirect('index.php');
                 return;

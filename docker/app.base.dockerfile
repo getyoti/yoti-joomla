@@ -12,9 +12,6 @@ RUN a2enmod ssl
 # Install additional packages.
 RUN apt-get update && apt-get install -y zip unzip git vim nano
 
-# Install MySQL Client.
-RUN apt-get install -y mysql-client
-
 # Install Composer.
 RUN EXPECTED_SIGNATURE="$(curl https://composer.github.io/installer.sig)" \
   php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \

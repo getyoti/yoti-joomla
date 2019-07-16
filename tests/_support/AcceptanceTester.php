@@ -22,19 +22,6 @@ class AcceptanceTester extends \Codeception\Actor
     use _generated\AcceptanceTesterActions;
 
     /**
-     * Bootstrap Joomla.
-     */
-    public function bootstrapJoomla()
-    {
-        ob_start();
-        $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        $_SERVER['REQUEST_METHOD'] = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $_SERVER['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '/';
-        require_once '/var/www/html/index.php';
-        ob_end_clean();
-    }
-
-    /**
      * Configures the Yoti Component.
      */
     public function configureTheYotiComponent()
@@ -79,7 +66,7 @@ class AcceptanceTester extends \Codeception\Actor
         $I->amLoggedInAsAdmin();
         $I->amOnPage('/administrator/index.php?option=com_modules');
         if (!$I->findElements(['link' => 'Yoti Login'])) {
-            $I->installExtensionFromFolder('/var/www/html/yoti');
+            $I->installExtensionFromFolder($this->getJoomlaFolder() . 'yoti');
             $I->configureTheYotiComponent();
             $I->enablePlugin('Yoti');
         }

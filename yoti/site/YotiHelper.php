@@ -36,8 +36,10 @@ class YotiHelper
 
     /**
      * Yoti Button javascript library.
+     *
+     * @deprecated this is now configured in loader.js
      */
-    const YOTI_BUTTON_JS_LIBRARY = 'https://sdk.yoti.com/clients/browser.2.1.0.js';
+    const YOTI_BUTTON_JS_LIBRARY = 'https://www.yoti.com/share/client/';
 
     /**
      * Yoti Hub URL.
@@ -774,5 +776,17 @@ class YotiHelper
         }
 
         return new ProfileAdapter($userProfile);
+    }
+
+    /**
+     * Creates a unique button ID for the current request.
+     *
+     * @return string
+     *   The button ID.
+     */
+    public static function createButtonId()
+    {
+        static $x = 0;
+        return 'yoti-button-' . ++$x;
     }
 }

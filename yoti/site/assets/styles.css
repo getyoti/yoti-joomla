@@ -24,11 +24,13 @@
     float:left;
     width:12em;
     padding:3px 0;
-
-
 }
 
 #users-profile-custom-yotiprofile dd
 {
     padding:3px 0;
+}
+
+.yoti-connect .yoti-button {
+    height: 50px;
 }

@@ -12,8 +12,25 @@ class YotiModuleCest
     {
         $I->amLoggedInAsAdmin();
         $I->placeTheYotiModule();
+
         $I->amOnPage('/');
-        $I->waitForElement('a[data-scenario-id="test_scenario_id"][data-application-id="test_app_id"]');
-        $I->see('Use Yoti');
+
+        $config = array(
+            'domId' => 'yoti-button-1',
+            'clientSdkId' => 'test_sdk_id',
+            'scenarioId' => 'test_scenario_id',
+            'button' => array(
+                'label' => 'Use Yoti',
+            ),
+        );
+        $I->canSeeInSource(json_encode($config));
+        $I->waitForElement('#yoti-button-1 iframe');
+
+        $I->doFrontEndLogin();
+        $I->amOnPage('/');
+
+        $config['button']['label'] = 'Link to Yoti';
+        $I->canSeeInSource(json_encode($config));
+        $I->waitForElement('#yoti-button-1 iframe');
     }
 }

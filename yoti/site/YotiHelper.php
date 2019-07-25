@@ -40,6 +40,11 @@ class YotiHelper
     const YOTI_BUTTON_JS_LIBRARY = 'https://sdk.yoti.com/clients/browser.2.1.0.js';
 
     /**
+     * Yoti Hub URL.
+     */
+    const YOTI_HUB_URL = 'https://hub.yoti.com';
+
+    /**
      * Yoti files upload dir
      */
     const YOTI_MEDIA_UPLOAD_DIR = '/media/com_yoti';

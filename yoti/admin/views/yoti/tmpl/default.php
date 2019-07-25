@@ -11,12 +11,12 @@ defined('_JEXEC') or die('Restricted access');
             <?php echo JHTML::_('form.token'); ?>
             <div class="alert">
             <p>
-                <?php echo JText::_('You need to first create a Yoti App at'); ?> <a href="<?php echo \Yoti\YotiClient::DASHBOARD_URL; ?>" target="_blank">
-                    <?php echo JText::_('Yoti Dashboard'); ?>
+                <?php echo JText::_('You need to first create a Yoti App at'); ?> <a href="<?php echo YotiHelper::YOTI_HUB_URL; ?>" target="_blank">
+                    <?php echo JText::_('Yoti Hub'); ?>
                 </a>.
             </p>
             <p>
-                <?php echo JText::_('Note: On the Yoti Dashboard the callback URL should be set to:'); ?>
+                <?php echo JText::_('Note: On the Yoti Hub the callback URL should be set to:'); ?>
                 <strong><?php echo JUri::root(false).'index.php?option=com_yoti&task=login'; ?></strong>
             </p>
             <p>
@@ -143,7 +143,7 @@ defined('_JEXEC') or die('Restricted access');
                         <?php echo JText::_('Prevent users who have not passed age verification to access your site'); ?>
                     </label>
                     <span class="help-block">
-                        <?php echo JText::_('(Requires Age verify condition to be set in the Yoti Dashboard)'); ?>
+                        <?php echo JText::_('(Requires Age verify condition to be set in the Yoti Hub)'); ?>
                     </span>
                 </div>
             </div>

@@ -49,15 +49,15 @@ defined('_JEXEC') or die('Restricted access');
             </div>
             <div class="control-group">
                 <label for="yoti_sdk_id" class="col-md-6 control-label">
-                    <?php echo JText::_('SDK ID'); ?> <span><strong>*</strong></span>
+                    <?php echo JText::_('Client SDK ID'); ?> <span><strong>*</strong></span>
                 </label>
                 <div class="controls">
-                    <input type="text" name="yoti_sdk_id" id="yoti_sdk_id" placeholder="Yoti SDK ID"
+                    <input type="text" name="yoti_sdk_id" id="yoti_sdk_id" placeholder="Yoti Client SDK ID"
                            value="<?php echo !empty($this->data['yoti_sdk_id']) ? htmlspecialchars($this->data['yoti_sdk_id']) : ''; ?>"
                            class="form-control input-xlarge"
                            required="true"
                     />
-                    <span class="help-block"><?php echo JText::_('Copy the SDK ID from your Yoti App here'); ?></span>
+                    <span class="help-block"><?php echo JText::_('Copy the Client SDK ID from your Yoti App here'); ?></span>
                 </div>
             </div>
             <div class="control-group">

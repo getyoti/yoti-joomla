@@ -35,7 +35,7 @@ class AcceptanceTester extends \Codeception\Actor
         // Fill in form with test configuration.
         $I->fillField('App ID', 'test_app_id');
         $I->fillField('Scenario ID', 'test_scenario_id');
-        $I->fillField('SDK ID', 'test_sdk_id');
+        $I->fillField('Client SDK ID', 'test_sdk_id');
         $I->fillField('Company Name', 'test_company_name');
         $I->attachFile('input[type="file"][id="yoti_pem"]', 'test.pem');
         $I->scrollTo('.btn-success');

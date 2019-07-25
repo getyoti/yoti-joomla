@@ -9,9 +9,9 @@ defined('_JEXEC') or die('Restricted access');
 class AdminYotiViewYoti extends JViewLegacy
 {
     const FORM_REQUIRED_FIELDS = [
-        'yoti_sdk_id' => 'App ID',
-        'yoti_app_id' => 'Scenario ID',
-        'yoti_scenario_id' => 'SDK ID',
+        'yoti_app_id' => 'App ID',
+        'yoti_scenario_id' => 'Scenario ID',
+        'yoti_sdk_id' => 'Client SDK ID',
         'yoti_success_url' => 'Success URL',
         'yoti_failed_url' => 'Failed URL'
     ];

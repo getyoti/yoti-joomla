@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access'); // no direct access
 
 use Yoti\YotiClient;
 
-// Don't show button until we have pem, SDK ID And Scenario ID.
+// Don't show button until we have pem, Client SDK ID And Scenario ID.
 $config = ModYotiHelper::getConfig();
 if (!$config['yoti_sdk_id']
     || !$config['yoti_scenario_id']

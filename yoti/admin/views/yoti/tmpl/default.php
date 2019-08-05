@@ -43,7 +43,7 @@ defined('_JEXEC') or die('Restricted access');
                            required="true"
                     />
                     <span class="help-block">
-                        <?php echo JText::_('Scenario ID is used to render the inline QR code'); ?>
+                        <?php echo JText::_('Scenario ID is used to render the modal window containing the QR code, for the scenario specified in Yoti Hub.'); ?>
                     </span>
                 </div>
             </div>

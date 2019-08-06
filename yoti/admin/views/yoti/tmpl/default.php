@@ -43,7 +43,7 @@ defined('_JEXEC') or die('Restricted access');
                            required="true"
                     />
                     <span class="help-block">
-                        <?php echo JText::_('Scenario ID is used to render the modal window containing the QR code, for the scenario specified in Yoti Hub.'); ?>
+                        <?php echo JText::_('Scenario ID identifies the attributes associated with your Yoti application. This value can be found on your application page in Yoti Hub.'); ?>
                     </span>
                 </div>
             </div>
@@ -57,7 +57,7 @@ defined('_JEXEC') or die('Restricted access');
                            class="form-control input-xlarge"
                            required="true"
                     />
-                    <span class="help-block"><?php echo JText::_('Copy the Client SDK ID from your Yoti App here'); ?></span>
+                    <span class="help-block"><?php echo JText::_('Client SDK ID identifies your Yoti Hub application. This value can be found in the Hub, within your application section, in the keys tab.'); ?></span>
                 </div>
             </div>
             <div class="control-group">

@@ -9,6 +9,8 @@ SDK_RELATIVE_PATH="sdk"
 
 echo "Packing plugin ..."
 
+rm -f ./yoti/admin/com_yoti.xml
+
 cp -R "$SDK_RELATIVE_PATH" "./yoti/site/sdk"
 cd yoti && zip -r "$NAME" . -i "*" && mv "$NAME" .. && cd ..
 rm -rf "./yoti/site/sdk"

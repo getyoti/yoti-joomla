@@ -110,13 +110,13 @@ class AdminYotiViewYoti extends JViewLegacy
                 ];
 
                 // Save config data
-                $config->set('yoti_app_id', $data['yoti_app_id']);
-                $config->set('yoti_scenario_id', $data['yoti_scenario_id']);
-                $config->set('yoti_sdk_id', $data['yoti_sdk_id']);
-                $config->set('yoti_company_name', $data['yoti_company_name']);
+                $config->set('yoti_app_id', trim($data['yoti_app_id']));
+                $config->set('yoti_scenario_id', trim($data['yoti_scenario_id']));
+                $config->set('yoti_sdk_id', trim($data['yoti_sdk_id']));
+                $config->set('yoti_company_name', trim($data['yoti_company_name']));
                 $config->set('yoti_pem', $data['yoti_pem']);
-                $config->set('yoti_success_url', $data['yoti_success_url']);
-                $config->set('yoti_failed_url', $data['yoti_failed_url']);
+                $config->set('yoti_success_url', trim($data['yoti_success_url']));
+                $config->set('yoti_failed_url', trim($data['yoti_failed_url']));
                 $config->set('yoti_only_existing_user', $data['yoti_only_existing_user']);
                 $config->set('yoti_user_email', $data['yoti_user_email']);
                 $config->set('yoti_age_verification', $data['yoti_age_verification']);

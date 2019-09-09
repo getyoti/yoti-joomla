@@ -69,6 +69,11 @@ class YotiHelper
      */
     const SDK_IDENTIFIER = 'Joomla';
 
+    /**
+     * Yoti Joomla SDK version.
+     */
+    const SDK_VERSION = '2.1.2';
+
     const AGE_VERIFICATION_ATTR = 'age_verified';
 
     /**
@@ -136,9 +141,11 @@ class YotiHelper
             $yotiClient = new YotiClient(
                 $yotiSDKID,
                 $yotiPemContents,
-                YotiClient::DEFAULT_CONNECT_API,
-                YotiHelper::SDK_IDENTIFIER
+                YotiClient::DEFAULT_CONNECT_API
             );
+            $yotiClient->setSdkIdentifier(YotiHelper::SDK_IDENTIFIER);
+            $yotiClient->setSdkVersion(YotiHelper::SDK_VERSION);
+
             $activityDetails = $yotiClient->getActivityDetails($token);
             $activityDetailsAdapter = new ActivityDetailsAdapter($activityDetails);
             $profileAdapter = $activityDetailsAdapter->getProfile();

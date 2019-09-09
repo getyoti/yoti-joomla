@@ -7,13 +7,13 @@
         <type>package</type>
         <client>0</client>
         <client_id>0</client_id>
-        <version>2.1.1</version>
-        <infourl title="Yoti 2.1.1 Released">
+        <version>2.1.2</version>
+        <infourl title="Yoti 2.1.2 Released">
             https://github.com/getyoti/yoti-joomla/releases
         </infourl>
         <downloads>
             <downloadurl type="full" format="zip">
-                https://github.com/getyoti/yoti-joomla/releases/download/2.1.1/yoti-joomla-2.1.1.zip
+                https://github.com/getyoti/yoti-joomla/releases/download/2.1.2/yoti-joomla-2.1.2.zip
             </downloadurl>
         </downloads>
         <tags>

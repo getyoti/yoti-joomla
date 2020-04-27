@@ -15,6 +15,9 @@ modules:
             window_size: 1440x1440
             capabilities:
               unexpectedAlertBehaviour: 'accept'
+              'goog:chromeOptions':
+                args: ['ignore-certificate-errors']
+                w3c: false
             username: 'admin'
             password: 'admin'
             database host: 'joomladb'

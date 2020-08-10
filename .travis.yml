@@ -8,4 +8,6 @@ before_install:
 
 script:
     - cd docker
+    - echo MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD >> .env
+    - echo JOOMLA_ADMIN_PASSWORD=$JOOMLA_ADMIN_PASSWORD >> .env
     - ./run-tests.sh

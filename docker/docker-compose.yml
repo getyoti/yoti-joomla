@@ -5,10 +5,13 @@ services:
     build:
       context: ./
       dockerfile: app.base.dockerfile
+    env_file:
+      - ./.env
     environment: &joomla-env
       JOOMLA_DB_NAME: yotijoomla
       JOOMLA_DB_HOST: joomladb
-      JOOMLA_DB_PASSWORD: root
+      JOOMLA_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JOOMLA_ADMIN_PASSWORD: ${JOOMLA_ADMIN_PASSWORD}
     depends_on:
       - joomladb
     restart: always
@@ -26,6 +29,8 @@ services:
     restart: always
     ports:
       - "6001:443"
+    env_file:
+      - ./.env
     environment:
       <<: *joomla-env
 
@@ -38,6 +43,8 @@ services:
     restart: always
     ports:
       - "6002:443"
+    env_file:
+      - ./.env
     environment:
       <<: *joomla-env
     volumes:
@@ -56,6 +63,8 @@ services:
     restart: always
     ports:
       - "6004:443"
+    env_file:
+      - ./.env
     environment:
       <<: *joomla-env
     volumes:
@@ -68,8 +77,10 @@ services:
     ports:
       - "3306:3306"
     restart: always
+    env_file:
+      - ./.env
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
   selenium:
     image: selenium/standalone-chrome:3.141.59

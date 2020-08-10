@@ -3,8 +3,16 @@ FROM joomla:3.9-php7.3-apache as joomla_base
 VOLUME /var/www/html
 
 COPY default.conf /etc/apache2/sites-available/000-default.conf
-COPY ./keys/server.crt /etc/apache2/ssl/server.crt
-COPY ./keys/server.key /etc/apache2/ssl/server.key
+
+RUN mkdir /etc/apache2/ssl/
+RUN openssl req \
+    -x509 \
+    -nodes \
+    -days 365 \
+    -newkey rsa:2048 \
+    -keyout /etc/apache2/ssl/server.key \
+    -out /etc/apache2/ssl/server.crt \
+    -subj "/C=UK/ST=London/L=London/O=Yoti/OU=Yoti/CN=localhost"
 
 # Enable SSL Module
 RUN a2enmod ssl

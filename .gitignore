@@ -2,3 +2,4 @@
 .history/
 yoti/site/sdk
 yoti/admin/com_yoti.xml
+.env

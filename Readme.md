@@ -71,6 +71,8 @@ Clone this repository and go into the folder:
 $ cd yoti-joomla
 ```
 
+Copy `.env.example` to `.env` and set environment variables.
+
 Rebuild the images if you have modified the `docker-compose.yml` file:
 
 ```shell

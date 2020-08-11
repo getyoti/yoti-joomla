@@ -19,10 +19,10 @@ modules:
                 args: ['ignore-certificate-errors']
                 w3c: false
             username: 'admin'
-            password: 'admin'
+            password: '%JOOMLA_ADMIN_PASSWORD%'
             database host: 'joomladb'
             database user: 'root'
-            database password: 'root'
+            database password: '%MYSQL_ROOT_PASSWORD%'
             database name: 'yotijoomla'
             database type: 'MySQL'
             database prefix: 'jtest_'

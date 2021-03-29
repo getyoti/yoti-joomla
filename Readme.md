@@ -1,3 +1,5 @@
+**This extension is no longer maintained. The PHP SDK, which this extension makes calls through, is still available at <https://github.com/getyoti/yoti-php-sdk>**
+
 # Yoti Joomla Extension
 
 [![Build Status](https://travis-ci.com/getyoti/yoti-joomla.svg?branch=master)](https://travis-ci.com/getyoti/yoti-joomla)
